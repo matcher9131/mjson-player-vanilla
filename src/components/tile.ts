@@ -11,6 +11,7 @@ export const createTile = (tileId: number): SVGUseElement => {
             : `src_tile${tileId >> 2}`;
     const tile = document.createElementNS(svgNS, "use");
     tile.setAttribute("id", `tile${tileId}`);
+    tile.classList.add("board-tile");
     tile.setAttribute("href", `#${srcTileId}`);
     // 初期状態
     tile.setAttribute("opacity", "0");

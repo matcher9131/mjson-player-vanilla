@@ -6,12 +6,19 @@ const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     return button;
 };
 
-export const createControlPanel = (
-    onGoToPreviousPosition: () => void,
-    onGoToNextPosition: () => void,
-    onGoToPreviousGame: () => void,
-    onGoToNextGame: () => void,
-): HTMLDivElement => {
+type ControlPanelProps = {
+    onGoToPreviousPosition: () => void;
+    onGoToNextPosition: () => void;
+    onGoToPreviousGame: () => void;
+    onGoToNextGame: () => void;
+};
+
+export const createControlPanel = ({
+    onGoToPreviousPosition,
+    onGoToNextPosition,
+    onGoToPreviousGame,
+    onGoToNextGame,
+}: ControlPanelProps): HTMLDivElement => {
     const panel = document.createElement("div");
     panel.append(
         createButton(onGoToPreviousPosition, "←"),
