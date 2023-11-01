@@ -30,7 +30,7 @@ export type PositionEvent = {
     readonly tileStateTransitions: readonly TileStateTransition[];
     readonly meldEvents: readonly MeldEvent[];
     readonly riichiStickEvents: readonly RiichiStickEvent[];
-    readonly isBeginningGame?: boolean;
+    readonly isBeginningGame: boolean;
 };
 
 const createDefaultPositionEvent = (): PositionEvent => ({
@@ -48,6 +48,7 @@ const createDefaultPositionEvent = (): PositionEvent => ({
     ]),
     meldEvents: [],
     riichiStickEvents: [],
+    isBeginningGame: false,
 });
 
 type Meld = {
@@ -315,9 +316,9 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                                     removeFrom(side.unrevealed, t);
                                 }
                                 side.melds.push({
-                                    tiles: event.tiles.map((t, i) => ({
-                                        tileId: t,
-                                        isUnrevealed: i === 1 || i === 2,
+                                    tiles: event.tiles.map((tileId) => ({
+                                        tileId,
+                                        isUnrevealed: tileId % 4 === 1 || tileId % 4 === 2,
                                     })),
                                 });
                             }

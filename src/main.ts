@@ -10,8 +10,8 @@ const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
 
 const positionEvents = createPositionEvents(sampleMJson as MJson);
+const gameBeginningPositions = positionEvents.flatMap((e, i) => (e.isBeginningGame ? [i] : []));
 let positionIndex = 0;
-// TODO: 局開始positionがわかるようにする
 const handleGoToPreviousPosition = (): void => {
     positionIndex = (positionIndex - 1 + positionEvents.length) % positionEvents.length;
     setTileAnimationAll(false);
@@ -21,7 +21,7 @@ const handleGoToPreviousPosition = (): void => {
 };
 const handleGoToNextPosition = (): void => {
     positionIndex = (positionIndex + 1) % positionEvents.length;
-    setTileAnimationAll(true); // TODO: 局開始時はfalseにする
+    setTileAnimationAll(!gameBeginningPositions.includes(positionIndex));
     updateTileState(
         positionEvents[positionIndex].tileStateTransitions.filter((transition) => transition.kind === "forward"),
     );

@@ -44,7 +44,7 @@ export const updateTileState = (transitions: readonly TileStateTransition[]): vo
         if (tile == null) continue;
         tile.setAttribute(
             "transform",
-            `rotate(${sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,
+            `rotate(${-sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,
         );
         tile.setAttribute("opacity", isInvisible ?? false ? "0" : "1");
     }
