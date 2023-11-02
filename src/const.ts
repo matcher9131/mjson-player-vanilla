@@ -15,3 +15,6 @@ export const centerDisplayWidth = 6 * tileWidth;
 export const centerDisplayHeight = 6 * tileWidth;
 export const centerDisplayOffsetX = -centerDisplayWidth / 2;
 export const centerDisplayOffsetY = -centerDisplayHeight / 2;
+
+export const overlayTextOffsetX = 0;
+export const overlayTextOffsetY = boardOneSize * 0.35;

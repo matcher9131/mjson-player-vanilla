@@ -1,4 +1,5 @@
 import { boardOneSize, svgNS } from "../const";
+import { createOverlayText } from "./overlayText";
 import { createTile } from "./tile";
 
 export const createBoard = (): SVGElement => {
@@ -6,6 +7,10 @@ export const createBoard = (): SVGElement => {
     for (let i = 0; i < 136; ++i) {
         const tile = createTile(i);
         board.appendChild(tile);
+    }
+    for (let i = 0; i < 4; ++i) {
+        const overlay = createOverlayText(i);
+        board.appendChild(overlay);
     }
     // temporary
     board.setAttribute("width", "500");

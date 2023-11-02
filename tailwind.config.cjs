@@ -2,7 +2,14 @@
 export default {
     content: ["index.html", "./src/**/*.{html,ts}"],
     theme: {
-        extend: {},
+        extend: {
+            keyframes: {
+                fadeOut: {
+                    "0%, 50%": { opacity: "1" },
+                    "100%": { opacity: "0" },
+                },
+            },
+        },
     },
     plugins: [],
 };

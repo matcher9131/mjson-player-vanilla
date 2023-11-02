@@ -7,6 +7,7 @@ import {
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
 import { setTileAnimationAll, updateTileState } from "../modules/tileState/states";
+import { showOverlay } from "./overlayText";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     const button = document.createElement("button");
@@ -27,9 +28,13 @@ export const createControlPanel = (): HTMLDivElement => {
     const handleGoToNextPosition = (): void => {
         goToNextPosition();
         setTileAnimationAll(!currentPositionIsBeginningGame());
+        const currentPositionEvent = getCurrentPositionEvent();
         updateTileState(
-            getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "forward"),
+            currentPositionEvent.tileStateTransitions.filter((transition) => transition.kind === "forward"),
         );
+        currentPositionEvent.meldEvents.forEach((e) => {
+            showOverlay(e.player, e.kind);
+        });
     };
     const handleGoToPreviousGame = (): void => {
         goToPreviousGame();
