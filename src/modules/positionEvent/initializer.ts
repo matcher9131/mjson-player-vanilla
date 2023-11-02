@@ -8,30 +8,12 @@ import {
     rotatedTileY,
     tileHeight,
     tileWidth,
-} from "../const";
-import { type MJson } from "../types/Mjson/mJson";
-import { insertTo, removeFrom } from "../util/arrayExtensions";
-import { type TileState, getDefaultTileState } from "./tileState";
-import { type TileStateTransition } from "./tileStateTransition";
-
-type MeldEventKind = "チー" | "ポン" | "カン" | "リーチ" | "ツモ" | "ロン";
-
-type MeldEvent = {
-    readonly kind: MeldEventKind;
-    readonly player: number;
-};
-
-type RiichiStickEvent = {
-    readonly kind: "set" | "reset";
-    readonly player: number;
-};
-
-export type PositionEvent = {
-    readonly tileStateTransitions: readonly TileStateTransition[];
-    readonly meldEvents: readonly MeldEvent[];
-    readonly riichiStickEvents: readonly RiichiStickEvent[];
-    readonly isBeginningGame: boolean;
-};
+} from "../../const";
+import { type MJson } from "../../types/Mjson/mJson";
+import { insertTo, removeFrom } from "../../util/arrayExtensions";
+import { getDefaultTileState } from "../tileState/states";
+import { type TileState, type TileStateTransition } from "../tileState/types";
+import { type MeldEvent, type RiichiStickEvent, type PositionEvent } from "./types";
 
 const createDefaultPositionEvent = (): PositionEvent => ({
     tileStateTransitions: new Array(136).fill(0).flatMap((_, tileId) => [

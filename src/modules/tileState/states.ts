@@ -1,13 +1,4 @@
-import { type TileStateTransition } from "./tileStateTransition";
-
-export type TileState = {
-    readonly x: number;
-    readonly y: number;
-    readonly sideIndex: number;
-    readonly isRotated?: boolean;
-    readonly isInvisible?: boolean;
-    readonly isFacedown?: boolean;
-};
+import { type TileStateTransition, type TileState } from "./types";
 
 export const getDefaultTileState = (): TileState => ({
     x: 0,
@@ -15,13 +6,6 @@ export const getDefaultTileState = (): TileState => ({
     sideIndex: 0,
     isInvisible: true,
 });
-
-export const resetAllTileState = (): void => {
-    document.querySelectorAll(".board-tile").forEach((element) => {
-        element.setAttribute("transform", "translate(0 0)");
-        element.setAttribute("opacity", "0");
-    });
-};
 
 export const setTileAnimationAll = (animates: boolean): void => {
     if (animates) {
