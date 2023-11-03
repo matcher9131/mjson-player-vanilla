@@ -16,5 +16,8 @@ export type PositionEvent = {
     readonly tileStateTransitions: readonly TileStateTransition[];
     readonly meldEvents: readonly MeldEvent[];
     readonly riichiStickEvents: readonly RiichiStickEvent[];
-    readonly isBeginningGame: boolean;
+    readonly isBeginningOfGame: boolean;
+    readonly isEndOfGame: boolean;
 };
+
+export type GameIndex = number | "pre" | "post";

@@ -1,12 +1,14 @@
 import {
-    currentPositionIsBeginningGame,
+    getCurrentGameIndex,
     getCurrentPositionEvent,
     goToNextGame,
     goToNextPosition,
     goToPreviousGame,
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
+import { type GameIndex } from "../modules/positionEvent/types";
 import { setTileAnimationAll, updateTileState } from "../modules/tileState/states";
+import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
 import { showOverlay } from "./overlayText";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
@@ -17,17 +19,31 @@ const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     return button;
 };
 
+const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
+    updateRoundText(newGameIndex);
+    setCenterDisplayVisibility(newGameIndex);
+    setTileAnimationAll(false);
+    // NOT IMPLEMENTED
+    // scoreとかリーチ棒とか
+};
+
 export const createControlPanel = (): HTMLDivElement => {
     const handleGoToPreviousPosition = (): void => {
-        goToPreviousPosition();
         setTileAnimationAll(false);
+        const prevGameIndex = getCurrentGameIndex();
+        goToPreviousPosition();
+        const newGameIndex = getCurrentGameIndex();
+        if (prevGameIndex !== newGameIndex) handleGameIndexChanged(newGameIndex);
         updateTileState(
             getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "backward"),
         );
     };
     const handleGoToNextPosition = (): void => {
+        setTileAnimationAll(true);
+        const prevGameIndex = getCurrentGameIndex();
         goToNextPosition();
-        setTileAnimationAll(!currentPositionIsBeginningGame());
+        const newGameIndex = getCurrentGameIndex();
+        if (prevGameIndex !== newGameIndex) handleGameIndexChanged(newGameIndex);
         const currentPositionEvent = getCurrentPositionEvent();
         updateTileState(
             currentPositionEvent.tileStateTransitions.filter((transition) => transition.kind === "forward"),
@@ -38,14 +54,14 @@ export const createControlPanel = (): HTMLDivElement => {
     };
     const handleGoToPreviousGame = (): void => {
         goToPreviousGame();
-        setTileAnimationAll(false);
+        handleGameIndexChanged(getCurrentGameIndex());
         updateTileState(
             getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "forward"),
         );
     };
     const handleGoToNextGame = (): void => {
         goToNextGame();
-        setTileAnimationAll(false);
+        handleGameIndexChanged(getCurrentGameIndex());
         updateTileState(
             getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "forward"),
         );

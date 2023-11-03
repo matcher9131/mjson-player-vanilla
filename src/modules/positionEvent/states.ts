@@ -1,19 +1,26 @@
 import { createPositionEvents } from "./initializer";
-import sampleMJson from "../../data/sample1.json";
-import { type MJson } from "../../types/Mjson/mJson";
-import { type PositionEvent } from "./types";
+import { type GameIndex, type PositionEvent } from "./types";
 import { upperBound } from "../../util/arrayExtensions";
+import { getMJson } from "../mJson/states";
 
-const positionEvents = createPositionEvents(sampleMJson as MJson);
-const gameBeginningPositions = positionEvents.flatMap((e, i) => (e.isBeginningGame ? [i] : []));
+const positionEvents = createPositionEvents(getMJson());
+const gameBeginningPositions = positionEvents.flatMap((e, i) => (e.isBeginningOfGame ? [i] : []));
 let positionIndex = 0;
 
 export const getCurrentPositionEvent = (): PositionEvent => positionEvents[positionIndex];
+
+export const getCurrentGameIndex = (): GameIndex =>
+    positionIndex === 0
+        ? "pre"
+        : positionIndex === positionEvents.length - 1
+        ? "post"
+        : upperBound(gameBeginningPositions, positionIndex) - 1;
 
 export const currentPositionIsBeginningGame = (): boolean => gameBeginningPositions.includes(positionIndex);
 
 export const goToPreviousPosition = (): void => {
     positionIndex = (positionIndex - 1 + positionEvents.length) % positionEvents.length;
+    // TODO: ツモ、ロンのPositionEventになるときはさらにもう一つ前に戻す
 };
 
 export const goToNextPosition = (): void => {

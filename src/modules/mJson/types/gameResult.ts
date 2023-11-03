@@ -22,3 +22,5 @@ export type GameResultDraw = GameResultBase & {
 };
 
 export type GameResult = GameResultWin | GameResultDraw;
+
+export const isGameResultWin = (result: GameResult): result is GameResultWin => result.resultKind === "win";

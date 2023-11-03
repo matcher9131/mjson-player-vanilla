@@ -7,10 +7,11 @@ export const createOverlayText = (sideIndex: number): SVGTextElement => {
     const element = document.createElementNS(svgNS, "text");
     element.setAttribute("id", `overlay_text${sideIndex}`);
     element.setAttribute("opacity", "0");
-    element.setAttribute("text-anchor", "middle");
     const { x, y } = rotate({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
     element.setAttribute("x", `${x}`);
     element.setAttribute("y", `${y}`);
+    element.setAttribute("text-anchor", "middle");
+    element.setAttribute("dominant-baseline", "middle");
     element.setAttribute("font-size", "1000");
     element.setAttribute("fill", "floralwhite");
     element.setAttribute("style", "text-shadow: 2px 2px 0 gray;");

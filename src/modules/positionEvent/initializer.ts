@@ -9,8 +9,11 @@ import {
     tileHeight,
     tileWidth,
 } from "../../const";
-import { type MJson } from "../../types/Mjson/mJson";
 import { insertTo, removeFrom } from "../../util/arrayExtensions";
+import { assertNonNull } from "../../util/error";
+import { type Game } from "../mJson/types/game";
+import { isGameResultWin } from "../mJson/types/gameResult";
+import { type MJson } from "../mJson/types/mJson";
 import { getDefaultTileState } from "../tileState/states";
 import { type TileState, type TileStateTransition } from "../tileState/types";
 import { type MeldEvent, type RiichiStickEvent, type PositionEvent } from "./types";
@@ -30,7 +33,8 @@ const createDefaultPositionEvent = (): PositionEvent => ({
     ]),
     meldEvents: [],
     riichiStickEvents: [],
-    isBeginningGame: false,
+    isBeginningOfGame: false,
+    isEndOfGame: false,
 });
 
 type Meld = {
@@ -165,9 +169,26 @@ const getAllTilesState = (sides: readonly Side[]): TileState[] => {
     return states;
 };
 
+const createPositionEventWin = (game: Game): PositionEvent | null => {
+    const meldEventsWin = game.gameResults
+        .filter(isGameResultWin)
+        .map((result): MeldEvent => ({ kind: result.from == null ? "ツモ" : "ロン", player: result.player }));
+    return meldEventsWin.length > 0
+        ? {
+              tileStateTransitions: [],
+              meldEvents: meldEventsWin,
+              riichiStickEvents: [],
+              isBeginningOfGame: false,
+              isEndOfGame: false,
+          }
+        : null;
+};
+
 export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
     return [
+        // 半荘開始時
         createDefaultPositionEvent(),
+        // 各局
         ...mJson.games
             .map((game) => {
                 const sides = game.dealtTiles.map(
@@ -258,7 +279,7 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                             {
                                 meldEvents.set(positionIndex, [{ kind: "ポン", player: sideIndex }]);
                                 const sideFrom = sides.findIndex((s) => s.discards.includes(event.t));
-                                if (sideFrom < 0) throw new Error(`Assertion: 'sideFrom' >= 0, actual: ${sideFrom}`);
+                                if (sideFrom < 0) throw new Error(`Assertion: sideFrom >= 0, actual: ${sideFrom}`);
                                 for (const t of event.tiles) {
                                     removeFrom(side.unrevealed, t);
                                 }
@@ -274,7 +295,7 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                                             return 0;
                                         default:
                                             throw new Error(
-                                                `Assertion: 'relativeIndex' should be 1, 2, or 3 but actually ${relativeIndex}`,
+                                                `Assertion: relativeIndex === 1, 2, 3, actual: ${relativeIndex}`,
                                             );
                                     }
                                 })();
@@ -291,7 +312,7 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                             // eslint-disable-next-line no-lone-blocks
                             {
                                 meldEvents.set(positionIndex, [{ kind: "カン", player: sideIndex }]);
-                                if (side.drawTile == null) throw new Error("ERROR: drawTile is nullish.");
+                                assertNonNull(side.drawTile, "drawTile");
                                 insertTo(side.unrevealed, side.drawTile);
                                 side.drawTile = undefined;
                                 for (const t of event.tiles) {
@@ -324,7 +345,7 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                                             return 0;
                                         default:
                                             throw new Error(
-                                                `Assertion: relativeIndex == 1, 2, 3, actually ${relativeIndex}`,
+                                                `Assertion: relativeIndex == 1, 2, 3, actual: ${relativeIndex}`,
                                             );
                                     }
                                 })();
@@ -344,7 +365,7 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                                 const meldIndex = side.melds.findIndex((meld) =>
                                     meld.tiles.every((t) => t.tileId >> 2 === event.t >> 2),
                                 );
-                                if (meldIndex === -1) throw new Error("Assertion meldIndex >= 0, actually -1");
+                                if (meldIndex === -1) throw new Error("Assertion meldIndex >= 0, actual: -1");
                                 side.melds[meldIndex].addedTileId = event.t;
                             }
                             break;
@@ -375,14 +396,48 @@ export const createPositionEvents = (mJson: MJson): PositionEvent[] => {
                         newState,
                     });
                 });
-                return transitions.map((t, i) => ({
-                    tileStateTransitions: t,
-                    meldEvents: [...(meldEvents.get(i) ?? [])],
-                    riichiStickEvents: [...(riichiStickEvents.get(i) ?? [])],
-                    isBeginningGame: i === 0,
-                }));
+                return [
+                    // 配牌～和了直前
+                    ...transitions.map((t, i) => ({
+                        tileStateTransitions: t,
+                        meldEvents: [...(meldEvents.get(i) ?? [])],
+                        riichiStickEvents:
+                            i === 0
+                                ? [0, 1, 2, 3].map((player): RiichiStickEvent => ({ kind: "reset", player }))
+                                : [...(riichiStickEvents.get(i) ?? [])],
+                        isBeginningOfGame: i === 0,
+                        isEndOfGame: false,
+                    })),
+                    // 和了（流局なら無し）
+                    ...(() => {
+                        const positionEventWin = createPositionEventWin(game);
+                        return positionEventWin != null ? [positionEventWin] : [];
+                    })(),
+                    // 点数表示
+                    {
+                        tileStateTransitions: prevStates.map(
+                            (newState, tileId): TileStateTransition => ({
+                                kind: "backward",
+                                tileId,
+                                newState,
+                            }),
+                        ),
+                        meldEvents: [],
+                        riichiStickEvents: game.events
+                            .filter((e) => (e.k === "d" && e.isRiichi) ?? false)
+                            .map(
+                                (e): RiichiStickEvent => ({
+                                    kind: "set",
+                                    player: e.p,
+                                }),
+                            ),
+                        isBeginningOfGame: false,
+                        isEndOfGame: true,
+                    },
+                ];
             })
             .flat(),
+        // 半荘終了時
         createDefaultPositionEvent(),
     ];
 };
