@@ -1,68 +1,80 @@
 import { createPositionEvents } from "./initializer";
 import { type GameIndex, type PositionEvent } from "./types";
-import { upperBound } from "../../util/arrayExtensions";
 import { getMJson } from "../mJson/states";
+import { assertNonNull } from "../../util/error";
 
 const positionEvents = createPositionEvents(getMJson());
-const gameBeginningPositions = positionEvents.flatMap((e, i) => (e.isBeginningOfGame ? [i] : []));
-let positionIndex = 0;
+const numGames = [...positionEvents.keys()].filter((gameIndex) => gameIndex !== "pre" && gameIndex !== "post").length;
+let gameIndex: GameIndex = "pre";
+let positionIndex: number = 0;
 
-export const getCurrentPositionEvent = (): PositionEvent => positionEvents[positionIndex];
+const getCurrentGameEvents = (): ReadonlyArray<readonly PositionEvent[]> => {
+    const currentGameEvents = positionEvents.get(gameIndex);
+    assertNonNull(currentGameEvents, `positionEvents[${gameIndex}]`);
+    return currentGameEvents;
+};
 
-export const getCurrentGameIndex = (): GameIndex =>
-    positionIndex === 0
-        ? "pre"
-        : positionIndex === positionEvents.length - 1
-        ? "post"
-        : upperBound(gameBeginningPositions, positionIndex) - 1;
+export const getCurrentPositionEvents = (): readonly PositionEvent[] => getCurrentGameEvents()[positionIndex];
 
-export const currentPositionIsBeginningGame = (): boolean => gameBeginningPositions.includes(positionIndex);
+export const getCurrentGameIndex = (): GameIndex => gameIndex;
+export const getCurrentPositionIndex = (): number => positionIndex;
 
-export const goToPreviousPosition = (): void => {
-    positionIndex = (positionIndex - 1 + positionEvents.length) % positionEvents.length;
+export const goToPreviousPosition = (): boolean => {
+    if (positionIndex === 0) {
+        goToPreviousGame();
+        return true;
+    } else {
+        --positionIndex;
+        return false;
+    }
     // TODO: ツモ、ロンのPositionEventになるときはさらにもう一つ前に戻す
 };
 
-export const goToNextPosition = (): void => {
-    positionIndex = (positionIndex + 1) % positionEvents.length;
+export const goToNextPosition = (): boolean => {
+    if (positionIndex === getCurrentGameEvents().length - 1) {
+        goToNextGame();
+        return true;
+    } else {
+        ++positionIndex;
+        return false;
+    }
 };
 
 export const goToPreviousGame = (): void => {
-    const gameIndex = upperBound(gameBeginningPositions, positionIndex) - 1;
-    switch (positionIndex) {
-        case 0:
-            positionIndex = positionEvents.length - 1;
-            break;
-        case 1:
-            positionIndex = 0;
-            break;
-        case positionEvents.length - 1:
-            positionIndex = gameBeginningPositions[gameBeginningPositions.length - 1];
-            break;
-        case gameBeginningPositions[gameIndex]:
-            positionIndex = gameBeginningPositions[gameIndex - 1];
-            break;
-        default:
-            positionIndex = gameBeginningPositions[gameIndex];
-            break;
+    if (positionIndex > 0) {
+        positionIndex = 0;
+    } else {
+        switch (gameIndex) {
+            case 0:
+                gameIndex = "pre";
+                break;
+            case "pre":
+                gameIndex = "post";
+                break;
+            case "post":
+                gameIndex = numGames - 1;
+                break;
+            default:
+                --gameIndex;
+                break;
+        }
+        positionIndex = 0;
     }
 };
 
 export const goToNextGame = (): void => {
-    if (positionIndex === positionEvents.length - 1) {
-        positionIndex = 0;
-    } else {
-        const gameIndex = upperBound(gameBeginningPositions, positionIndex) - 1;
-        switch (gameIndex) {
-            case -1:
-                positionIndex = 1;
-                break;
-            case gameBeginningPositions.length - 1:
-                positionIndex = positionEvents.length - 1;
-                break;
-            default:
-                positionIndex = gameBeginningPositions[gameIndex + 1];
-                break;
-        }
+    switch (gameIndex) {
+        case numGames - 1:
+            gameIndex = "post";
+            break;
+        case "pre":
+            gameIndex = 0;
+            break;
+        case "post":
+            gameIndex = "pre";
+            break;
+        default:
+            ++gameIndex;
+            break;
     }
 };

@@ -1,4 +1,5 @@
 import { overlayTextOffsetX, overlayTextOffsetY, svgNS } from "../const";
+import { type PositionEventMeld } from "../modules/positionEvent/types";
 import { rotate } from "../util/vector2D";
 
 const animationClassName = "animate-[fadeOut_0.5s]";
@@ -18,7 +19,7 @@ export const createOverlayText = (sideIndex: number): SVGTextElement => {
     return element;
 };
 
-export const showOverlay = (sideIndex: number, text: string): void => {
+export const showOverlay = ({ sideIndex, text }: PositionEventMeld): void => {
     const element = document.getElementById(`overlay_text${sideIndex}`);
     if (element == null) return;
     element.textContent = text;

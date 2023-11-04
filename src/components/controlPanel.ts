@@ -1,15 +1,20 @@
 import {
     getCurrentGameIndex,
-    getCurrentPositionEvent,
+    getCurrentPositionEvents,
     goToNextGame,
     goToNextPosition,
     goToPreviousGame,
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
-import { type GameIndex } from "../modules/positionEvent/types";
-import { setTileAnimationAll, updateTileState } from "../modules/tileState/states";
+import {
+    isPositionEventTransitionForward,
+    type GameIndex,
+    isPositionEventTransitionBackward,
+    isPositionEventMeld,
+} from "../modules/positionEvent/types";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
 import { showOverlay } from "./overlayText";
+import { setTileAnimationAll, updateTile } from "./tile";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     const button = document.createElement("button");
@@ -30,41 +35,46 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
 export const createControlPanel = (): HTMLDivElement => {
     const handleGoToPreviousPosition = (): void => {
         setTileAnimationAll(false);
-        const prevGameIndex = getCurrentGameIndex();
-        goToPreviousPosition();
-        const newGameIndex = getCurrentGameIndex();
-        if (prevGameIndex !== newGameIndex) handleGameIndexChanged(newGameIndex);
-        updateTileState(
-            getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "backward"),
-        );
+        const gameIsChanged = goToPreviousPosition();
+        if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
+        getCurrentPositionEvents()
+            .filter(isPositionEventTransitionBackward)
+            .forEach((e) => {
+                updateTile(e);
+            });
     };
     const handleGoToNextPosition = (): void => {
         setTileAnimationAll(true);
-        const prevGameIndex = getCurrentGameIndex();
-        goToNextPosition();
-        const newGameIndex = getCurrentGameIndex();
-        if (prevGameIndex !== newGameIndex) handleGameIndexChanged(newGameIndex);
-        const currentPositionEvent = getCurrentPositionEvent();
-        updateTileState(
-            currentPositionEvent.tileStateTransitions.filter((transition) => transition.kind === "forward"),
-        );
-        currentPositionEvent.meldEvents.forEach((e) => {
-            showOverlay(e.player, e.kind);
+        const gameIsChanged = goToNextPosition();
+        if (gameIsChanged) {
+            setTileAnimationAll(false);
+            handleGameIndexChanged(getCurrentGameIndex());
+        }
+        const currentPositionEvent = getCurrentPositionEvents();
+        currentPositionEvent.filter(isPositionEventTransitionForward).forEach((e) => {
+            updateTile(e);
+        });
+        currentPositionEvent.filter(isPositionEventMeld).forEach((e) => {
+            showOverlay(e);
         });
     };
     const handleGoToPreviousGame = (): void => {
         goToPreviousGame();
         handleGameIndexChanged(getCurrentGameIndex());
-        updateTileState(
-            getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "forward"),
-        );
+        getCurrentPositionEvents()
+            .filter(isPositionEventTransitionForward)
+            .forEach((e) => {
+                updateTile(e);
+            });
     };
     const handleGoToNextGame = (): void => {
         goToNextGame();
         handleGameIndexChanged(getCurrentGameIndex());
-        updateTileState(
-            getCurrentPositionEvent().tileStateTransitions.filter((transition) => transition.kind === "forward"),
-        );
+        getCurrentPositionEvents()
+            .filter(isPositionEventTransitionForward)
+            .forEach((e) => {
+                updateTile(e);
+            });
     };
     const panel = document.createElement("div");
     panel.append(

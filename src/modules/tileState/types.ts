@@ -6,9 +6,3 @@ export type TileState = {
     readonly isInvisible?: boolean;
     readonly isFacedown?: boolean;
 };
-
-export type TileStateTransition = {
-    readonly kind: "forward" | "backward";
-    readonly tileId: number;
-    readonly newState: TileState;
-};

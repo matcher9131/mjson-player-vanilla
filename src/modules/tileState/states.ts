@@ -1,4 +1,4 @@
-import { type TileStateTransition, type TileState } from "./types";
+import { type TileState } from "./types";
 
 export const getDefaultTileState = (): TileState => ({
     x: 0,
@@ -6,30 +6,3 @@ export const getDefaultTileState = (): TileState => ({
     sideIndex: 0,
     isInvisible: true,
 });
-
-export const setTileAnimationAll = (animates: boolean): void => {
-    if (animates) {
-        document.querySelectorAll(".board-tile").forEach((element) => {
-            element.classList.add("transition-all");
-        });
-    } else {
-        document.querySelectorAll(".board-tile").forEach((element) => {
-            element.classList.remove("transition-all");
-        });
-    }
-};
-
-export const updateTileState = (transitions: readonly TileStateTransition[]): void => {
-    for (const {
-        tileId,
-        newState: { x, y, sideIndex, isRotated, isInvisible },
-    } of transitions) {
-        const tile = document.querySelector(`#tile${tileId}`);
-        if (tile == null) continue;
-        tile.setAttribute(
-            "transform",
-            `rotate(${-sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,
-        );
-        tile.setAttribute("opacity", isInvisible ?? false ? "0" : "1");
-    }
-};
