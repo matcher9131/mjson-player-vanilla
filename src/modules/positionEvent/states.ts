@@ -29,6 +29,9 @@ export const goToPreviousPosition = (): boolean => {
         return true;
     } else {
         --positionIndex;
+        while (getCurrentPositionEvents().find((e) => e.kind === "gameResult") != null) {
+            --positionIndex;
+        }
         return false;
     }
 };
