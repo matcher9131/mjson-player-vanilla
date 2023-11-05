@@ -14,7 +14,7 @@ import {
 } from "../modules/positionEvent/types";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
 import { showOverlay } from "./overlayText";
-import { setTileAnimationAll, updateTile } from "./tile";
+import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     const button = document.createElement("button");
@@ -28,6 +28,10 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     updateRoundText(newGameIndex);
     setCenterDisplayVisibility(newGameIndex);
     setTileAnimationAll(false);
+    const currentGameIndex = getCurrentGameIndex();
+    if (currentGameIndex === "pre" || currentGameIndex === "post") {
+        resetAllTiles();
+    }
     // NOT IMPLEMENTED
     // scoreとかリーチ棒とか
 };
@@ -39,8 +43,8 @@ export const createControlPanel = (): HTMLDivElement => {
         if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
         getCurrentPositionEvents()
             .filter(isPositionEventTransitionBackward)
-            .forEach((e) => {
-                updateTile(e);
+            .forEach(({ tileId, newState }) => {
+                updateTile(tileId, newState);
             });
     };
     const handleGoToNextPosition = (): void => {
@@ -51,8 +55,8 @@ export const createControlPanel = (): HTMLDivElement => {
             handleGameIndexChanged(getCurrentGameIndex());
         }
         const currentPositionEvent = getCurrentPositionEvents();
-        currentPositionEvent.filter(isPositionEventTransitionForward).forEach((e) => {
-            updateTile(e);
+        currentPositionEvent.filter(isPositionEventTransitionForward).forEach(({ tileId, newState }) => {
+            updateTile(tileId, newState);
         });
         currentPositionEvent.filter(isPositionEventMeld).forEach((e) => {
             showOverlay(e);
@@ -63,8 +67,8 @@ export const createControlPanel = (): HTMLDivElement => {
         handleGameIndexChanged(getCurrentGameIndex());
         getCurrentPositionEvents()
             .filter(isPositionEventTransitionForward)
-            .forEach((e) => {
-                updateTile(e);
+            .forEach(({ tileId, newState }) => {
+                updateTile(tileId, newState);
             });
     };
     const handleGoToNextGame = (): void => {
@@ -72,8 +76,8 @@ export const createControlPanel = (): HTMLDivElement => {
         handleGameIndexChanged(getCurrentGameIndex());
         getCurrentPositionEvents()
             .filter(isPositionEventTransitionForward)
-            .forEach((e) => {
-                updateTile(e);
+            .forEach(({ tileId, newState }) => {
+                updateTile(tileId, newState);
             });
     };
     const panel = document.createElement("div");

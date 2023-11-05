@@ -151,7 +151,21 @@ const getAllTilesState = (sides: readonly Side[]): TileState[] => {
 
 export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
     return new Map<GameIndex, GamePositionEvents>([
-        ["pre", [[{ kind: "beginningMatch", players: mJson.players.map((player) => player.name) }]]],
+        [
+            "pre",
+            [
+                [
+                    { kind: "beginningMatch", players: mJson.players.map((player) => player.name) },
+                    // ...new Array(136).fill(0).map(
+                    //     (_, tileId): PositionEvent => ({
+                    //         kind: "tileTransitionForward",
+                    //         tileId,
+                    //         newState: getDefaultTileState(),
+                    //     }),
+                    // ),
+                ],
+            ],
+        ],
         ...mJson.games.map((game, gameIndex) => {
             const sides = game.dealtTiles.map(
                 (dealt): Side => ({
@@ -165,7 +179,13 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             let prevStates: TileState[] = getAllTilesState(sides);
             let riichiStickShouldBeHandled: number | null = null;
 
-            const events: PositionEvent[][] = [];
+            const events: PositionEvent[][] = [
+                prevStates.map((newState, tileId) => ({
+                    kind: "tileTransitionForward",
+                    tileId,
+                    newState,
+                })),
+            ];
             let positionIndex = 0;
             for (const e of game.events) {
                 events.push([]);
@@ -198,9 +218,14 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                 isInvisible: true,
                             };
                             events[positionIndex - 1].push({
-                                kind: "tileTransitionBackward",
+                                kind: "tileTransitionForward",
                                 tileId,
                                 newState: { ...state },
+                            });
+                            events[positionIndex - 2]?.push({
+                                kind: "tileTransitionBackward",
+                                tileId,
+                                newState: getDefaultTileState(),
                             });
                             prevStates[tileId] = state;
                         }
@@ -387,8 +412,28 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             }
             // 点数表示
             events.push(...game.gameResults.map((gameResult): PositionEvent[] => [{ kind: "gameResult" }])); // NOT IMPLEMENTED
+            // 局の最後のeventsにbackward用のTileTransitionを入れる
+            events[events.length - 1].push(
+                ...prevStates.map(
+                    (newState, tileId): PositionEvent => ({ kind: "tileTransitionBackward", tileId, newState }),
+                ),
+            );
             return [gameIndex, events] as [GameIndex, GamePositionEvents];
         }),
-        ["post", [[{ kind: "endMatch", players: mJson.players.map(({ name, score }) => ({ name, score })) }]]],
+        [
+            "post",
+            [
+                [
+                    { kind: "endMatch", players: mJson.players.map(({ name, score }) => ({ name, score })) },
+                    // ...new Array(136).fill(0).map(
+                    //     (_, tileId): PositionEvent => ({
+                    //         kind: "tileTransitionForward",
+                    //         tileId,
+                    //         newState: getDefaultTileState(),
+                    //     }),
+                    // ),
+                ],
+            ],
+        ],
     ]);
 };

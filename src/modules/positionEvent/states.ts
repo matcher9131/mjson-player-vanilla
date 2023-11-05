@@ -4,6 +4,9 @@ import { getMJson } from "../mJson/states";
 import { assertNonNull } from "../../util/error";
 
 const positionEvents = createPositionEvents(getMJson());
+//
+console.log(positionEvents);
+//
 const numGames = [...positionEvents.keys()].filter((gameIndex) => gameIndex !== "pre" && gameIndex !== "post").length;
 let gameIndex: GameIndex = "pre";
 let positionIndex: number = 0;
@@ -22,12 +25,12 @@ export const getCurrentPositionIndex = (): number => positionIndex;
 export const goToPreviousPosition = (): boolean => {
     if (positionIndex === 0) {
         goToPreviousGame();
+        positionIndex = getCurrentGameEvents().length - 1;
         return true;
     } else {
         --positionIndex;
         return false;
     }
-    // TODO: ツモ、ロンのPositionEventになるときはさらにもう一つ前に戻す
 };
 
 export const goToNextPosition = (): boolean => {
@@ -63,6 +66,7 @@ export const goToPreviousGame = (): void => {
 };
 
 export const goToNextGame = (): void => {
+    positionIndex = 0;
     switch (gameIndex) {
         case numGames - 1:
             gameIndex = "post";

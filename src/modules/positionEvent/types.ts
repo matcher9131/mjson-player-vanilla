@@ -23,8 +23,6 @@ type PositionEventTileTransitionBackward = PositionEventBase & {
     readonly newState: TileState;
 };
 
-export type PositionEventTileTransition = PositionEventTileTransitionForward | PositionEventTileTransitionBackward;
-
 export type PositionEventMeld = PositionEventBase & {
     readonly kind: "meld";
     readonly sideIndex: number;
@@ -53,7 +51,8 @@ type PositionEventEndMatch = PositionEventBase & {
 };
 
 export type PositionEvent =
-    | PositionEventTileTransition
+    | PositionEventTileTransitionForward
+    | PositionEventTileTransitionBackward
     | PositionEventMeld
     | PositionEventRiichiStick
     | PositionEventRiichiStick

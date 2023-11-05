@@ -1,5 +1,6 @@
 import { svgNS } from "../const";
-import { type PositionEventTileTransition } from "../modules/positionEvent/types";
+import { getDefaultTileState } from "../modules/tileState/states";
+import { type TileState } from "../modules/tileState/types";
 import { assertNonNull } from "../util/error";
 
 export const createTile = (tileId: number): SVGUseElement => {
@@ -32,10 +33,7 @@ export const setTileAnimationAll = (animates: boolean): void => {
     }
 };
 
-export const updateTile = ({
-    tileId,
-    newState: { x, y, sideIndex, isRotated, isInvisible },
-}: PositionEventTileTransition): void => {
+export const updateTile = (tileId: number, { x, y, sideIndex, isRotated, isInvisible }: TileState): void => {
     const tile = document.querySelector(`#tile${tileId}`);
     assertNonNull(tile, `#tile${tileId}`);
     tile.setAttribute(
@@ -43,4 +41,10 @@ export const updateTile = ({
         `rotate(${-sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,
     );
     tile.setAttribute("opacity", isInvisible ?? false ? "0" : "1");
+};
+
+export const resetAllTiles = (): void => {
+    for (let tileId = 0; tileId < 136; ++tileId) {
+        updateTile(tileId, getDefaultTileState());
+    }
 };
