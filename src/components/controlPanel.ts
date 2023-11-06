@@ -11,8 +11,10 @@ import {
     type GameIndex,
     isPositionEventTransitionBackward,
     isPositionEventMeld,
+    isPositionEventGameResult,
 } from "../modules/positionEvent/types";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
+import { hideGameResult, showGameResult } from "./gameResult";
 import { showOverlay } from "./overlayText";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 
@@ -38,16 +40,21 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
 
 export const createControlPanel = (): HTMLDivElement => {
     const handleGoToPreviousPosition = (): void => {
+        hideGameResult();
         setTileAnimationAll(false);
         const gameIsChanged = goToPreviousPosition();
         if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
-        getCurrentPositionEvents()
-            .filter(isPositionEventTransitionBackward)
-            .forEach(({ tileId, newState }) => {
-                updateTile(tileId, newState);
-            });
+        const currentPositionEvent = getCurrentPositionEvents();
+        currentPositionEvent.filter(isPositionEventTransitionBackward).forEach(({ tileId, newState }) => {
+            updateTile(tileId, newState);
+        });
+        const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
+        if (eventGameResult != null) {
+            showGameResult(eventGameResult);
+        }
     };
     const handleGoToNextPosition = (): void => {
+        hideGameResult();
         setTileAnimationAll(true);
         const gameIsChanged = goToNextPosition();
         if (gameIsChanged) {
@@ -61,8 +68,13 @@ export const createControlPanel = (): HTMLDivElement => {
         currentPositionEvent.filter(isPositionEventMeld).forEach((e) => {
             showOverlay(e);
         });
+        const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
+        if (eventGameResult != null) {
+            showGameResult(eventGameResult);
+        }
     };
     const handleGoToPreviousGame = (): void => {
+        hideGameResult();
         goToPreviousGame();
         handleGameIndexChanged(getCurrentGameIndex());
         getCurrentPositionEvents()
@@ -72,6 +84,7 @@ export const createControlPanel = (): HTMLDivElement => {
             });
     };
     const handleGoToNextGame = (): void => {
+        hideGameResult();
         goToNextGame();
         handleGameIndexChanged(getCurrentGameIndex());
         getCurrentPositionEvents()

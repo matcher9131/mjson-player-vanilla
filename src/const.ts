@@ -22,3 +22,6 @@ export const scoreTextOffsetY = centerDisplayHeight / 2 - 20;
 
 export const overlayTextOffsetX = 0;
 export const overlayTextOffsetY = boardOneSize * 0.35;
+
+export const gameResultScoreWidth = boardOneSize * 0.75;
+export const gameResultScoreHeight = gameResultScoreWidth / 2;

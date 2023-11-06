@@ -397,7 +397,18 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                 events.push(winMeld);
             }
             // 点数表示
-            events.push(...game.gameResults.map((gameResult): PositionEvent[] => [{ kind: "gameResult" }])); // NOT IMPLEMENTED
+            events.push(
+                ...game.gameResults.map((gameResult): PositionEvent[] => [
+                    {
+                        kind: "gameResult",
+                        players: mJson.players.map(({ name }, sideIndex) => ({
+                            name,
+                            increment: gameResult.scoreIncrements[sideIndex], // NOT IMPLEMENTED
+                            newScore: -1, // NOT IMPLEMENTED
+                        })),
+                    },
+                ]),
+            );
             // 局の最後のeventsにbackward用のTileTransitionを入れる
             events[events.length - 1].push(
                 ...prevStates.map(

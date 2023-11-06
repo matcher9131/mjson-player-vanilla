@@ -35,9 +35,9 @@ type PositionEventRiichiStick = PositionEventBase & {
     readonly isSet: boolean;
 };
 
-type PositionEventGameResult = PositionEventBase & {
+export type PositionEventGameResult = PositionEventBase & {
     readonly kind: "gameResult";
-    // NOT IMPLEMENTED
+    readonly players: ReadonlyArray<{ readonly name: string; readonly increment: number; readonly newScore: number }>;
 };
 
 type PositionEventBeginningMatch = PositionEventBase & {
@@ -72,3 +72,6 @@ export const isPositionEventTransitionBackward = (event: PositionEvent): event i
     event.kind === "tileTransitionBackward";
 
 export const isPositionEventMeld = (event: PositionEvent): event is PositionEventMeld => event.kind === "meld";
+
+export const isPositionEventGameResult = (event: PositionEvent): event is PositionEventGameResult =>
+    event.kind === "gameResult";
