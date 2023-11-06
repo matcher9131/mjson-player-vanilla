@@ -151,21 +151,7 @@ const getAllTilesState = (sides: readonly Side[]): TileState[] => {
 
 export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
     return new Map<GameIndex, GamePositionEvents>([
-        [
-            "pre",
-            [
-                [
-                    { kind: "beginningMatch", players: mJson.players.map((player) => player.name) },
-                    // ...new Array(136).fill(0).map(
-                    //     (_, tileId): PositionEvent => ({
-                    //         kind: "tileTransitionForward",
-                    //         tileId,
-                    //         newState: getDefaultTileState(),
-                    //     }),
-                    // ),
-                ],
-            ],
-        ],
+        ["pre", [[{ kind: "beginningMatch", players: mJson.players.map((player) => player.name) }]]],
         ...mJson.games.map((game, gameIndex) => {
             const sides = game.dealtTiles.map(
                 (dealt): Side => ({
@@ -420,20 +406,6 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             );
             return [gameIndex, events] as [GameIndex, GamePositionEvents];
         }),
-        [
-            "post",
-            [
-                [
-                    { kind: "endMatch", players: mJson.players.map(({ name, score }) => ({ name, score })) },
-                    // ...new Array(136).fill(0).map(
-                    //     (_, tileId): PositionEvent => ({
-                    //         kind: "tileTransitionForward",
-                    //         tileId,
-                    //         newState: getDefaultTileState(),
-                    //     }),
-                    // ),
-                ],
-            ],
-        ],
+        ["post", [[{ kind: "endMatch", players: mJson.players.map(({ name, score }) => ({ name, score })) }]]],
     ]);
 };

@@ -4,9 +4,6 @@ import { getMJson } from "../mJson/states";
 import { assertNonNull } from "../../util/error";
 
 const positionEvents = createPositionEvents(getMJson());
-//
-console.log(positionEvents);
-//
 const numGames = [...positionEvents.keys()].filter((gameIndex) => gameIndex !== "pre" && gameIndex !== "post").length;
 let gameIndex: GameIndex = "pre";
 let positionIndex: number = 0;
@@ -29,7 +26,10 @@ export const goToPreviousPosition = (): boolean => {
         return true;
     } else {
         --positionIndex;
-        while (getCurrentPositionEvents().find((e) => e.kind === "gameResult") != null) {
+        while (
+            getCurrentPositionEvents().find((e) => e.kind === "meld" && (e.text === "ツモ" || e.text === "ロン")) !=
+            null
+        ) {
             --positionIndex;
         }
         return false;
