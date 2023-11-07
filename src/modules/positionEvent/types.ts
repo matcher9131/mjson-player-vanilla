@@ -1,3 +1,4 @@
+import { type YakuDoubles } from "../mJson/types/yakuDoubles";
 import { type TileState } from "../tileState/types";
 
 type PositionEventBase = {
@@ -6,7 +7,8 @@ type PositionEventBase = {
         | "tileTransitionBackward"
         | "meld"
         | "riichiStick"
-        | "gameResult"
+        | "gameResultWin"
+        | "gameResultDraw"
         | "beginningMatch"
         | "endMatch";
 };
@@ -35,10 +37,22 @@ type PositionEventRiichiStick = PositionEventBase & {
     readonly isSet: boolean;
 };
 
-export type PositionEventGameResult = PositionEventBase & {
-    readonly kind: "gameResult";
+type PositionEventGameResultBase = PositionEventBase & {
+    readonly kind: "gameResultWin" | "gameResultDraw";
     readonly players: ReadonlyArray<{ readonly name: string; readonly increment: number; readonly newScore: number }>;
 };
+
+type PositionEventGameResultWin = PositionEventGameResultBase & {
+    readonly kind: "gameResultWin";
+    readonly handTileStates: ReadonlyMap<number, TileState>;
+    readonly yakuList: readonly YakuDoubles[];
+};
+
+type PositionEventGameResultDraw = PositionEventGameResultBase & {
+    readonly kind: "gameResultDraw";
+};
+
+export type PositionEventGameResult = PositionEventGameResultWin | PositionEventGameResultDraw;
 
 type PositionEventBeginningMatch = PositionEventBase & {
     readonly kind: "beginningMatch";
@@ -74,4 +88,4 @@ export const isPositionEventTransitionBackward = (event: PositionEvent): event i
 export const isPositionEventMeld = (event: PositionEvent): event is PositionEventMeld => event.kind === "meld";
 
 export const isPositionEventGameResult = (event: PositionEvent): event is PositionEventGameResult =>
-    event.kind === "gameResult";
+    event.kind === "gameResultWin" || event.kind === "gameResultDraw";

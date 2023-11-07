@@ -64,8 +64,8 @@ const isSameState = (state1: TileState, state2: TileState): boolean => {
     );
 };
 
-// 'states'に捨て牌のTileStateを書き込む
-const setDiscardsTilesState = (states: TileState[], side: Side, sideIndex: number): void => {
+const getDiscardsTileStates = (side: Side, sideIndex: number): ReadonlyMap<number, TileState> => {
+    const map = new Map<number, TileState>();
     const riichiRow = side.riichiIndex != null ? Math.min(2, Math.floor(side.riichiIndex / 6)) : -1;
     const riichiColumn = side.riichiIndex != null ? side.riichiIndex - 6 * riichiRow : -1;
     const adjustment = (i: number, j: number): number => {
@@ -78,72 +78,82 @@ const setDiscardsTilesState = (states: TileState[], side: Side, sideIndex: numbe
     for (let discardIndex = 0; discardIndex < side.discards.length; ++discardIndex) {
         const i = Math.min(2, Math.floor(discardIndex / 6));
         const j = discardIndex - 6 * i;
-        states[side.discards[discardIndex]] = {
+        map.set(side.discards[discardIndex], {
             x: discardsOffsetX + j * tileWidth + adjustment(i, j),
             y: discardsOffsetY + i * tileHeight,
             sideIndex,
             isRotated: discardIndex === side.riichiIndex,
-        };
+        });
     }
+    return map;
+};
+
+export const getHandTileStates = (side: Side, sideIndex: number): ReadonlyMap<number, TileState> => {
+    const map = new Map<number, TileState>();
+    // 手牌（ツモ牌以外）
+    const sideWidth = getSideWidth(side);
+    for (let j = 0; j < side.unrevealed.length; ++j) {
+        map.set(side.unrevealed[j], {
+            x: j * tileWidth + tileWidth / 2 - sideWidth / 2,
+            y: regularTileY,
+            sideIndex,
+        });
+    }
+    // ツモ牌
+    const drawTile = side.drawTile;
+    if (drawTile != null) {
+        map.set(drawTile, {
+            x: getDrawX(side),
+            y: regularTileY,
+            sideIndex,
+        });
+    }
+    // 鳴き牌
+    let tileLeft = getUnrevealedWidth(side) + meldGapX - sideWidth / 2;
+    for (let meldIndex = 0; meldIndex < side.melds.length; ++meldIndex) {
+        const meld = side.melds[meldIndex];
+        for (let j = 0; j < meld.tiles.length; ++j) {
+            if (j === meld.rotatedIndex) {
+                map.set(meld.tiles[j].tileId, {
+                    x: tileLeft + tileHeight / 2,
+                    y: rotatedTileY,
+                    sideIndex,
+                    isRotated: true,
+                });
+                if (meld.addedTileId != null) {
+                    map.set(meld.addedTileId, {
+                        x: tileLeft + tileHeight / 2,
+                        y: rotatedTileY - tileWidth,
+                        sideIndex,
+                    });
+                }
+                tileLeft += tileHeight;
+            } else {
+                map.set(meld.tiles[j].tileId, {
+                    x: tileLeft + tileWidth / 2,
+                    y: regularTileY,
+                    sideIndex,
+                });
+                tileLeft += tileWidth;
+            }
+        }
+        tileLeft += meldGapX;
+    }
+
+    return map;
 };
 
 const getAllTilesState = (sides: readonly Side[]): TileState[] => {
     const states = new Array(136).fill(0).map(() => getDefaultTileState());
     for (let sideIndex = 0; sideIndex < sides.length; ++sideIndex) {
         const side = sides[sideIndex];
-        // 手牌（ツモ牌以外）
-        const sideWidth = getSideWidth(side);
-        for (let j = 0; j < side.unrevealed.length; ++j) {
-            states[side.unrevealed[j]] = {
-                x: j * tileWidth + tileWidth / 2 - sideWidth / 2,
-                y: regularTileY,
-                sideIndex,
-            };
-        }
-
-        // ツモ牌
-        const drawTile = side.drawTile;
-        if (drawTile != null) {
-            states[drawTile] = {
-                x: getDrawX(side),
-                y: regularTileY,
-                sideIndex,
-            };
-        }
-
         // 捨て牌
-        setDiscardsTilesState(states, side, sideIndex);
-
-        // 鳴き牌
-        let tileLeft = getUnrevealedWidth(side) + meldGapX - sideWidth / 2;
-        for (let meldIndex = 0; meldIndex < side.melds.length; ++meldIndex) {
-            const meld = side.melds[meldIndex];
-            for (let j = 0; j < meld.tiles.length; ++j) {
-                if (j === meld.rotatedIndex) {
-                    states[meld.tiles[j].tileId] = {
-                        x: tileLeft + tileHeight / 2,
-                        y: rotatedTileY,
-                        sideIndex,
-                        isRotated: true,
-                    };
-                    if (meld.addedTileId != null) {
-                        states[meld.addedTileId] = {
-                            x: tileLeft + tileHeight / 2,
-                            y: rotatedTileY - tileWidth,
-                            sideIndex,
-                        };
-                    }
-                    tileLeft += tileHeight;
-                } else {
-                    states[meld.tiles[j].tileId] = {
-                        x: tileLeft + tileWidth / 2,
-                        y: regularTileY,
-                        sideIndex,
-                    };
-                    tileLeft += tileWidth;
-                }
-            }
-            tileLeft += meldGapX;
+        for (const [tileId, state] of getDiscardsTileStates(side, sideIndex)) {
+            states[tileId] = state;
+        }
+        // 捨て牌以外
+        for (const [tileId, state] of getHandTileStates(side, sideIndex)) {
+            states[tileId] = state;
         }
     }
     return states;
@@ -164,6 +174,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             // states[tileId]
             let prevStates: TileState[] = getAllTilesState(sides);
             let riichiStickShouldBeHandled: number | null = null;
+            let lastTileId: number = -1;
 
             const events: PositionEvent[][] = [
                 prevStates.map((newState, tileId) => ({
@@ -214,6 +225,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                 newState: getDefaultTileState(),
                             });
                             prevStates[tileId] = state;
+                            lastTileId = tileId;
                         }
                         break;
                     case "d": // 捨て
@@ -234,6 +246,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                 side.riichiIndex = side.discards.length - 1;
                                 riichiStickShouldBeHandled = sideIndex;
                             }
+                            lastTileId = tileId;
                         }
                         break;
                     case "c": // チー
@@ -399,14 +412,28 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             // 点数表示
             events.push(
                 ...game.gameResults.map((gameResult): PositionEvent[] => [
-                    {
-                        kind: "gameResult",
-                        players: mJson.players.map(({ name }, sideIndex) => ({
-                            name,
-                            increment: gameResult.scoreIncrements[sideIndex], // NOT IMPLEMENTED
-                            newScore: -1, // NOT IMPLEMENTED
-                        })),
-                    },
+                    gameResult.resultKind === "win"
+                        ? {
+                              kind: "gameResultWin",
+                              players: mJson.players.map(({ name }, sideIndex) => ({
+                                  name,
+                                  increment: gameResult.scoreIncrements[sideIndex],
+                                  newScore: -1, // NOT IMPLEMENTED
+                              })),
+                              handTileStates: getHandTileStates(
+                                  { ...sides[gameResult.player], drawTile: lastTileId },
+                                  gameResult.player,
+                              ),
+                              yakuList: gameResult.yakuList,
+                          }
+                        : {
+                              kind: "gameResultDraw",
+                              players: mJson.players.map(({ name }, sideIndex) => ({
+                                  name,
+                                  increment: gameResult.scoreIncrements[sideIndex],
+                                  newScore: -1, // NOT IMPLEMENTED
+                              })),
+                          },
                 ]),
             );
             // 局の最後のeventsにbackward用のTileTransitionを入れる
