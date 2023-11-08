@@ -422,7 +422,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                               })),
                               handTileStates: getHandTileStates(
                                   { ...sides[gameResult.player], drawTile: lastTileId },
-                                  gameResult.player,
+                                  0, // gameResult表示用のため回転移動の必要なし
                               ),
                               yakuList: gameResult.yakuList,
                           }

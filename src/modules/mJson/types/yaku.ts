@@ -1,4 +1,4 @@
-export const yakuList = [
+const yakuList = [
     // 一飜
     "門前清自摸和", // 0
     "立直", // 1
@@ -69,18 +69,5 @@ export const yakuList = [
     "赤ドラ", // 54
 ] as const;
 
-// export const honorYakuList = [
-//     "自風 東",
-//     "自風 南",
-//     "自風 西",
-//     "自風 北",
-
-//     "場風 東",
-//     "場風 南",
-//     "場風 西",
-//     "場風 北",
-
-//     "役牌 白",
-//     "役牌 發",
-//     "役牌 中",
-// ] as const;
+type YakuName = (typeof yakuList)[number];
+export const getYakuName = (yakuId: number): YakuName => yakuList[yakuId];
