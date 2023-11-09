@@ -320,6 +320,12 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                             for (const t of e.tiles) {
                                 removeFrom(side.unrevealed, t);
                             }
+                            // 赤ドラが裏向きになってしまわないようにする
+                            const tiles = e.tiles.map((tileId) => ({
+                                tileId,
+                                isUnrevealed: tileId % 4 === 1 || tileId % 4 === 3,
+                            }));
+                            [tiles[0], tiles[1]] = [tiles[1], tiles[0]];
                             side.melds.push({
                                 tiles: e.tiles.map((tileId) => ({
                                     tileId,
