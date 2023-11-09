@@ -326,12 +326,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                 isUnrevealed: tileId % 4 === 1 || tileId % 4 === 3,
                             }));
                             [tiles[0], tiles[1]] = [tiles[1], tiles[0]];
-                            side.melds.push({
-                                tiles: e.tiles.map((tileId) => ({
-                                    tileId,
-                                    isUnrevealed: tileId % 4 === 1 || tileId % 4 === 2,
-                                })),
-                            });
+                            side.melds.push({ tiles });
                         }
                         break;
                     case "m": // 明槓
