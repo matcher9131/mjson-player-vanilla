@@ -175,13 +175,21 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             let prevStates: TileState[] = getAllTilesState(sides);
             let riichiStickShouldBeHandled: number | null = null;
             let lastTileId: number = -1;
+            let doraIndex: number = 0;
+            let doraIndexShouldBe: number = 0;
 
             const events: PositionEvent[][] = [
-                prevStates.map((newState, tileId) => ({
-                    kind: "tileTransitionForward",
-                    tileId,
-                    newState,
-                })),
+                [
+                    ...prevStates.map((newState, tileId) => ({
+                        kind: "tileTransitionForward" as const,
+                        tileId,
+                        newState,
+                    })),
+                    {
+                        kind: "dora" as const,
+                        rightIndex: doraIndex,
+                    },
+                ],
             ];
             let positionIndex = 0;
             for (const e of game.events) {
@@ -230,6 +238,19 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                         break;
                     case "d": // 捨て
                         {
+                            // ドラ表示関連
+                            if (doraIndexShouldBe > doraIndex) {
+                                events[positionIndex - 1].push({
+                                    kind: "dora",
+                                    rightIndex: doraIndex,
+                                });
+                                doraIndex = doraIndexShouldBe;
+                                events[positionIndex].push({
+                                    kind: "dora",
+                                    rightIndex: doraIndex,
+                                });
+                            }
+
                             const tileId = e.t;
                             if (side.drawTile != null) {
                                 insertTo(side.unrevealed, side.drawTile);
@@ -309,6 +330,18 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                     case "a": // 暗槓
                         // eslint-disable-next-line no-lone-blocks
                         {
+                            // ドラ表示関連
+                            events[positionIndex - 1].push({
+                                kind: "dora",
+                                rightIndex: doraIndex,
+                            });
+                            ++doraIndex;
+                            doraIndexShouldBe = doraIndex;
+                            events[positionIndex].push({
+                                kind: "dora",
+                                rightIndex: doraIndex,
+                            });
+
                             events[positionIndex].push({
                                 kind: "meld",
                                 sideIndex,
@@ -331,6 +364,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                         break;
                     case "m": // 明槓
                         {
+                            ++doraIndexShouldBe;
                             events[positionIndex].push({
                                 kind: "meld",
                                 sideIndex,
@@ -367,6 +401,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                         break;
                     case "k": // 加槓
                         {
+                            ++doraIndexShouldBe;
                             events[positionIndex].push({
                                 kind: "meld",
                                 sideIndex,
@@ -412,10 +447,10 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             }
             // 点数表示
             events.push(
-                ...game.gameResults.map((gameResult): PositionEvent[] => [
+                ...game.gameResults.map((gameResult) => [
                     gameResult.resultKind === "win"
                         ? {
-                              kind: "gameResultWin",
+                              kind: "gameResultWin" as const,
                               players: mJson.players.map(({ name }, sideIndex) => ({
                                   name,
                                   increment: gameResult.scoreIncrements[sideIndex],
@@ -428,7 +463,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                               yakuList: gameResult.yakuList,
                           }
                         : {
-                              kind: "gameResultDraw",
+                              kind: "gameResultDraw" as const,
                               players: mJson.players.map(({ name }, sideIndex) => ({
                                   name,
                                   increment: gameResult.scoreIncrements[sideIndex],
@@ -437,11 +472,17 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                           },
                 ]),
             );
-            // 局の最後のeventsにbackward用のTileTransitionを入れる
+            // 局の最後のeventsにbackward用のTileTransitionとドラ表示を入れる
             events[events.length - 1].push(
-                ...prevStates.map(
-                    (newState, tileId): PositionEvent => ({ kind: "tileTransitionBackward", tileId, newState }),
-                ),
+                ...prevStates.map((newState, tileId) => ({
+                    kind: "tileTransitionBackward" as const,
+                    tileId,
+                    newState,
+                })),
+                {
+                    kind: "dora",
+                    rightIndex: doraIndex,
+                },
             );
             return [gameIndex, events] as [GameIndex, GamePositionEvents];
         }),

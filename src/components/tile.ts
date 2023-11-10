@@ -3,17 +3,22 @@ import { getDefaultTileState } from "../modules/tileState/states";
 import { type TileState } from "../modules/tileState/types";
 import { assertNonNull } from "../util/error";
 
-export const createTile = (tileId: number, setId = true): SVGUseElement => {
-    const srcTileId =
-        tileId === 16
-            ? "src_tile4r"
-            : tileId === 52
-            ? "src_tile13r"
-            : tileId === 88
-            ? "src_tile22r"
-            : `src_tile${tileId >> 2}`;
+export const getSrcTileId = (tileId: number | null): string => {
+    return tileId == null
+        ? "src_tile_facedown"
+        : tileId === 16
+        ? "src_tile4r"
+        : tileId === 52
+        ? "src_tile13r"
+        : tileId === 88
+        ? "src_tile22r"
+        : `src_tile${tileId >> 2}`;
+};
+
+export const createTile = (tileId: number | null, setId = true): SVGUseElement => {
+    const srcTileId = getSrcTileId(tileId);
     const tile = document.createElementNS(svgNS, "use");
-    if (setId) tile.setAttribute("id", `tile${tileId}`);
+    if (setId && tileId != null) tile.setAttribute("id", `tile${tileId}`);
     tile.classList.add("board-tile");
     tile.setAttribute("href", `#${srcTileId}`);
     // 初期状態

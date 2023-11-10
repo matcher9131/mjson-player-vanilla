@@ -1,3 +1,4 @@
+import { getMJson } from "../modules/mJson/states";
 import {
     getCurrentGameIndex,
     getCurrentPositionEvents,
@@ -12,8 +13,10 @@ import {
     isPositionEventTransitionBackward,
     isPositionEventMeld,
     isPositionEventGameResult,
+    isPositionEventDora,
 } from "../modules/positionEvent/types";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
+import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
 import { showOverlay } from "./overlayText";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
@@ -30,10 +33,14 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     updateRoundText(newGameIndex);
     setCenterDisplayVisibility(newGameIndex);
     setTileAnimationAll(false);
-    const currentGameIndex = getCurrentGameIndex();
-    if (currentGameIndex === "pre" || currentGameIndex === "post") {
+    if (newGameIndex === "pre" || newGameIndex === "post") {
         resetAllTiles();
+    } else {
+        // ドラをセットする
+        updateDoraTileIds(getMJson().games[newGameIndex].dora);
+        updateDoraRightIndex(0);
     }
+
     // NOT IMPLEMENTED
     // scoreとかリーチ棒とか
 };
@@ -45,9 +52,15 @@ export const createControlPanel = (): HTMLDivElement => {
         const gameIsChanged = goToPreviousPosition();
         if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
         const currentPositionEvent = getCurrentPositionEvents();
+        // 牌の移動
         currentPositionEvent.filter(isPositionEventTransitionBackward).forEach(({ tileId, newState }) => {
             updateTile(tileId, newState);
         });
+        // ドラ表示
+        currentPositionEvent.filter(isPositionEventDora).forEach(({ rightIndex }) => {
+            updateDoraRightIndex(rightIndex);
+        });
+        // 局結果表示
         const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
         if (eventGameResult != null) {
             showGameResult(eventGameResult);
@@ -62,12 +75,19 @@ export const createControlPanel = (): HTMLDivElement => {
             handleGameIndexChanged(getCurrentGameIndex());
         }
         const currentPositionEvent = getCurrentPositionEvents();
+        // 牌の移動
         currentPositionEvent.filter(isPositionEventTransitionForward).forEach(({ tileId, newState }) => {
             updateTile(tileId, newState);
         });
+        // ドラ表示
+        currentPositionEvent.filter(isPositionEventDora).forEach(({ rightIndex }) => {
+            updateDoraRightIndex(rightIndex);
+        });
+        // 鳴き表示
         currentPositionEvent.filter(isPositionEventMeld).forEach((e) => {
             showOverlay(e);
         });
+        // 局結果表示
         const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
         if (eventGameResult != null) {
             showGameResult(eventGameResult);

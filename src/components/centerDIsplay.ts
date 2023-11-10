@@ -8,10 +8,12 @@ import {
     scoreTextOffsetX,
     scoreTextOffsetY,
     svgNS,
+    tileWidth,
 } from "../const";
 import { getMJson } from "../modules/mJson/states";
 import { type GameIndex } from "../modules/positionEvent/types";
 import { assertNonNull } from "../util/error";
+import { createDoraDisplay } from "./doraDisplay";
 
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";
@@ -58,6 +60,12 @@ export const createCenterDisplay = (): SVGGElement => {
     cd.appendChild(bg);
     const roundText = createRoundText();
     cd.appendChild(roundText);
+    const doraDisplay = createDoraDisplay();
+    // temporary
+    doraDisplay.setAttribute("x", `${-tileWidth * 2.5}`);
+    doraDisplay.setAttribute("y", `${0}`);
+    // end temporary
+    cd.appendChild(doraDisplay);
     for (let i = 0; i < 4; ++i) {
         const scoreText = createScoreText(i);
         cd.appendChild(scoreText);
