@@ -3,7 +3,7 @@ import { getYakuName } from "../modules/mJson/types/yaku";
 import { type YakuDoubles } from "../modules/mJson/types/yakuDoubles";
 import { type PositionEventGameResult } from "../modules/positionEvent/types";
 import { type TileState } from "../modules/tileState/types";
-import { MaxBy } from "../util/arrayExtensions";
+import { maxBy } from "../util/arrayExtensions";
 import { createSVGTextElement } from "../util/domHelper";
 import { assertNonNull } from "../util/error";
 import { boardId } from "./board";
@@ -79,7 +79,7 @@ const createHandElement = (
     hiddenDora: readonly number[],
 ): SVGElement => {
     const left = Math.min(...[...tileStates.values()].map((state) => state.x)) - tileWidth / 2;
-    const rightTile = MaxBy([...tileStates.values()], (state) => state.x);
+    const rightTile = maxBy([...tileStates.values()], (state) => state.x);
     assertNonNull(rightTile, "rightTile");
     const right = rightTile.x + (rightTile.isRotated ?? false ? tileHeight / 2 : tileWidth / 2);
     const handWidth = right - left;

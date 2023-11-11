@@ -22,7 +22,7 @@ export const removeFrom = (arr: number[], x: number): number => {
     return index;
 };
 
-export const MaxBy = <T>(arr: readonly T[], predicate: (item: T) => number): T | null => {
+export const maxBy = <T>(arr: readonly T[], predicate: (item: T) => number): T | null => {
     let target: T | null = null;
     let maxValue = Number.NEGATIVE_INFINITY;
     for (let i = 0; i < arr.length; ++i) {
