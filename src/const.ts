@@ -25,3 +25,9 @@ export const overlayTextOffsetY = boardOneSize * 0.35;
 
 export const gameResultScoreWidth = boardOneSize * 0.75;
 export const gameResultScoreHeight = gameResultScoreWidth / 2;
+
+// TODO
+// centerDisplayWidth, centerDisplayHeightをもう少し大きく
+// 伴ってcenterDisplayOffsetX, centerDisplayOffsetY, discardsOffsetYを変更
+// drawGapXをもう少し大きく
+// meldGapXをもう少し小さく

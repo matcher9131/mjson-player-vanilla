@@ -15,10 +15,10 @@ export const getSrcTileId = (tileId: number | null): string => {
         : `src_tile${tileId >> 2}`;
 };
 
-export const createTile = (tileId: number | null, setId = true): SVGUseElement => {
+export const createTile = (tileId: number | null, setsId = true): SVGUseElement => {
     const srcTileId = getSrcTileId(tileId);
     const tile = document.createElementNS(svgNS, "use");
-    if (setId && tileId != null) tile.setAttribute("id", `tile${tileId}`);
+    if (setsId && tileId != null) tile.setAttribute("id", `tile${tileId}`);
     tile.classList.add("board-tile");
     tile.setAttribute("href", `#${srcTileId}`);
     // 初期状態

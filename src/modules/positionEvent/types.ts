@@ -38,6 +38,8 @@ type PositionEventGameResultWin = PositionEventGameResultBase & {
     readonly kind: "gameResultWin";
     readonly handTileStates: ReadonlyMap<number, TileState>;
     readonly yakuList: readonly YakuDoubles[];
+    readonly dora: readonly number[];
+    readonly hiddenDora: readonly number[];
 };
 
 type PositionEventGameResultDraw = PositionEventGameResultBase & {

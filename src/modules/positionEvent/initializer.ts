@@ -461,6 +461,8 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                   0, // gameResult表示用のため回転移動の必要なし
                               ),
                               yakuList: gameResult.yakuList,
+                              dora: game.dora,
+                              hiddenDora: game.hiddenDora ?? [],
                           }
                         : {
                               kind: "gameResultDraw" as const,
