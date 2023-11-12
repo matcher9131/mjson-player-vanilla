@@ -14,10 +14,10 @@ import { getMJson } from "../modules/mJson/states";
 import { type GameIndex } from "../modules/positionEvent/types";
 import { assertNonNull } from "../util/error";
 import { createDoraDisplay } from "./doraDisplay";
+import { createScoreText } from "./scoreDisplay";
 
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";
-const scoreTextId = (sideIndex: number): string => `score_text${sideIndex}`;
 
 const createBackground = (): SVGRectElement => {
     const element = document.createElementNS(svgNS, "rect");
@@ -40,19 +40,6 @@ const createRoundText = (): SVGTextElement => {
     return element;
 };
 
-const createScoreText = (sideIndex: number): SVGTextElement => {
-    const element = document.createElementNS(svgNS, "text");
-    element.setAttribute("id", scoreTextId(sideIndex));
-    element.setAttribute("text-anchor", "middle");
-    element.setAttribute("dominant-baseline", "alphabetic");
-    element.setAttribute("font-size", "400");
-    element.setAttribute("fill", "floralwhite");
-    element.setAttribute("transform", `rotate(${-90 * sideIndex}) translate(${scoreTextOffsetX} ${scoreTextOffsetY})`);
-    // 初期状態
-    element.textContent = " 25000";
-    return element;
-};
-
 export const createCenterDisplay = (): SVGGElement => {
     const cd = document.createElementNS(svgNS, "g");
     cd.setAttribute("id", centerDisplayId);
@@ -66,8 +53,12 @@ export const createCenterDisplay = (): SVGGElement => {
     doraDisplay.setAttribute("y", `${0}`);
     // end temporary
     cd.appendChild(doraDisplay);
-    for (let i = 0; i < 4; ++i) {
-        const scoreText = createScoreText(i);
+    for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
+        const scoreText = createScoreText(sideIndex);
+        scoreText.setAttribute(
+            "transform",
+            `rotate(${-90 * sideIndex}) translate(${scoreTextOffsetX} ${scoreTextOffsetY})`,
+        );
         cd.appendChild(scoreText);
     }
     // 初期状態
@@ -87,10 +78,4 @@ export const updateRoundText = (gameIndex: GameIndex): void => {
     assertNonNull(roundText, roundTextId);
     const round = getMJson().games[gameIndex].round;
     roundText.textContent = `${["東", "南", "西", "北"][round >> 2]}${(round % 4) + 1}局`;
-};
-
-export const updateScoreText = (sideIndex: number, score: number): void => {
-    const scoreText = document.getElementById(scoreTextId(sideIndex));
-    assertNonNull(scoreText, scoreTextId(sideIndex));
-    scoreText.textContent = `${score}`.padStart(6, " ");
 };
