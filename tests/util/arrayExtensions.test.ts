@@ -1,4 +1,4 @@
-import { describe } from "vitest";
+import { describe, expect, test } from "vitest";
 import { maxBy, insertTo, lowerBound, removeFrom } from "@/util/arrayExtensions";
 
 describe("arrayExtension", () => {

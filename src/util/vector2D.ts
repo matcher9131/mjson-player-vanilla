@@ -4,7 +4,7 @@ type Vector2D = {
 };
 
 export const rotate = ({ x, y }: Vector2D, degree: number): Vector2D => {
-    const radian = (degree * Math.PI) / 180;
+    const radian = (degree / 180.0) * Math.PI;
     const a11 = Math.cos(radian);
     const a12 = -Math.sin(radian);
     const a21 = Math.sin(radian);

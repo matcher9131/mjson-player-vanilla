@@ -3,9 +3,9 @@ import path from "path";
 
 export default defineConfig({
     test: {
-        globals: true,
         alias: {
             "@": path.join(__dirname, "/src"),
         },
+        environment: "jsdom",
     },
 });
