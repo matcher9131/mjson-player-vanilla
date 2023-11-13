@@ -14,7 +14,7 @@ import { getMJson } from "../modules/mJson/states";
 import { type GameIndex } from "../modules/positionEvent/types";
 import { assertNonNull } from "../util/error";
 import { createDoraDisplay } from "./doraDisplay";
-import { createScoreText } from "./scoreDisplay";
+import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";
 
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";
@@ -60,6 +60,14 @@ export const createCenterDisplay = (): SVGGElement => {
             `rotate(${-90 * sideIndex}) translate(${scoreTextOffsetX} ${scoreTextOffsetY})`,
         );
         cd.appendChild(scoreText);
+        const riichiStick = createRiichiStickDisplay(sideIndex);
+        // temporary
+        riichiStick.setAttribute(
+            "transform",
+            `rotate(${-90 * sideIndex}) translate(${scoreTextOffsetX} ${scoreTextOffsetY})`,
+        );
+        // end temporary
+        cd.appendChild(riichiStick);
     }
     // 初期状態
     cd.setAttribute("opacity", "0");

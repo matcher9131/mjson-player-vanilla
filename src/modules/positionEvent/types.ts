@@ -1,16 +1,11 @@
 import { type YakuDoubles } from "../mJson/types/yakuDoubles";
 import { type TileState } from "../tileState/types";
 
-type PositionEventTileTransitionForward = {
-    readonly kind: "tileTransitionForward";
+export type PositionEventTileTransition = {
+    readonly kind: "tileTransition";
     readonly tileId: number;
     readonly newState: TileState;
-};
-
-type PositionEventTileTransitionBackward = {
-    readonly kind: "tileTransitionBackward";
-    readonly tileId: number;
-    readonly newState: TileState;
+    readonly isForward: boolean;
 };
 
 export type PositionEventMeld = {
@@ -19,7 +14,7 @@ export type PositionEventMeld = {
     readonly text: "チー" | "ポン" | "カン" | "リーチ" | "ツモ" | "ロン";
 };
 
-type PositionEventRiichiStick = {
+export type PositionEventRiichiStick = {
     readonly kind: "riichiStick";
     readonly sideIndex: number;
     readonly isSet: boolean;
@@ -58,12 +53,18 @@ type PositionEventEndMatch = {
     readonly players: ReadonlyArray<{ readonly name: string; readonly score: number }>;
 };
 
+export type PositionEventScore = {
+    readonly kind: "score";
+    readonly sideIndex: number;
+    readonly newScore: number;
+};
+
 export type PositionEvent =
-    | PositionEventTileTransitionForward
-    | PositionEventTileTransitionBackward
+    | PositionEventTileTransition
     | PositionEventMeld
     | PositionEventRiichiStick
     | PositionEventDora
+    | PositionEventScore
     | PositionEventGameResult
     | PositionEventBeginningMatch
     | PositionEventEndMatch;
@@ -73,15 +74,9 @@ export type GameIndex = number | "pre" | "post";
 export type GamePositionEvents = ReadonlyArray<readonly PositionEvent[]>;
 export type MatchPositionEvents = ReadonlyMap<GameIndex, GamePositionEvents>;
 
-export const isPositionEventTransitionForward = (event: PositionEvent): event is PositionEventTileTransitionForward =>
-    event.kind === "tileTransitionForward";
+// export const isPositionEventMeld = (event: PositionEvent): event is PositionEventMeld => event.kind === "meld";
 
-export const isPositionEventTransitionBackward = (event: PositionEvent): event is PositionEventTileTransitionBackward =>
-    event.kind === "tileTransitionBackward";
+// export const isPositionEventGameResult = (event: PositionEvent): event is PositionEventGameResult =>
+//     event.kind === "gameResultWin" || event.kind === "gameResultDraw";
 
-export const isPositionEventMeld = (event: PositionEvent): event is PositionEventMeld => event.kind === "meld";
-
-export const isPositionEventGameResult = (event: PositionEvent): event is PositionEventGameResult =>
-    event.kind === "gameResultWin" || event.kind === "gameResultDraw";
-
-export const isPositionEventDora = (event: PositionEvent): event is PositionEventDora => event.kind === "dora";
+// export const isPositionEventDora = (event: PositionEvent): event is PositionEventDora => event.kind === "dora";

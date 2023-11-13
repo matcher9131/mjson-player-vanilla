@@ -1,6 +1,6 @@
+import { type PositionEventTileTransition } from "@/modules/positionEvent/types";
 import { svgNS } from "../const";
 import { getDefaultTileState } from "../modules/tileState/states";
-import { type TileState } from "../modules/tileState/types";
 import { assertNonNull } from "../util/error";
 
 export const getSrcTileId = (tileId: number | null): string => {
@@ -38,7 +38,10 @@ export const setTileAnimationAll = (animates: boolean): void => {
     }
 };
 
-export const updateTile = (tileId: number, { x, y, sideIndex, isRotated, isInvisible }: TileState): void => {
+export const updateTile = ({
+    tileId,
+    newState: { x, y, sideIndex, isRotated, isInvisible },
+}: Omit<PositionEventTileTransition, "kind" | "isForward">): void => {
     const tile = document.querySelector(`#tile${tileId}`);
     assertNonNull(tile, `#tile${tileId}`);
     tile.setAttribute(
@@ -50,6 +53,6 @@ export const updateTile = (tileId: number, { x, y, sideIndex, isRotated, isInvis
 
 export const resetAllTiles = (): void => {
     for (let tileId = 0; tileId < 136; ++tileId) {
-        updateTile(tileId, getDefaultTileState());
+        updateTile({ tileId, newState: getDefaultTileState() });
     }
 };

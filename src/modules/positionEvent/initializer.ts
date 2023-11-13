@@ -163,6 +163,9 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
     return new Map<GameIndex, GamePositionEvents>([
         ["pre", [[{ kind: "beginningMatch", players: mJson.players.map((player) => player.name) }]]],
         ...mJson.games.map((game, gameIndex) => {
+            // 点棒
+            const score = [...game.beginningScores];
+            // 配牌
             const sides = game.dealtTiles.map(
                 (dealt): Side => ({
                     unrevealed: [...dealt],
@@ -174,6 +177,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             // states[tileId]
             let prevStates: TileState[] = getAllTilesState(sides);
             let riichiStickShouldBeHandled: number | null = null;
+            const putsRiichiStick = [false, false, false, false];
             let lastTileId: number = -1;
             let doraIndex: number = 0;
             let doraIndexShouldBe: number = 0;
@@ -181,9 +185,15 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             const events: PositionEvent[][] = [
                 [
                     ...prevStates.map((newState, tileId) => ({
-                        kind: "tileTransitionForward" as const,
+                        kind: "tileTransition" as const,
                         tileId,
                         newState,
+                        isForward: true,
+                    })),
+                    ...score.map((newScore, sideIndex) => ({
+                        kind: "score" as const,
+                        sideIndex,
+                        newScore,
                     })),
                     {
                         kind: "dora" as const,
@@ -192,20 +202,39 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                 ],
             ];
             let positionIndex = 0;
+
             for (const e of game.events) {
                 events.push([]);
                 ++positionIndex;
+                // 直前のリーチが通った場合
                 if (riichiStickShouldBeHandled != null) {
-                    events[positionIndex].push({
-                        kind: "riichiStick",
-                        sideIndex: riichiStickShouldBeHandled,
-                        isSet: true,
-                    });
-                    events[positionIndex - 1].push({
-                        kind: "riichiStick",
-                        sideIndex: riichiStickShouldBeHandled,
-                        isSet: false,
-                    });
+                    events[positionIndex - 1].push(
+                        {
+                            kind: "riichiStick",
+                            sideIndex: riichiStickShouldBeHandled,
+                            isSet: false,
+                        },
+                        {
+                            kind: "score",
+                            sideIndex: riichiStickShouldBeHandled,
+                            newScore: score[riichiStickShouldBeHandled],
+                        },
+                    );
+                    score[riichiStickShouldBeHandled] -= 1000;
+                    events[positionIndex].push(
+                        {
+                            kind: "riichiStick",
+                            sideIndex: riichiStickShouldBeHandled,
+                            isSet: true,
+                        },
+                        {
+                            kind: "score",
+                            sideIndex: riichiStickShouldBeHandled,
+                            newScore: score[riichiStickShouldBeHandled],
+                        },
+                    );
+
+                    putsRiichiStick[riichiStickShouldBeHandled] = true;
                     riichiStickShouldBeHandled = null;
                 }
                 const sideIndex = e.p;
@@ -223,14 +252,16 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                 isInvisible: true,
                             };
                             events[positionIndex - 1].push({
-                                kind: "tileTransitionForward",
+                                kind: "tileTransition",
                                 tileId,
                                 newState: { ...state },
+                                isForward: true,
                             });
                             events[positionIndex - 2]?.push({
-                                kind: "tileTransitionBackward",
+                                kind: "tileTransition",
                                 tileId,
                                 newState: getDefaultTileState(),
+                                isForward: false,
                             });
                             prevStates[tileId] = state;
                             lastTileId = tileId;
@@ -421,14 +452,16 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                 for (let tileId = 0; tileId < 136; ++tileId) {
                     if (!isSameState(prevStates[tileId], newStates[tileId])) {
                         events[positionIndex].push({
-                            kind: "tileTransitionForward",
+                            kind: "tileTransition",
                             tileId,
                             newState: { ...newStates[tileId] },
+                            isForward: true,
                         });
                         events[positionIndex - 1].push({
-                            kind: "tileTransitionBackward",
+                            kind: "tileTransition",
                             tileId,
                             newState: { ...prevStates[tileId] },
+                            isForward: false,
                         });
                     }
                 }
@@ -474,17 +507,26 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                           },
                 ]),
             );
-            // 局の最後のeventsにbackward用のTileTransitionとドラ表示を入れる
+            // 局の最後のeventsにbackward用のTileTransition、ドラ表示、スコア更新、リーチ棒表示更新を入れる
             events[events.length - 1].push(
                 ...prevStates.map((newState, tileId) => ({
-                    kind: "tileTransitionBackward" as const,
+                    kind: "tileTransition" as const,
                     tileId,
                     newState,
+                    isForward: false,
                 })),
                 {
                     kind: "dora",
                     rightIndex: doraIndex,
                 },
+                ...putsRiichiStick.flatMap((value, sideIndex) =>
+                    value ? [{ kind: "riichiStick" as const, sideIndex, isSet: true }] : [],
+                ),
+                ...game.beginningScores.map((newScore, sideIndex) => ({
+                    kind: "score" as const,
+                    sideIndex,
+                    newScore: putsRiichiStick[sideIndex] ? newScore - 1000 : newScore,
+                })),
             );
             return [gameIndex, events] as [GameIndex, GamePositionEvents];
         }),

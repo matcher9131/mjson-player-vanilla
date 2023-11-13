@@ -7,18 +7,12 @@ import {
     goToPreviousGame,
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
-import {
-    isPositionEventTransitionForward,
-    type GameIndex,
-    isPositionEventTransitionBackward,
-    isPositionEventMeld,
-    isPositionEventGameResult,
-    isPositionEventDora,
-} from "../modules/positionEvent/types";
+import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
 import { showOverlay } from "./overlayText";
+import { setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
@@ -40,9 +34,34 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
         updateDoraTileIds(getMJson().games[newGameIndex].dora);
         updateDoraRightIndex(0);
     }
+};
 
-    // NOT IMPLEMENTED
-    // scoreとかリーチ棒とか
+const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boolean): void => {
+    for (const event of events) {
+        switch (event.kind) {
+            case "dora":
+                updateDoraRightIndex(event.rightIndex);
+                break;
+            case "gameResultDraw":
+            case "gameResultWin":
+                showGameResult(event);
+                break;
+            case "meld":
+                showOverlay(event);
+                break;
+            case "riichiStick":
+                setShowsRiichiStick(event);
+                break;
+            case "score":
+                updateScoreText(event);
+                break;
+            case "tileTransition":
+                if (goesForward === event.isForward) updateTile(event);
+                break;
+            default:
+                break;
+        }
+    }
 };
 
 export const createControlPanel = (): HTMLDivElement => {
@@ -51,20 +70,7 @@ export const createControlPanel = (): HTMLDivElement => {
         setTileAnimationAll(false);
         const gameIsChanged = goToPreviousPosition();
         if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
-        const currentPositionEvent = getCurrentPositionEvents();
-        // 牌の移動
-        currentPositionEvent.filter(isPositionEventTransitionBackward).forEach(({ tileId, newState }) => {
-            updateTile(tileId, newState);
-        });
-        // ドラ表示
-        currentPositionEvent.filter(isPositionEventDora).forEach(({ rightIndex }) => {
-            updateDoraRightIndex(rightIndex);
-        });
-        // 局結果表示
-        const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
-        if (eventGameResult != null) {
-            showGameResult(eventGameResult);
-        }
+        handlePositionEvents(getCurrentPositionEvents(), false);
     };
     const handleGoToNextPosition = (): void => {
         hideGameResult();
@@ -74,44 +80,19 @@ export const createControlPanel = (): HTMLDivElement => {
             setTileAnimationAll(false);
             handleGameIndexChanged(getCurrentGameIndex());
         }
-        const currentPositionEvent = getCurrentPositionEvents();
-        // 牌の移動
-        currentPositionEvent.filter(isPositionEventTransitionForward).forEach(({ tileId, newState }) => {
-            updateTile(tileId, newState);
-        });
-        // ドラ表示
-        currentPositionEvent.filter(isPositionEventDora).forEach(({ rightIndex }) => {
-            updateDoraRightIndex(rightIndex);
-        });
-        // 鳴き表示
-        currentPositionEvent.filter(isPositionEventMeld).forEach((e) => {
-            showOverlay(e);
-        });
-        // 局結果表示
-        const eventGameResult = currentPositionEvent.filter(isPositionEventGameResult)?.[0];
-        if (eventGameResult != null) {
-            showGameResult(eventGameResult);
-        }
+        handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const handleGoToPreviousGame = (): void => {
         hideGameResult();
         goToPreviousGame();
         handleGameIndexChanged(getCurrentGameIndex());
-        getCurrentPositionEvents()
-            .filter(isPositionEventTransitionForward)
-            .forEach(({ tileId, newState }) => {
-                updateTile(tileId, newState);
-            });
+        handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const handleGoToNextGame = (): void => {
         hideGameResult();
         goToNextGame();
         handleGameIndexChanged(getCurrentGameIndex());
-        getCurrentPositionEvents()
-            .filter(isPositionEventTransitionForward)
-            .forEach(({ tileId, newState }) => {
-                updateTile(tileId, newState);
-            });
+        handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const panel = document.createElement("div");
     panel.append(
