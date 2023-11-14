@@ -47,7 +47,7 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 showGameResult(event);
                 break;
             case "meld":
-                showOverlay(event);
+                if (goesForward) showOverlay(event);
                 break;
             case "riichiStick":
                 setShowsRiichiStick(event);
