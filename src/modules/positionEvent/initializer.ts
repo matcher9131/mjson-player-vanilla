@@ -9,7 +9,7 @@ import {
     tileHeight,
     tileWidth,
 } from "../../const";
-import { insertTo, removeFrom } from "../../util/arrayExtensions";
+import { addVector, insertTo, removeFrom } from "../../util/arrayExtensions";
 import { assertNonNull } from "../../util/error";
 import { isGameResultWin } from "../mJson/types/gameResult";
 import { type MJson } from "../mJson/types/mJson";
@@ -489,15 +489,24 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                 events.push(winMeld);
             }
             // 点数表示
+            const gameResultScores = (() => {
+                let currentScore = score;
+                const r: number[][] = [];
+                game.gameResults.forEach((gameResult) => {
+                    currentScore = addVector(score, gameResult.scoreIncrements);
+                    r.push([...currentScore]);
+                });
+                return r;
+            })();
             events.push(
-                ...game.gameResults.map((gameResult) => [
+                ...game.gameResults.map((gameResult, gameResultIndex) => [
                     gameResult.resultKind === "win"
                         ? {
                               kind: "gameResultWin" as const,
                               players: mJson.players.map(({ name }, sideIndex) => ({
                                   name,
                                   increment: gameResult.scoreIncrements[sideIndex],
-                                  newScore: -1, // NOT IMPLEMENTED
+                                  newScore: gameResultScores[gameResultIndex][sideIndex],
                               })),
                               handTileStates: getHandTileStates(
                                   { ...sides[gameResult.player], drawTile: lastTileId },

@@ -54,7 +54,12 @@ const createScoreElement = (
             fontSize: scoreFontSize,
         });
         const increment = createSVGTextElement({
-            text: players[sideIndex].increment === 0 ? "" : `${players[sideIndex].increment}`,
+            text:
+                players[sideIndex].increment === 0
+                    ? ""
+                    : players[sideIndex].increment > 0
+                    ? `+${players[sideIndex].increment}`
+                    : `${players[sideIndex].increment}`,
             x: scoreLocationX[sideIndex],
             y: scoreIncrementLocationY[sideIndex],
             fontSize: scoreFontSize,

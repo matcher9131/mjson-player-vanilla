@@ -34,3 +34,15 @@ export const maxBy = <T>(arr: readonly T[], predicate: (item: T) => number): T |
     }
     return target;
 };
+
+export const addVector = (x: readonly number[], y: readonly number[]): number[] => {
+    if (x.length !== y.length)
+        throw new Error(
+            `x.length and y.length should be same value but x.length = ${x.length}, y.length = ${y.length}`,
+        );
+    const z = new Array(x.length).fill(0);
+    for (let i = 0; i < x.length; ++i) {
+        z[i] = x[i] + y[i];
+    }
+    return z;
+};
