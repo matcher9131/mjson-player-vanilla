@@ -36,12 +36,12 @@ export const updateDoraRightIndex = (value: number): void => {
         const tileId = `${doraDisplayTileId}${i}`;
         const tile = document.getElementById(tileId);
         assertNonNull(tile, tileId);
-        tile.setAttribute("href", `#${getSrcTileId(doraTileIds[i])}`);
+        tile.setAttribute("href", `tiles.svg#${getSrcTileId(doraTileIds[i])}`);
     }
     for (; i < 5; ++i) {
         const tileId = `${doraDisplayTileId}${i}`;
         const tile = document.getElementById(tileId);
         assertNonNull(tile, tileId);
-        tile.setAttribute("href", `#${getSrcTileId(null)}`);
+        tile.setAttribute("href", `tiles.svg#${getSrcTileId(null)}`);
     }
 };
