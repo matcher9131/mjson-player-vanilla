@@ -1,0 +1,8 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" display="none">
+    <defs>
+        <g id="thousand_point_stick">
+            <rect x="-870" y="-100" width="1740" height="200" rx="50" ry="50" fill="ivory" />
+            <circle x="0" y="0" r="50" fill="red" />
+        </g>
+    </defs>
+</svg>

@@ -184,21 +184,30 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
 
             const events: PositionEvent[][] = [
                 [
+                    // 配牌
                     ...prevStates.map((newState, tileId) => ({
                         kind: "tileTransition" as const,
                         tileId,
                         newState,
                         isForward: true,
                     })),
+                    // 点棒
                     ...score.map((newScore, sideIndex) => ({
                         kind: "score" as const,
                         sideIndex,
                         newScore,
                     })),
+                    // ドラ
                     {
                         kind: "dora" as const,
                         rightIndex: doraIndex,
                     },
+                    // リーチ棒リセット
+                    ...score.map((_, sideIndex) => ({
+                        kind: "riichiStick" as const,
+                        sideIndex,
+                        isSet: false,
+                    })),
                 ],
             ];
             let positionIndex = 0;
@@ -237,6 +246,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                     putsRiichiStick[riichiStickShouldBeHandled] = true;
                     riichiStickShouldBeHandled = null;
                 }
+
                 const sideIndex = e.p;
                 const side = sides[sideIndex];
                 switch (e.k) {

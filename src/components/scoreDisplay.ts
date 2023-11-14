@@ -26,16 +26,15 @@ export const updateScoreText = ({ newScore, sideIndex }: PositionEventScore): vo
     assertNonNull(element, id);
     element.textContent = `${newScore}`;
     score[sideIndex] = newScore;
-    //
-    console.log(`updateScoreText(newScore = ${newScore}, sideIndex = ${sideIndex})`);
-    //
 };
 
 export const createRiichiStickDisplay = (sideIndex: number): SVGUseElement => {
     const element = document.createElementNS(svgNS, "use");
     element.setAttribute("id", riichiStickId(sideIndex));
     element.setAttribute("opacity", "0");
-    // NOT IMPLEMENTED
+    element.setAttribute("href", `sticks.svg#thousand_point_stick`);
+    // 初期状態
+    element.setAttribute("opacity", "0");
     return element;
 };
 
