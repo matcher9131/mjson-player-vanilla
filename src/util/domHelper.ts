@@ -38,10 +38,23 @@ export const createSVGTextElement = ({
     return element;
 };
 
-export const createCenterOriginSVG = (width: number, height: number): SVGElement => {
+type Size = { readonly width: number; readonly height: number };
+type CreateCenterOriginSVGOptions = {
+    readonly size: Size;
+    readonly viewBoxSize?: Size;
+};
+export const createCenterOriginSVG = ({ size, viewBoxSize }: CreateCenterOriginSVGOptions): SVGElement => {
     const element = document.createElementNS(svgNS, "svg");
-    element.setAttribute("width", `${width}`);
-    element.setAttribute("height", `${height}`);
-    element.setAttribute("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`);
+    element.setAttribute("width", `${size.width}`);
+    element.setAttribute("height", `${size.height}`);
+    if (viewBoxSize != null) {
+        element.setAttribute(
+            "viewBox",
+            `${-viewBoxSize.width / 2} ${-viewBoxSize.height / 2} ${viewBoxSize.width} ${viewBoxSize.height}`,
+        );
+    } else {
+        element.setAttribute("viewBox", `${-size.width / 2} ${-size.height / 2} ${size.width} ${size.height}`);
+    }
+
     return element;
 };

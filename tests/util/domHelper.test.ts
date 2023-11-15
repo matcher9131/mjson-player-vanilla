@@ -42,8 +42,20 @@ describe("domHelper", () => {
     });
 
     describe("createCenterOriginSVG", () => {
-        test("通常", () => {
-            const element = createCenterOriginSVG(500, 200);
+        test("viewBoxを指定", () => {
+            const element = createCenterOriginSVG({
+                size: { width: 500, height: 200 },
+                viewBoxSize: { width: 1500, height: 600 },
+            });
+            expect(element.getAttribute("width")).toBe("500");
+            expect(element.getAttribute("height")).toBe("200");
+            expect(element.getAttribute("viewBox")).toBe("-750 -300 1500 600");
+        });
+
+        test("viewBoxを指定しない", () => {
+            const element = createCenterOriginSVG({
+                size: { width: 500, height: 200 },
+            });
             expect(element.getAttribute("width")).toBe("500");
             expect(element.getAttribute("height")).toBe("200");
             expect(element.getAttribute("viewBox")).toBe("-250 -100 500 200");
