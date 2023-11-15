@@ -37,3 +37,11 @@ export const createSVGTextElement = ({
     element.setAttribute("fill", color ?? "floralwhite");
     return element;
 };
+
+export const createCenterOriginSVG = (width: number, height: number): SVGElement => {
+    const element = document.createElementNS(svgNS, "svg");
+    element.setAttribute("width", `${width}`);
+    element.setAttribute("height", `${height}`);
+    element.setAttribute("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`);
+    return element;
+};
