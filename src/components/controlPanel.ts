@@ -8,7 +8,7 @@ import {
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
 import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
-import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
+import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
 import { showOverlay } from "./overlayText";

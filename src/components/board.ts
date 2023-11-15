@@ -1,5 +1,5 @@
 import { boardOneSize, svgNS } from "../const";
-import { createCenterDisplay } from "./centerDIsplay";
+import { createCenterDisplay } from "./centerDisplay";
 import { createOverlayText } from "./overlayText";
 import { createTile } from "./tile";
 

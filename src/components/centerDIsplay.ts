@@ -1,4 +1,5 @@
 import {
+    betsDisplayWidth,
     centerDisplayHeight,
     centerDisplayOffsetX,
     centerDisplayOffsetY,
@@ -13,6 +14,7 @@ import {
 import { getMJson } from "../modules/mJson/states";
 import { type GameIndex } from "../modules/positionEvent/types";
 import { assertNonNull } from "../util/error";
+import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
 import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";
 
@@ -43,16 +45,27 @@ const createRoundText = (): SVGTextElement => {
 export const createCenterDisplay = (): SVGGElement => {
     const cd = document.createElementNS(svgNS, "g");
     cd.setAttribute("id", centerDisplayId);
+    // 背景
     const bg = createBackground();
     cd.appendChild(bg);
+    // 局表示
     const roundText = createRoundText();
     cd.appendChild(roundText);
+    // 積み棒表示
+    const betsDisplay = createBetsDisplay();
+    // temporary
+    betsDisplay.setAttribute("x", `${-betsDisplayWidth / 2}`);
+    betsDisplay.setAttribute("y", `${0}`);
+    // end temporary
+    cd.appendChild(betsDisplay);
+    // ドラ表示
     const doraDisplay = createDoraDisplay();
     // temporary
     doraDisplay.setAttribute("x", `${-tileWidth * 2.5}`);
-    doraDisplay.setAttribute("y", `${0}`);
+    doraDisplay.setAttribute("y", `${tileWidth}`);
     // end temporary
     cd.appendChild(doraDisplay);
+    // 点棒表示・リーチ棒表示
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const scoreText = createScoreText(sideIndex);
         scoreText.setAttribute(
