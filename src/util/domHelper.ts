@@ -43,7 +43,7 @@ type CreateCenterOriginSVGOptions = {
     readonly size: Size;
     readonly viewBoxSize?: Size;
 };
-export const createCenterOriginSVG = ({ size, viewBoxSize }: CreateCenterOriginSVGOptions): SVGElement => {
+export const createCenterOriginSVG = ({ size, viewBoxSize }: CreateCenterOriginSVGOptions): SVGSVGElement => {
     const element = document.createElementNS(svgNS, "svg");
     element.setAttribute("width", `${size.width}`);
     element.setAttribute("height", `${size.height}`);
