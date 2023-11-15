@@ -7,7 +7,7 @@ const doraDisplayTileId = "dora_display_tile";
 let rightIndex = -1;
 let doraTileIds: readonly number[] = [];
 
-export const createDoraDisplay = (): SVGElement => {
+export const createDoraDisplay = (): SVGSVGElement => {
     const element = document.createElementNS(svgNS, "svg");
     const width = 5 * tileWidth;
     element.setAttribute("width", `${width}`);

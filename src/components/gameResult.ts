@@ -30,7 +30,7 @@ const scoreLocationY = [
 
 const createScoreElement = (
     players: ReadonlyArray<{ readonly name: string; readonly newScore: number; readonly increment: number }>,
-): SVGElement => {
+): SVGSVGElement => {
     const container = document.createElementNS(svgNS, "svg");
     container.setAttribute("width", `${gameResultScoreWidth}`);
     container.setAttribute("height", `${gameResultScoreHeight}`);
@@ -82,7 +82,7 @@ const createHandElement = (
     yakuList: readonly YakuDoubles[],
     dora: readonly number[],
     hiddenDora: readonly number[],
-): SVGElement => {
+): SVGSVGElement => {
     const left = Math.min(...[...tileStates.values()].map((state) => state.x)) - tileWidth / 2;
     const rightTile = maxBy([...tileStates.values()], (state) => state.x);
     assertNonNull(rightTile, "rightTile");

@@ -5,7 +5,7 @@ import { createTile } from "./tile";
 
 export const boardId = "board";
 
-export const createBoard = (): SVGElement => {
+export const createBoard = (): SVGSVGElement => {
     const board = document.createElementNS(svgNS, "svg");
     board.setAttribute("id", boardId);
     board.setAttribute("viewBox", `${-boardOneSize / 2} ${-boardOneSize / 2} ${boardOneSize} ${boardOneSize}`);
