@@ -2,11 +2,11 @@ import { betsDisplayHeight, betsDisplayWidth, svgNS } from "@/const";
 import { createCenterOriginSVG, createSVGTextElement } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 
-const stickWidth = 1600;
+const stickWidth = 900;
 const width = stickWidth * 4;
-const height = width / 16; // const.tsとともに要調整
-const fontSize = 600;
-const gapX = stickWidth / 2;
+const height = width / 8; // const.tsとともに要調整
+const fontSize = 300;
+const gapX = stickWidth / 4;
 
 const hundredStickId = "bets_stick_hundred";
 const thousandStickId = "bets_stick_thousand";
@@ -33,11 +33,11 @@ export const createBetsDisplay = (): SVGSVGElement => {
     });
     const hundredStick = document.createElementNS(svgNS, "use");
     hundredStick.setAttribute("id", hundredStickId);
-    hundredStick.setAttribute("href", "sticks.svg#hundred_point_stick");
+    hundredStick.setAttribute("href", "sticks.svg#short_hundred_point_stick");
     element.appendChild(hundredStick);
     const thousandStick = document.createElementNS(svgNS, "use");
     thousandStick.setAttribute("id", thousandStickId);
-    thousandStick.setAttribute("href", "sticks.svg#thousand_point_stick");
+    thousandStick.setAttribute("href", "sticks.svg#short_thousand_point_stick");
     element.appendChild(thousandStick);
     const numHundredsText = createSVGTextElement({
         text: "×0",

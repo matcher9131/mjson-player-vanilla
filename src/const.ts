@@ -22,7 +22,7 @@ export const scoreTextOffsetY = centerDisplayHeight / 2 - 20;
 export const betsDisplayOffsetX = 0;
 export const betsDisplayOffsetY = 0;
 export const betsDisplayWidth = centerDisplayWidth;
-export const betsDisplayHeight = betsDisplayWidth / 16; // 要調整
+export const betsDisplayHeight = betsDisplayWidth / 8; // 要調整
 
 export const overlayTextOffsetX = 0;
 export const overlayTextOffsetY = boardOneSize * 0.35;
