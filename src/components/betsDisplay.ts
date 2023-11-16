@@ -45,6 +45,7 @@ export const createBetsDisplay = (): SVGSVGElement => {
         y: 0,
         fontSize,
     });
+    numHundredsText.setAttribute("id", numHundredsTextId);
     element.appendChild(numHundredsText);
     const numThousandsText = createSVGTextElement({
         text: "×0",
@@ -52,12 +53,13 @@ export const createBetsDisplay = (): SVGSVGElement => {
         y: 0,
         fontSize,
     });
+    numThousandsText.setAttribute("id", numThousandsTextId);
     element.appendChild(numThousandsText);
     adjustX({ hundredStick, thousandStick, numHundredsText, numThousandsText });
     return element;
 };
 
-export const updateBetDisplay = (numHundreds: number, numThousands: number): void => {
+export const updateNumHundredSticks = (value: number): void => {
     const hundredStick = document.getElementById(hundredStickId) as unknown as SVGElement | null;
     assertNonNull(hundredStick, hundredStickId);
     const thousandStick = document.getElementById(thousandStickId) as unknown as SVGElement | null;
@@ -66,7 +68,19 @@ export const updateBetDisplay = (numHundreds: number, numThousands: number): voi
     assertNonNull(numHundredsText, numHundredsTextId);
     const numThousandsText = document.getElementById(numThousandsTextId) as unknown as SVGTextElement | null;
     assertNonNull(numThousandsText, numThousandsTextId);
-    numHundredsText.textContent = `×${numHundreds}`;
-    numThousandsText.textContent = `×${numThousands}`;
+    numHundredsText.textContent = `×${value}`;
+    adjustX({ hundredStick, thousandStick, numHundredsText, numThousandsText });
+};
+
+export const updateNumThousandSticks = (value: number): void => {
+    const hundredStick = document.getElementById(hundredStickId) as unknown as SVGElement | null;
+    assertNonNull(hundredStick, hundredStickId);
+    const thousandStick = document.getElementById(thousandStickId) as unknown as SVGElement | null;
+    assertNonNull(thousandStick, thousandStickId);
+    const numHundredsText = document.getElementById(numHundredsTextId) as unknown as SVGTextElement | null;
+    assertNonNull(numHundredsText, numHundredsTextId);
+    const numThousandsText = document.getElementById(numThousandsTextId) as unknown as SVGTextElement | null;
+    assertNonNull(numThousandsText, numThousandsTextId);
+    numThousandsText.textContent = `×${value}`;
     adjustX({ hundredStick, thousandStick, numHundredsText, numThousandsText });
 };

@@ -8,6 +8,7 @@ import {
     goToPreviousPosition,
 } from "../modules/positionEvent/states";
 import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
+import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
@@ -57,6 +58,12 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 break;
             case "tileTransition":
                 if (goesForward === event.isForward) updateTile(event);
+                break;
+            case "hundredSticks":
+                updateNumHundredSticks(event.value);
+                break;
+            case "thousandSticks":
+                updateNumThousandSticks(event.value);
                 break;
             default:
                 break;

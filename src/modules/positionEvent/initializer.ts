@@ -181,6 +181,7 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
             let lastTileId: number = -1;
             let doraIndex: number = 0;
             let doraIndexShouldBe: number = 0;
+            let bets = game.bets;
 
             const events: PositionEvent[][] = [
                 [
@@ -202,12 +203,22 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                         kind: "dora" as const,
                         rightIndex: doraIndex,
                     },
-                    // リーチ棒リセット
+                    // リーチ棒表示リセット
                     ...score.map((_, sideIndex) => ({
                         kind: "riichiStick" as const,
                         sideIndex,
                         isSet: false,
                     })),
+                    // 積み棒
+                    {
+                        kind: "hundredSticks",
+                        value: game.dealerKeepingCount,
+                    },
+                    // 供託
+                    {
+                        kind: "thousandSticks",
+                        value: bets,
+                    },
                 ],
             ];
             let positionIndex = 0;
@@ -228,8 +239,13 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                             sideIndex: riichiStickShouldBeHandled,
                             newScore: score[riichiStickShouldBeHandled],
                         },
+                        {
+                            kind: "thousandSticks",
+                            value: bets,
+                        },
                     );
                     score[riichiStickShouldBeHandled] -= 1000;
+                    ++bets;
                     events[positionIndex].push(
                         {
                             kind: "riichiStick",
@@ -240,6 +256,10 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                             kind: "score",
                             sideIndex: riichiStickShouldBeHandled,
                             newScore: score[riichiStickShouldBeHandled],
+                        },
+                        {
+                            kind: "thousandSticks",
+                            value: bets,
                         },
                     );
 
@@ -526,26 +546,40 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                           },
                 ]),
             );
-            // 局の最後のeventsにbackward用のTileTransition、ドラ表示、スコア更新、リーチ棒表示更新を入れる
+            // 局の最後のeventsにbackward用のPositionEventを入れる
             events[events.length - 1].push(
+                // TileTransition
                 ...prevStates.map((newState, tileId) => ({
                     kind: "tileTransition" as const,
                     tileId,
                     newState,
                     isForward: false,
                 })),
+                // ドラ表示
                 {
                     kind: "dora",
                     rightIndex: doraIndex,
                 },
+                // リーチ棒表示
                 ...putsRiichiStick.flatMap((value, sideIndex) =>
                     value ? [{ kind: "riichiStick" as const, sideIndex, isSet: true }] : [],
                 ),
+                // 点棒
                 ...game.beginningScores.map((newScore, sideIndex) => ({
                     kind: "score" as const,
                     sideIndex,
                     newScore: putsRiichiStick[sideIndex] ? newScore - 1000 : newScore,
                 })),
+                // 積み棒
+                {
+                    kind: "hundredSticks",
+                    value: game.dealerKeepingCount,
+                },
+                // 供託
+                {
+                    kind: "thousandSticks",
+                    value: bets,
+                },
             );
             return [gameIndex, events] as [GameIndex, GamePositionEvents];
         }),

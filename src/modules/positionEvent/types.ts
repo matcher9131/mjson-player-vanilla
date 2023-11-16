@@ -59,6 +59,16 @@ export type PositionEventScore = {
     readonly newScore: number;
 };
 
+type PositionEventNumHundredSticks = {
+    readonly kind: "hundredSticks";
+    readonly value: number;
+};
+
+type PositionEventNumThousandSticks = {
+    readonly kind: "thousandSticks";
+    readonly value: number;
+};
+
 export type PositionEvent =
     | PositionEventTileTransition
     | PositionEventMeld
@@ -67,16 +77,11 @@ export type PositionEvent =
     | PositionEventScore
     | PositionEventGameResult
     | PositionEventBeginningMatch
-    | PositionEventEndMatch;
+    | PositionEventEndMatch
+    | PositionEventNumHundredSticks
+    | PositionEventNumThousandSticks;
 
 export type GameIndex = number | "pre" | "post";
 
 export type GamePositionEvents = ReadonlyArray<readonly PositionEvent[]>;
 export type MatchPositionEvents = ReadonlyMap<GameIndex, GamePositionEvents>;
-
-// export const isPositionEventMeld = (event: PositionEvent): event is PositionEventMeld => event.kind === "meld";
-
-// export const isPositionEventGameResult = (event: PositionEvent): event is PositionEventGameResult =>
-//     event.kind === "gameResultWin" || event.kind === "gameResultDraw";
-
-// export const isPositionEventDora = (event: PositionEvent): event is PositionEventDora => event.kind === "dora";
