@@ -2,11 +2,11 @@
     <defs>
         <g id="thousand_point_stick">
             <rect x="-900" y="-90" width="1800" height="180" rx="45" ry="45" fill="ivory" />
-            <circle x="0" y="0" r="50" fill="red" />
+            <circle cx="0" cy="0" r="50" fill="red" />
         </g>
         <g id="short_thousand_point_stick">
             <rect x="-450" y="-90" width="900" height="180" rx="45" ry="45" fill="ivory" />
-            <circle x="0" y="0" r="50" fill="red" />
+            <circle cx="0" cy="0" r="50" fill="red" />
         </g>
         <g id="short_hundred_point_stick">
             <rect x="-450" y="-90" width="900" height="180" rx="45" ry="45" fill="ivory" />
