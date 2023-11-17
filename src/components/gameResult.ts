@@ -1,4 +1,12 @@
-import { gameResultScoreHeight, gameResultScoreWidth, svgNS, tileHeight, tileWidth } from "../const";
+import {
+    gameResultScoreHeight,
+    gameResultScoreWidth,
+    negativeNumberColor,
+    positiveNumberColor,
+    svgNS,
+    tileHeight,
+    tileWidth,
+} from "../const";
 import { getYakuName } from "../modules/mJson/types/yaku";
 import { type YakuDoubles } from "../modules/mJson/types/yakuDoubles";
 import { type PositionEventGameResult } from "../modules/positionEvent/types";
@@ -63,7 +71,7 @@ const createScoreElement = (
             x: scoreLocationX[sideIndex],
             y: scoreIncrementLocationY[sideIndex],
             fontSize: scoreFontSize,
-            color: players[sideIndex].increment > 0 ? "#dc2626" : "#2563eb",
+            color: players[sideIndex].increment > 0 ? positiveNumberColor : negativeNumberColor,
         });
         const score = createSVGTextElement({
             text: `${players[sideIndex].newScore}`,
