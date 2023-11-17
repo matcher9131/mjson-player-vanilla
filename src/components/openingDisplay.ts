@@ -3,11 +3,11 @@ import { createSVGTextElement } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 import { rotate } from "@/util/vector2D";
 
-const openningDisplayId = "openning_display";
+const openingDisplayId = "opening_display";
 
-export const createOpenningDisplay = (playerNames: readonly string[]): SVGGElement => {
+export const createOpeningDisplay = (playerNames: readonly string[]): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
-    element.setAttribute("id", openningDisplayId);
+    element.setAttribute("id", openingDisplayId);
     playerNames.forEach((name, sideIndex) => {
         const { x, y } = rotate({ x: 0, y: boardOneSize / 2 }, -90 * sideIndex);
         const text = createSVGTextElement({
@@ -21,8 +21,8 @@ export const createOpenningDisplay = (playerNames: readonly string[]): SVGGEleme
     return element;
 };
 
-export const setOpenningDisplayVisible = (isVisible: boolean): void => {
-    const element = document.getElementById(openningDisplayId);
-    assertNonNull(element, openningDisplayId);
+export const setOpeningDisplayVisible = (isVisible: boolean): void => {
+    const element = document.getElementById(openingDisplayId);
+    assertNonNull(element, openingDisplayId);
     element.setAttribute("opacity", isVisible ? "1" : "0");
 };
