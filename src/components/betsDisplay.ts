@@ -4,7 +4,7 @@ import { assertNonNull } from "@/util/error";
 
 const stickWidth = 900;
 const width = stickWidth * 4;
-const height = width / 8; // const.tsとともに要調整
+const height = width / (betsDisplayWidth / betsDisplayHeight); // const.tsの設定を反映させる
 const fontSize = 300;
 const gapX = stickWidth / 4;
 

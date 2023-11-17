@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { maxBy, insertTo, lowerBound, removeFrom } from "@/util/arrayExtensions";
+import { maxBy, insertTo, lowerBound, removeFrom, addVector } from "@/util/arrayExtensions";
 
 describe("arrayExtension", () => {
     describe("lowerBoundが", () => {
@@ -109,6 +109,24 @@ describe("arrayExtension", () => {
 
         test("空の配列arrに対しnullを返す", () => {
             expect(maxBy([], () => 0)).toBeNull();
+        });
+    });
+
+    describe("addVectorが", () => {
+        test("同じ長さの配列x, yに対し各要素を足してできた配列を新たに返す", () => {
+            const arr1 = [1, 3, 5];
+            const arr2 = [8, -1, -10];
+            expect(addVector(arr1, arr2)).toStrictEqual([9, 2, -5]);
+        });
+
+        test("異なる長さの配列x, yに対しエラーを投げる", () => {
+            expect(() => {
+                addVector([1], [2, 4]);
+            }).toThrowError();
+        });
+
+        test("ともに空の配列x, yに対し空の配列を返す", () => {
+            expect(addVector([], [])).toStrictEqual([]);
         });
     });
 });
