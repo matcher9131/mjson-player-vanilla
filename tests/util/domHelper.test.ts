@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vitest";
-import { createCenterOriginSVG, createSVGTextElement } from "@/util/domHelper";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { createCenterOriginSVG, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 
 describe("domHelper", () => {
     describe("createSVGTextElement", () => {
@@ -59,6 +59,34 @@ describe("domHelper", () => {
             expect(element.getAttribute("width")).toBe("500");
             expect(element.getAttribute("height")).toBe("200");
             expect(element.getAttribute("viewBox")).toBe("-250 -100 500 200");
+        });
+    });
+
+    describe("getElementByIdOrThrowErrorが", () => {
+        beforeAll(() => {
+            const div = document.createElement("div");
+            div.setAttribute("id", "foo");
+            div.textContent = "bar";
+            document.body.appendChild(div);
+        });
+
+        test("存在するIDに対応するNodeを返す", () => {
+            const div = getElementByIdOrThrowError("foo");
+            expect(div.getAttribute("id")).toBe("foo");
+            expect(div.tagName).toBe("DIV");
+            expect(div.textContent).toBe("bar");
+        });
+
+        test("存在しないIDに対してエラーを投げる", () => {
+            expect(() => {
+                getElementByIdOrThrowError("bar");
+            }).toThrowError();
+        });
+
+        afterAll(() => {
+            while (document.body.firstChild != null) {
+                document.body.removeChild(document.body.firstChild);
+            }
         });
     });
 });

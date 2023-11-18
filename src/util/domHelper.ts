@@ -1,4 +1,5 @@
 import { svgNS } from "../const";
+import { assertNonNull } from "./error";
 
 type CreateSVGTextElementOptions = {
     text: string;
@@ -56,5 +57,11 @@ export const createCenterOriginSVG = ({ size, viewBoxSize }: CreateCenterOriginS
         element.setAttribute("viewBox", `${-size.width / 2} ${-size.height / 2} ${size.width} ${size.height}`);
     }
 
+    return element;
+};
+
+export const getElementByIdOrThrowError = (id: string): HTMLElement => {
+    const element = document.getElementById(id);
+    assertNonNull(element, id);
     return element;
 };
