@@ -10,8 +10,10 @@ import {
 import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
 import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
+import { setClosingDisplayVisibility } from "./closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
+import { setOpeningDisplayVisible } from "./openingDisplay";
 import { showOverlay } from "./overlayText";
 import { setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
@@ -28,9 +30,17 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     updateRoundText(newGameIndex);
     setCenterDisplayVisibility(newGameIndex);
     setTileAnimationAll(false);
-    if (newGameIndex === "pre" || newGameIndex === "post") {
+    if (newGameIndex === "pre") {
         resetAllTiles();
+        setClosingDisplayVisibility(false);
+        setOpeningDisplayVisible(true);
+    } else if (newGameIndex === "post") {
+        resetAllTiles();
+        setOpeningDisplayVisible(false);
+        setClosingDisplayVisibility(true);
     } else {
+        setOpeningDisplayVisible(false);
+        setClosingDisplayVisibility(false);
         // ドラをセットする
         updateDoraTileIds(getMJson().games[newGameIndex].dora);
         updateDoraRightIndex(0);

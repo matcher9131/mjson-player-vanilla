@@ -1,24 +1,36 @@
 import { boardOneSize, svgNS } from "@/const";
-import { createSVGTextElement } from "@/util/domHelper";
+import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 import { rotate } from "@/util/vector2D";
 
 const openingDisplayId = "opening_display";
+const playerNameTextId = (sideIndex: number): string => `opening_display_player_name${sideIndex}`;
 
-export const createOpeningDisplay = (playerNames: readonly string[]): SVGGElement => {
+export const createOpeningDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", openingDisplayId);
-    playerNames.forEach((name, sideIndex) => {
+    for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const { x, y } = rotate({ x: 0, y: boardOneSize / 2 }, -90 * sideIndex);
         const text = createSVGTextElement({
-            text: name,
+            text: "",
             x,
             y,
             fontSize: 400,
         });
+        text.setAttribute("id", playerNameTextId(sideIndex));
         element.appendChild(text);
-    });
+    }
+    // 初期状態
+    element.setAttribute("opacity", "0");
+
     return element;
+};
+
+export const setPlayerNames = (playerNames: readonly string[]): void => {
+    for (let sideIndex = 0; sideIndex < playerNames.length; ++sideIndex) {
+        const text = getElementByIdOrThrowError(playerNameTextId(sideIndex));
+        text.textContent = playerNames[sideIndex];
+    }
 };
 
 export const setOpeningDisplayVisible = (isVisible: boolean): void => {
