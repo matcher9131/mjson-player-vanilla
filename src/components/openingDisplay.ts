@@ -10,7 +10,7 @@ export const createOpeningDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", openingDisplayId);
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const { x, y } = rotate({ x: 0, y: boardOneSize / 2 }, -90 * sideIndex);
+        const { x, y } = rotate({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
         const text = createSVGTextElement({
             text: "",
             x,

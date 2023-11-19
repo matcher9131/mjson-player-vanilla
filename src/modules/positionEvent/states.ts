@@ -1,12 +1,14 @@
 import { createPositionEvents } from "./initializer";
-import { type GameIndex, type PositionEvent } from "./types";
-import { getMJson } from "../mJson/states";
+import { type MatchPositionEvents, type GameIndex, type PositionEvent } from "./types";
 import { assertNonNull } from "../../util/error";
+import { type MJson } from "../mJson/types/mJson";
 
-const positionEvents = createPositionEvents(getMJson());
-const numGames = [...positionEvents.keys()].filter((gameIndex) => gameIndex !== "pre" && gameIndex !== "post").length;
+let positionEvents: MatchPositionEvents = new Map();
 let gameIndex: GameIndex = "pre";
 let positionIndex: number = 0;
+
+const getNumGames = (): number =>
+    [...positionEvents.keys()].filter((gameIndex) => gameIndex !== "pre" && gameIndex !== "post").length;
 
 const getCurrentGameEvents = (): ReadonlyArray<readonly PositionEvent[]> => {
     const currentGameEvents = positionEvents.get(gameIndex);
@@ -58,7 +60,7 @@ export const goToPreviousGame = (): void => {
                 gameIndex = "post";
                 break;
             case "post":
-                gameIndex = numGames - 1;
+                gameIndex = getNumGames() - 1;
                 break;
             default:
                 --gameIndex;
@@ -71,7 +73,7 @@ export const goToPreviousGame = (): void => {
 export const goToNextGame = (): void => {
     positionIndex = 0;
     switch (gameIndex) {
-        case numGames - 1:
+        case getNumGames() - 1:
             gameIndex = "post";
             break;
         case "pre":
@@ -84,4 +86,13 @@ export const goToNextGame = (): void => {
             ++gameIndex;
             break;
     }
+};
+
+export const setPositionEvents = (mJson: MJson): void => {
+    positionEvents = createPositionEvents(mJson);
+};
+
+export const resetPositionIndex = (): void => {
+    gameIndex = "pre";
+    positionIndex = 0;
 };

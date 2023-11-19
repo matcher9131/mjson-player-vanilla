@@ -1,6 +1,14 @@
-import sampleMJson from "../../data/sample1.json";
+import { assertNonNull } from "@/util/error";
 import { type MJson } from "./types/mJson";
 
-const mJson = sampleMJson as MJson;
+let mJson: MJson | null = null;
 
-export const getMJson = (): MJson => mJson;
+// export const getMJsonOrNull = (): MJson | null => mJson;
+export const getMJson = (): MJson => {
+    assertNonNull(mJson, "MJson");
+    return mJson;
+};
+
+export const setMJson = (value: MJson): void => {
+    mJson = value;
+};

@@ -20,7 +20,7 @@ export const createScoreText = (sideIndex: number): SVGTextElement => {
     return element;
 };
 
-export const updateScoreText = ({ newScore, sideIndex }: PositionEventScore): void => {
+export const updateScoreText = ({ newScore, sideIndex }: Omit<PositionEventScore, "kind">): void => {
     const id = scoreTextId(sideIndex);
     const element = document.getElementById(id);
     assertNonNull(element, id);
@@ -31,17 +31,23 @@ export const updateScoreText = ({ newScore, sideIndex }: PositionEventScore): vo
 export const createRiichiStickDisplay = (sideIndex: number): SVGUseElement => {
     const element = document.createElementNS(svgNS, "use");
     element.setAttribute("id", riichiStickId(sideIndex));
-    element.setAttribute("opacity", "0");
     element.setAttribute("href", `sticks.svg#thousand_point_stick`);
     // 初期状態
     element.setAttribute("opacity", "0");
     return element;
 };
 
-export const setShowsRiichiStick = ({ isSet, sideIndex }: PositionEventRiichiStick): void => {
+export const setShowsRiichiStick = ({ isSet, sideIndex }: Omit<PositionEventRiichiStick, "kind">): void => {
     const id = riichiStickId(sideIndex);
     const element = document.getElementById(id);
     assertNonNull(element, id);
     element.setAttribute("opacity", isSet ? "1" : "0");
     showsRiichiStick[sideIndex] = isSet;
+};
+
+export const resetScoreDisplay = (): void => {
+    for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
+        updateScoreText({ newScore: 25000, sideIndex });
+        setShowsRiichiStick({ isSet: false, sideIndex });
+    }
 };

@@ -1,3 +1,4 @@
+import { type MJson } from "@/modules/mJson/types/mJson";
 import { getMJson } from "../modules/mJson/states";
 import {
     getCurrentGameIndex,
@@ -6,23 +7,30 @@ import {
     goToNextPosition,
     goToPreviousGame,
     goToPreviousPosition,
+    resetPositionIndex,
+    setPositionEvents,
 } from "../modules/positionEvent/states";
 import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
 import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
-import { setClosingDisplayVisibility } from "./closingDisplay";
+import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResult, showGameResult } from "./gameResult";
-import { setOpeningDisplayVisible } from "./openingDisplay";
+import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
 import { showOverlay } from "./overlayText";
-import { setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
+import { resetScoreDisplay, setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
+
+const positionNavigatorButtonClassName = "position-navigator-button";
 
 const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     const button = document.createElement("button");
     button.textContent = text;
     button.onclick = onClick;
     button.classList.add("bg-slate-700", "text-white", "px-2", "py-2", "rounded");
+    button.classList.add(positionNavigatorButtonClassName);
+    // 初期状態
+    button.disabled = true;
     return button;
 };
 
@@ -79,6 +87,29 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 break;
         }
     }
+};
+
+const enablePositionNavigatorButtons = (): void => {
+    for (const element of document.getElementsByClassName(positionNavigatorButtonClassName)) {
+        (element as HTMLButtonElement).disabled = false;
+    }
+};
+
+// exportはtemporary
+export const handleMJsonChanged = (newMJson: MJson): void => {
+    // PositionEvent
+    setPositionEvents(newMJson);
+    resetPositionIndex();
+    // OpeningDisplay
+    setPlayerNames(newMJson.players.map(({ name }) => name));
+    // ClosingDisplay
+    setPlayerMatchResults(newMJson.players);
+    // ScoreDisplay
+    resetScoreDisplay();
+    // ControlPanel
+    enablePositionNavigatorButtons();
+    // あとはhandleGameIndexChangedに任せる
+    handleGameIndexChanged("pre");
 };
 
 export const createControlPanel = (): HTMLDivElement => {

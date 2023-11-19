@@ -15,7 +15,7 @@ export const createClosingDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", closingDisplayId);
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const { x, y } = rotate({ x: 0, y: boardOneSize / 2 }, -90 * sideIndex);
+        const { x, y } = rotate({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
         const nameText = createSVGTextElement({
             text: "",
             x,
