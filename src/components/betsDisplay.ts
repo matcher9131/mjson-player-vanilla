@@ -1,6 +1,5 @@
 import { betsDisplayHeight, betsDisplayWidth, svgNS } from "@/const";
-import { createCenterOriginSVG, createSVGTextElement } from "@/util/domHelper";
-import { assertNonNull } from "@/util/error";
+import { createCenterOriginSVG, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 
 const stickWidth = 900;
 const width = stickWidth * 4;
@@ -60,27 +59,19 @@ export const createBetsDisplay = (): SVGSVGElement => {
 };
 
 export const updateNumHundredSticks = (value: number): void => {
-    const hundredStick = document.getElementById(hundredStickId) as unknown as SVGElement | null;
-    assertNonNull(hundredStick, hundredStickId);
-    const thousandStick = document.getElementById(thousandStickId) as unknown as SVGElement | null;
-    assertNonNull(thousandStick, thousandStickId);
-    const numHundredsText = document.getElementById(numHundredsTextId) as unknown as SVGTextElement | null;
-    assertNonNull(numHundredsText, numHundredsTextId);
-    const numThousandsText = document.getElementById(numThousandsTextId) as unknown as SVGTextElement | null;
-    assertNonNull(numThousandsText, numThousandsTextId);
+    const hundredStick = getElementByIdOrThrowError(hundredStickId) as unknown as SVGElement;
+    const thousandStick = getElementByIdOrThrowError(thousandStickId) as unknown as SVGElement;
+    const numHundredsText = getElementByIdOrThrowError(numHundredsTextId) as unknown as SVGTextElement;
+    const numThousandsText = getElementByIdOrThrowError(numThousandsTextId) as unknown as SVGTextElement;
     numHundredsText.textContent = `×${value}`;
     adjustX({ hundredStick, thousandStick, numHundredsText, numThousandsText });
 };
 
 export const updateNumThousandSticks = (value: number): void => {
-    const hundredStick = document.getElementById(hundredStickId) as unknown as SVGElement | null;
-    assertNonNull(hundredStick, hundredStickId);
-    const thousandStick = document.getElementById(thousandStickId) as unknown as SVGElement | null;
-    assertNonNull(thousandStick, thousandStickId);
-    const numHundredsText = document.getElementById(numHundredsTextId) as unknown as SVGTextElement | null;
-    assertNonNull(numHundredsText, numHundredsTextId);
-    const numThousandsText = document.getElementById(numThousandsTextId) as unknown as SVGTextElement | null;
-    assertNonNull(numThousandsText, numThousandsTextId);
+    const hundredStick = getElementByIdOrThrowError(hundredStickId) as unknown as SVGElement;
+    const thousandStick = getElementByIdOrThrowError(thousandStickId) as unknown as SVGElement;
+    const numHundredsText = getElementByIdOrThrowError(numHundredsTextId) as unknown as SVGTextElement;
+    const numThousandsText = getElementByIdOrThrowError(numThousandsTextId) as unknown as SVGTextElement;
     numThousandsText.textContent = `×${value}`;
     adjustX({ hundredStick, thousandStick, numHundredsText, numThousandsText });
 };

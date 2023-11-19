@@ -1,6 +1,6 @@
 import { svgNS } from "@/const";
 import { type PositionEventScore, type PositionEventRiichiStick } from "@/modules/positionEvent/types";
-import { assertNonNull } from "@/util/error";
+import { getElementByIdOrThrowError } from "@/util/domHelper";
 
 const score = [25000, 25000, 25000, 25000];
 const showsRiichiStick = [false, false, false, false];
@@ -21,9 +21,7 @@ export const createScoreText = (sideIndex: number): SVGTextElement => {
 };
 
 export const updateScoreText = ({ newScore, sideIndex }: Omit<PositionEventScore, "kind">): void => {
-    const id = scoreTextId(sideIndex);
-    const element = document.getElementById(id);
-    assertNonNull(element, id);
+    const element = getElementByIdOrThrowError(scoreTextId(sideIndex));
     element.textContent = `${newScore}`;
     score[sideIndex] = newScore;
 };
@@ -38,9 +36,7 @@ export const createRiichiStickDisplay = (sideIndex: number): SVGUseElement => {
 };
 
 export const setShowsRiichiStick = ({ isSet, sideIndex }: Omit<PositionEventRiichiStick, "kind">): void => {
-    const id = riichiStickId(sideIndex);
-    const element = document.getElementById(id);
-    assertNonNull(element, id);
+    const element = getElementByIdOrThrowError(riichiStickId(sideIndex));
     element.setAttribute("opacity", isSet ? "1" : "0");
     showsRiichiStick[sideIndex] = isSet;
 };

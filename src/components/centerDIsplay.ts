@@ -1,3 +1,4 @@
+import { getElementByIdOrThrowError } from "@/util/domHelper";
 import {
     betsDisplayWidth,
     centerDisplayHeight,
@@ -13,7 +14,6 @@ import {
 } from "../const";
 import { getMJson } from "../modules/mJson/states";
 import { type GameIndex } from "../modules/positionEvent/types";
-import { assertNonNull } from "../util/error";
 import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
 import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";
@@ -88,15 +88,13 @@ export const createCenterDisplay = (): SVGGElement => {
 };
 
 export const setCenterDisplayVisibility = (gameIndex: GameIndex): void => {
-    const cd = document.getElementById(centerDisplayId);
-    assertNonNull(cd, centerDisplayId);
+    const cd = getElementByIdOrThrowError(centerDisplayId);
     cd.setAttribute("opacity", `${gameIndex === "pre" || gameIndex === "post" ? 0 : 1}`);
 };
 
 export const updateRoundText = (gameIndex: GameIndex): void => {
     if (gameIndex === "pre" || gameIndex === "post") return;
-    const roundText = document.getElementById(roundTextId);
-    assertNonNull(roundText, roundTextId);
+    const roundText = getElementByIdOrThrowError(roundTextId);
     const round = getMJson().games[gameIndex].round;
     roundText.textContent = `${["東", "南", "西", "北"][round >> 2]}${(round % 4) + 1}局`;
 };

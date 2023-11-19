@@ -1,12 +1,14 @@
+import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { overlayTextOffsetX, overlayTextOffsetY, svgNS } from "../const";
 import { type PositionEventMeld } from "../modules/positionEvent/types";
 import { rotate } from "../util/vector2D";
 
+const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;
 const animationClassName = "animate-[fadeOut_0.5s]";
 
 export const createOverlayText = (sideIndex: number): SVGTextElement => {
     const element = document.createElementNS(svgNS, "text");
-    element.setAttribute("id", `overlay_text${sideIndex}`);
+    element.setAttribute("id", overlayTextId(sideIndex));
     element.setAttribute("opacity", "0");
     const { x, y } = rotate({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
     element.setAttribute("x", `${x}`);
@@ -20,8 +22,7 @@ export const createOverlayText = (sideIndex: number): SVGTextElement => {
 };
 
 export const showOverlay = ({ sideIndex, text }: PositionEventMeld): void => {
-    const element = document.getElementById(`overlay_text${sideIndex}`);
-    if (element == null) return;
+    const element = getElementByIdOrThrowError(overlayTextId(sideIndex));
     element.textContent = text;
     element.classList.remove(animationClassName);
     window.requestAnimationFrame(() => {

@@ -12,7 +12,7 @@ import { type YakuDoubles } from "../modules/mJson/types/yakuDoubles";
 import { type PositionEventGameResult } from "../modules/positionEvent/types";
 import { type TileState } from "../modules/tileState/types";
 import { maxBy } from "../util/arrayExtensions";
-import { createSVGTextElement } from "../util/domHelper";
+import { createSVGTextElement, getElementByIdOrThrowError } from "../util/domHelper";
 import { assertNonNull } from "../util/error";
 import { boardId } from "./board";
 import { createTile } from "./tile";
@@ -232,8 +232,7 @@ const createGameResult = (event: PositionEventGameResult): SVGGElement => {
 };
 
 export const showGameResult = (event: PositionEventGameResult): void => {
-    const board = document.getElementById(boardId);
-    assertNonNull(board);
+    const board = getElementByIdOrThrowError(boardId);
     const gameResult = createGameResult(event);
     board.appendChild(gameResult);
 };

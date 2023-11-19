@@ -1,6 +1,5 @@
 import { boardOneSize, svgNS } from "@/const";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
-import { assertNonNull } from "@/util/error";
 import { rotate } from "@/util/vector2D";
 
 const openingDisplayId = "opening_display";
@@ -34,7 +33,6 @@ export const setPlayerNames = (playerNames: readonly string[]): void => {
 };
 
 export const setOpeningDisplayVisible = (isVisible: boolean): void => {
-    const element = document.getElementById(openingDisplayId);
-    assertNonNull(element, openingDisplayId);
+    const element = getElementByIdOrThrowError(openingDisplayId);
     element.setAttribute("opacity", isVisible ? "1" : "0");
 };

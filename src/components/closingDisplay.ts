@@ -1,7 +1,6 @@
 import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileHeight } from "@/const";
 import { type PlayerGameResult } from "@/modules/mJson/types/playerGameResult";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
-import { assertNonNull } from "@/util/error";
 import { rotate } from "@/util/vector2D";
 
 const closingDisplayId = "closing_display";
@@ -61,7 +60,6 @@ export const setPlayerMatchResults = (results: readonly PlayerGameResult[]): voi
 };
 
 export const setClosingDisplayVisibility = (isVisible: boolean): void => {
-    const element = document.getElementById(closingDisplayId);
-    assertNonNull(element, closingDisplayId);
+    const element = getElementByIdOrThrowError(closingDisplayId);
     element.setAttribute("opacity", isVisible ? "1" : "0");
 };
