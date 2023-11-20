@@ -11,9 +11,9 @@ import {
     scoreTextOffsetY,
     svgNS,
     tileWidth,
-} from "../const";
-import { getMJson } from "../modules/mJson/states";
-import { type GameIndex } from "../modules/positionEvent/types";
+} from "@/const";
+import { getMJson } from "@/modules/mJson/states";
+import { type GameIndex } from "@/modules/positionEvent/types";
 import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
 import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";

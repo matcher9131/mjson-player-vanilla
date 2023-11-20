@@ -1,4 +1,4 @@
-import { boardOneSize, svgNS } from "../const";
+import { boardOneSize, svgNS } from "@/const";
 import { createCenterDisplay } from "./centerDisplay";
 import { createClosingDisplay } from "./closingDisplay";
 import { createOpeningDisplay } from "./openingDisplay";

@@ -1,7 +1,7 @@
 import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileHeight } from "@/const";
 import { type PlayerGameResult } from "@/modules/mJson/types/playerGameResult";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
-import { rotate } from "@/util/vector2D";
+import { rotateVector2D } from "@/util/vector2D";
 
 const closingDisplayId = "closing_display";
 const playerNameTextId = (sideIndex: number): string => `closing_display_player_name${sideIndex}`;
@@ -14,7 +14,7 @@ export const createClosingDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", closingDisplayId);
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const { x, y } = rotate({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
+        const { x, y } = rotateVector2D({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
         const nameText = createSVGTextElement({
             text: "",
             x,

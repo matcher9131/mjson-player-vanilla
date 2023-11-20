@@ -1,6 +1,6 @@
 import { boardOneSize, svgNS } from "@/const";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
-import { rotate } from "@/util/vector2D";
+import { rotateVector2D } from "@/util/vector2D";
 
 const openingDisplayId = "opening_display";
 const playerNameTextId = (sideIndex: number): string => `opening_display_player_name${sideIndex}`;
@@ -9,7 +9,7 @@ export const createOpeningDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", openingDisplayId);
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const { x, y } = rotate({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
+        const { x, y } = rotateVector2D({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
         const text = createSVGTextElement({
             text: "",
             x,

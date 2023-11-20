@@ -3,7 +3,7 @@ type Vector2D = {
     readonly y: number;
 };
 
-export const rotate = ({ x, y }: Vector2D, degree: number): Vector2D => {
+export const rotateVector2D = ({ x, y }: Vector2D, degree: number): Vector2D => {
     const radian = (degree / 180.0) * Math.PI;
     const a11 = Math.cos(radian);
     const a12 = -Math.sin(radian);

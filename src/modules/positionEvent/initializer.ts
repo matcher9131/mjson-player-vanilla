@@ -8,9 +8,9 @@ import {
     rotatedTileY,
     tileHeight,
     tileWidth,
-} from "../../const";
-import { addVector, insertTo, removeFrom } from "../../util/arrayExtensions";
-import { assertNonNull } from "../../util/error";
+} from "@/const";
+import { addVector, insertTo, removeFrom } from "@/util/arrayExtensions";
+import { assertNonNull } from "@/util/error";
 import { isGameResultWin } from "../mJson/types/gameResult";
 import { type MJson } from "../mJson/types/mJson";
 import { getDefaultTileState } from "../tileState/states";

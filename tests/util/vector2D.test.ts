@@ -1,4 +1,4 @@
-import { rotate } from "@/util/vector2D";
+import { rotateVector2D } from "@/util/vector2D";
 import { describe, expect, test } from "vitest";
 
 describe("vector2D", () => {
@@ -15,7 +15,7 @@ describe("vector2D", () => {
                 expected: { x: -3, y: -4 },
             },
         ])("rotate($v, $degree) = $expected", ({ v, degree, expected }) => {
-            const actual = rotate(v, degree);
+            const actual = rotateVector2D(v, degree);
             expect(actual.x).toBeCloseTo(expected.x, 6);
             expect(actual.y).toBeCloseTo(expected.y, 6);
         });

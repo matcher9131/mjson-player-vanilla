@@ -1,7 +1,7 @@
 import { getElementByIdOrThrowError } from "@/util/domHelper";
-import { overlayTextOffsetX, overlayTextOffsetY, svgNS } from "../const";
-import { type PositionEventMeld } from "../modules/positionEvent/types";
-import { rotate } from "../util/vector2D";
+import { overlayTextOffsetX, overlayTextOffsetY, svgNS } from "@/const";
+import { type PositionEventMeld } from "@/modules/positionEvent/types";
+import { rotateVector2D } from "@/util/vector2D";
 
 const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;
 const animationClassName = "animate-[fadeOut_0.5s]";
@@ -10,7 +10,7 @@ export const createOverlayText = (sideIndex: number): SVGTextElement => {
     const element = document.createElementNS(svgNS, "text");
     element.setAttribute("id", overlayTextId(sideIndex));
     element.setAttribute("opacity", "0");
-    const { x, y } = rotate({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
+    const { x, y } = rotateVector2D({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
     element.setAttribute("x", `${x}`);
     element.setAttribute("y", `${y}`);
     element.setAttribute("text-anchor", "middle");

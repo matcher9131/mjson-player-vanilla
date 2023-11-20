@@ -1,6 +1,6 @@
 import { createPositionEvents } from "./initializer";
 import { type MatchPositionEvents, type GameIndex, type PositionEvent } from "./types";
-import { assertNonNull } from "../../util/error";
+import { assertNonNull } from "@/util/error";
 import { type MJson } from "../mJson/types/mJson";
 
 let positionEvents: MatchPositionEvents = new Map();

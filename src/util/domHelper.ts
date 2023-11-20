@@ -1,4 +1,4 @@
-import { svgNS } from "../const";
+import { svgNS } from "@/const";
 import { assertNonNull } from "./error";
 
 type CreateSVGTextElementOptions = {

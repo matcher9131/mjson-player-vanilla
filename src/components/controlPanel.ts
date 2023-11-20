@@ -1,5 +1,5 @@
 import { type MJson } from "@/modules/mJson/types/mJson";
-import { getMJson } from "../modules/mJson/states";
+import { getMJson } from "@/modules/mJson/states";
 import {
     getCurrentGameIndex,
     getCurrentPositionEvents,
@@ -9,8 +9,8 @@ import {
     goToPreviousPosition,
     resetPositionIndex,
     setPositionEvents,
-} from "../modules/positionEvent/states";
-import { type GameIndex, type PositionEvent } from "../modules/positionEvent/types";
+} from "@/modules/positionEvent/states";
+import { type GameIndex, type PositionEvent } from "@/modules/positionEvent/types";
 import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
 import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";

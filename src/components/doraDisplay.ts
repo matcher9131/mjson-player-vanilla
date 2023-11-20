@@ -1,5 +1,5 @@
 import { getElementByIdOrThrowError } from "@/util/domHelper";
-import { svgNS, tileHeight, tileWidth } from "../const";
+import { svgNS, tileHeight, tileWidth } from "@/const";
 import { createTile, getSrcTileId } from "./tile";
 
 const doraDisplayTileId = (index: number): string => `dora_display_tile${index}`;

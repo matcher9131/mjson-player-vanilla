@@ -1,7 +1,9 @@
 import { type PositionEventTileTransition } from "@/modules/positionEvent/types";
-import { svgNS } from "../const";
-import { getDefaultTileState } from "../modules/tileState/states";
-import { assertNonNull } from "../util/error";
+import { svgNS } from "@/const";
+import { getDefaultTileState } from "@/modules/tileState/states";
+import { getElementByIdOrThrowError } from "@/util/domHelper";
+
+const tileDomId = (tileId: number): string => `tile${tileId}`;
 
 export const getSrcTileId = (tileId: number | null): string => {
     return tileId == null
@@ -18,7 +20,7 @@ export const getSrcTileId = (tileId: number | null): string => {
 export const createTile = (tileId: number | null, setsId = true): SVGUseElement => {
     const srcTileId = getSrcTileId(tileId);
     const tile = document.createElementNS(svgNS, "use");
-    if (setsId && tileId != null) tile.setAttribute("id", `tile${tileId}`);
+    if (setsId && tileId != null) tile.setAttribute("id", tileDomId(tileId));
     tile.classList.add("board-tile");
     tile.setAttribute("href", `tiles.svg#${srcTileId}`);
     // 初期状態
@@ -42,8 +44,7 @@ export const updateTile = ({
     tileId,
     newState: { x, y, sideIndex, isRotated, isInvisible },
 }: Omit<PositionEventTileTransition, "kind" | "isForward">): void => {
-    const tile = document.querySelector(`#tile${tileId}`);
-    assertNonNull(tile, `#tile${tileId}`);
+    const tile = getElementByIdOrThrowError(tileDomId(tileId));
     tile.setAttribute(
         "transform",
         `rotate(${-sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,

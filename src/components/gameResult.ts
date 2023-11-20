@@ -6,14 +6,14 @@ import {
     svgNS,
     tileHeight,
     tileWidth,
-} from "../const";
-import { getYakuName } from "../modules/mJson/types/yaku";
-import { type YakuDoubles } from "../modules/mJson/types/yakuDoubles";
-import { type PositionEventGameResult } from "../modules/positionEvent/types";
-import { type TileState } from "../modules/tileState/types";
-import { maxBy } from "../util/arrayExtensions";
-import { createSVGTextElement, getElementByIdOrThrowError } from "../util/domHelper";
-import { assertNonNull } from "../util/error";
+} from "@/const";
+import { getYakuName } from "@/modules/mJson/types/yaku";
+import { type YakuDoubles } from "@/modules/mJson/types/yakuDoubles";
+import { type PositionEventGameResult } from "@/modules/positionEvent/types";
+import { type TileState } from "@/modules/tileState/types";
+import { maxBy } from "@/util/arrayExtensions";
+import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import { assertNonNull } from "@/util/error";
 import { boardId } from "./board";
 import { createTile } from "./tile";
 
