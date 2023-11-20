@@ -15,6 +15,7 @@ setMJson(sampleMJson as MJson);
 const board = createBoard();
 const controlPanel = createControlPanel();
 root.append(board, controlPanel);
+root.classList.add("flex", "flex-wrap");
 
 // temporary
 handleMJsonChanged(getMJson());

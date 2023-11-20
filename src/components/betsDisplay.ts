@@ -2,9 +2,9 @@ import { betsDisplayHeight, betsDisplayWidth, svgNS } from "@/const";
 import { createCenterOriginSVG, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 
 const stickWidth = 900;
-const width = stickWidth * 4;
+const width = stickWidth * 5;
 const height = width / (betsDisplayWidth / betsDisplayHeight); // const.tsの設定を反映させる
-const fontSize = 300;
+const fontSize = 400;
 const gapX = stickWidth / 4;
 
 const hundredStickId = "bets_stick_hundred";
@@ -43,6 +43,7 @@ export const createBetsDisplay = (): SVGSVGElement => {
         x: 0,
         y: 0,
         fontSize,
+        dominantBaseline: "middle",
     });
     numHundredsText.setAttribute("id", numHundredsTextId);
     element.appendChild(numHundredsText);
@@ -51,6 +52,7 @@ export const createBetsDisplay = (): SVGSVGElement => {
         x: 0,
         y: 0,
         fontSize,
+        dominantBaseline: "middle",
     });
     numThousandsText.setAttribute("id", numThousandsTextId);
     element.appendChild(numThousandsText);

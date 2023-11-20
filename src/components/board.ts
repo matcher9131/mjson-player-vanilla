@@ -43,5 +43,8 @@ export const createBoard = (): SVGSVGElement => {
     const closingDisplay = createClosingDisplay();
     board.appendChild(closingDisplay);
 
+    // CSS
+    board.classList.add("w-[min(100vw,100vh)]", "h-[min(100vw,100vh)]");
+
     return board;
 };

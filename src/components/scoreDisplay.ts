@@ -1,6 +1,6 @@
 import { svgNS } from "@/const";
 import { type PositionEventScore, type PositionEventRiichiStick } from "@/modules/positionEvent/types";
-import { getElementByIdOrThrowError } from "@/util/domHelper";
+import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 
 const score = [25000, 25000, 25000, 25000];
 const showsRiichiStick = [false, false, false, false];
@@ -9,14 +9,14 @@ const scoreTextId = (sideIndex: number): string => `score_text${sideIndex}`;
 const riichiStickId = (sideIndex: number): string => `riichi_stick${sideIndex}`;
 
 export const createScoreText = (sideIndex: number): SVGTextElement => {
-    const element = document.createElementNS(svgNS, "text");
+    const element = createSVGTextElement({
+        text: `${score[sideIndex]}`,
+        x: 0,
+        y: 0,
+        fontSize: 500,
+        dominantBaseline: "alphabetic",
+    });
     element.setAttribute("id", scoreTextId(sideIndex));
-    element.setAttribute("text-anchor", "middle");
-    element.setAttribute("dominant-baseline", "alphabetic");
-    element.setAttribute("font-size", "400");
-    element.setAttribute("fill", "floralwhite");
-    // 初期状態
-    element.textContent = `${score[sideIndex]}`;
     return element;
 };
 

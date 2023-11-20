@@ -1,5 +1,6 @@
-import { getElementByIdOrThrowError } from "@/util/domHelper";
+import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import {
+    betsDisplayHeight,
     betsDisplayWidth,
     centerDisplayHeight,
     centerDisplayOffsetX,
@@ -32,13 +33,13 @@ const createBackground = (): SVGRectElement => {
 };
 
 const createRoundText = (): SVGTextElement => {
-    const element = document.createElementNS(svgNS, "text");
+    const element = createSVGTextElement({
+        text: "",
+        x: gameNumberTextOffsetX,
+        y: gameNumberTextOffsetY,
+        fontSize: 1000,
+    });
     element.setAttribute("id", roundTextId);
-    element.setAttribute("x", `${gameNumberTextOffsetX}`);
-    element.setAttribute("y", `${gameNumberTextOffsetY}`);
-    element.setAttribute("text-anchor", "middle");
-    element.setAttribute("font-size", "1000");
-    element.setAttribute("fill", "floralwhite");
     return element;
 };
 
@@ -55,14 +56,14 @@ export const createCenterDisplay = (): SVGGElement => {
     const betsDisplay = createBetsDisplay();
     // temporary
     betsDisplay.setAttribute("x", `${-betsDisplayWidth / 2}`);
-    betsDisplay.setAttribute("y", `${0}`);
+    betsDisplay.setAttribute("y", `${-betsDisplayHeight / 2}`);
     // end temporary
     cd.appendChild(betsDisplay);
     // ドラ表示
     const doraDisplay = createDoraDisplay();
     // temporary
     doraDisplay.setAttribute("x", `${-tileWidth * 2.5}`);
-    doraDisplay.setAttribute("y", `${tileWidth}`);
+    doraDisplay.setAttribute("y", `${tileWidth * 0.75}`);
     // end temporary
     cd.appendChild(doraDisplay);
     // 点棒表示・リーチ棒表示
