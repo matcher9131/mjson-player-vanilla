@@ -8,9 +8,7 @@ import {
     tileWidth,
 } from "@/const";
 import { getYakuName } from "@/modules/mJson/types/yaku";
-import { type YakuDoubles } from "@/modules/mJson/types/yakuDoubles";
-import { type PositionEventGameResult } from "@/modules/positionEvent/types";
-import { type TileState } from "@/modules/tileState/types";
+import { type PositionEventGameResultWin, type PositionEventGameResult } from "@/modules/positionEvent/types";
 import { maxBy } from "@/util/arrayExtensions";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
@@ -19,7 +17,23 @@ import { createTile } from "./tile";
 
 const gameResultId = "game_result";
 const scoreFontSize = 400;
-const yakuFontSize = 400;
+const yakuFontSize = 350;
+const yakuSummaryFontSize = 500;
+
+const yakuRowHeight = tileWidth * 1.25;
+const yakuColumnGap = tileWidth * 1;
+const yakuColumnWidth = tileWidth * 4.5;
+// |<-- yakuColumnWidth -->|<-- yakuColumnGap -->|<-- yakuColumnWidth -->|
+const yakuWidth = yakuColumnWidth * 2 + yakuColumnGap;
+
+const doraCaptionHeight = tileWidth;
+const doraWidth = tileWidth * 5;
+const doraScale = 0.8;
+
+const yakuDoraPadding = tileWidth / 2;
+const yakuDoraGap = tileWidth * 0.75;
+// |<-- yakuDoraPadding -->|<-- yakuWidth -->|<-- yakuDoraGap -->|<-- doraWidth * doraScale -->|<-- yakuDoraPadding -->|
+const yakuDoraWidth = yakuDoraPadding * 2 + yakuWidth + yakuDoraGap + doraWidth * doraScale;
 
 const scoreLocationX = [0, gameResultScoreWidth / 3, 0, -gameResultScoreWidth / 3];
 const scorePlayerNameLocationY = [
@@ -85,26 +99,31 @@ const createScoreElement = (
     return container;
 };
 
-const createHandElement = (
-    tileStates: ReadonlyMap<number, TileState>,
-    yakuList: readonly YakuDoubles[],
-    dora: readonly number[],
-    hiddenDora: readonly number[],
-): SVGSVGElement => {
-    const left = Math.min(...[...tileStates.values()].map((state) => state.x)) - tileWidth / 2;
-    const rightTile = maxBy([...tileStates.values()], (state) => state.x);
+const createHandElement = ({
+    handTileStates,
+    winScore,
+    isSelfDraw,
+    isDealer,
+    points,
+    yakuList,
+    dora,
+    hiddenDora,
+}: PositionEventGameResultWin): SVGSVGElement => {
+    const left = Math.min(...[...handTileStates.values()].map((state) => state.x)) - tileWidth / 2;
+    const rightTile = maxBy([...handTileStates.values()], (state) => state.x);
     assertNonNull(rightTile, "rightTile");
     const right = rightTile.x + (rightTile.isRotated ?? false ? tileHeight / 2 : tileWidth / 2);
     const handWidth = right - left;
     const handHeight = tileWidth * 2; // 加槓の場合に備えて高さは牌の幅x2
 
+    // Origin: UpperMiddle
     const handElement = document.createElementNS(svgNS, "svg");
     handElement.setAttribute("width", `${handWidth}`);
     handElement.setAttribute("height", `${handHeight}`);
     handElement.setAttribute("viewBox", `${-handWidth / 2} ${0} ${handWidth} ${handHeight}`);
     handElement.setAttribute("x", `${-handWidth / 2}`);
     handElement.setAttribute("y", "0");
-    for (const [tileId, { x, isRotated }] of tileStates) {
+    for (const [tileId, { x, isRotated }] of handTileStates) {
         const tile = createTile(tileId, false);
         tile.setAttribute("opacity", "1");
         tile.setAttribute(
@@ -116,21 +135,16 @@ const createHandElement = (
         handElement.appendChild(tile);
     }
 
-    const yakuWidth = tileWidth * 8;
-    // temporary
-    const yakuRowHeight = tileWidth * 1.5;
-    const yakuColumnGap = tileWidth * 1;
-    const yakuColumnWidth = (yakuWidth - yakuColumnGap) / 2;
-    // end temporary
-    const yakuHeight = Math.ceil(yakuList.length / 2) * yakuRowHeight;
+    const yakuHeight = (Math.ceil(yakuList.length / 2) + 1.5) * yakuRowHeight;
+    // Origin: UpperLeft
     const yakuElement = document.createElementNS(svgNS, "svg");
     yakuElement.setAttribute("width", `${yakuWidth}`);
     yakuElement.setAttribute("height", `${yakuHeight}`);
-    yakuElement.setAttribute("viewBox", `${-yakuWidth / 2} 0 ${yakuWidth} ${yakuHeight}`);
-    yakuElement.setAttribute("x", `${-handWidth / 2}`);
+    yakuElement.setAttribute("viewBox", `0 0 ${yakuWidth} ${yakuHeight}`);
+    yakuElement.setAttribute("x", `${-yakuDoraWidth / 2 + yakuDoraPadding}`);
     yakuElement.setAttribute("y", `${handHeight}`);
     for (let i = 0; i < yakuList.length; ++i) {
-        const yakuNameX = i % 2 === 0 ? -yakuColumnWidth - yakuColumnGap / 2 : yakuColumnGap / 2;
+        const yakuNameX = i % 2 === 0 ? 0 : yakuColumnWidth + yakuColumnGap;
         const y = (Math.floor(i / 2) + 0.5) * yakuRowHeight;
         const textYakuName = createSVGTextElement({
             text: getYakuName(yakuList[i].yakuId),
@@ -142,7 +156,7 @@ const createHandElement = (
         });
         yakuElement.appendChild(textYakuName);
         if (yakuList[i].doubles < 13) {
-            const yakuDoublesX = i % 2 === 0 ? -yakuColumnGap / 2 : yakuColumnGap / 2 + yakuColumnWidth;
+            const yakuDoublesX = yakuNameX + yakuColumnWidth;
             const textYakuDoubles = createSVGTextElement({
                 text: `${yakuList[i].doubles}飜`,
                 x: yakuDoublesX,
@@ -154,18 +168,63 @@ const createHandElement = (
             yakuElement.appendChild(textYakuDoubles);
         }
     }
+    const yakuSummaryText = (() => {
+        if (yakuList.find(({ doubles }) => doubles === 13) != null) {
+            const doublesText =
+                yakuList.length === 1
+                    ? "役満"
+                    : yakuList.length === 2
+                    ? "ダブル役満"
+                    : yakuList.length === 3
+                    ? "トリプル役満"
+                    : `${yakuList.length}倍役満`;
+            const scoreText = isSelfDraw
+                ? isDealer
+                    ? `${winScore / 3}点All`
+                    : `${winScore / 4}-${winScore / 2}点`
+                : `${winScore}点`;
+            return `${doublesText} ${scoreText}`;
+        } else {
+            const sumDoubles = yakuList.reduce((sum, { doubles }) => sum + doubles, 0);
+            const doublesText =
+                sumDoubles >= 13
+                    ? "役満"
+                    : sumDoubles >= 11
+                    ? "三倍満"
+                    : sumDoubles >= 8
+                    ? "倍満"
+                    : sumDoubles >= 6
+                    ? "跳満"
+                    : winScore >= 8000 * (isDealer ? 1.5 : 1)
+                    ? "満貫"
+                    : `${points}符${sumDoubles}飜`;
+            const scoreText = isSelfDraw
+                ? isDealer
+                    ? `${winScore / 3}点All`
+                    : `${winScore / 4}-${winScore / 2}点`
+                : `${winScore}点`;
+            return `${doublesText} ${scoreText}`;
+        }
+    })();
+    yakuElement.appendChild(
+        createSVGTextElement({
+            text: yakuSummaryText,
+            x: yakuWidth / 2,
+            y: (Math.ceil(yakuList.length / 2) + 0.5) * yakuRowHeight,
+            fontSize: yakuSummaryFontSize,
+        }),
+    );
 
-    const doraCaptionHeight = tileWidth;
-    const doraWidth = tileWidth * 5;
-    const doraHeight = doraCaptionHeight + tileHeight + (hiddenDora.length > 0 ? tileHeight : 0);
+    // Origin: UpperMiddle
+    const doraHeight = doraCaptionHeight + (hiddenDora.length > 0 ? 2 * tileHeight : tileHeight);
     const doraElement = document.createElementNS(svgNS, "svg");
-    doraElement.setAttribute("width", `${doraWidth}`);
-    doraElement.setAttribute("height", `${doraHeight}`);
-    doraElement.setAttribute("viewBox", `0 0 ${doraWidth} ${doraHeight}`);
+    doraElement.setAttribute("width", `${doraWidth * doraScale}`);
+    doraElement.setAttribute("height", `${doraHeight * doraScale}`);
+    doraElement.setAttribute("viewBox", `${-doraWidth / 2} 0 ${doraWidth} ${doraHeight}`);
     doraElement.appendChild(
         createSVGTextElement({
             text: "ドラ",
-            x: doraWidth / 2,
+            x: 0,
             y: 0,
             fontSize: scoreFontSize,
             textAnchor: "middle",
@@ -175,7 +234,7 @@ const createHandElement = (
     for (let i = 0; i < 5; ++i) {
         const tile = createTile(dora[i] ?? null, false);
         tile.setAttribute("opacity", "1");
-        tile.setAttribute("x", `${i * tileWidth + tileWidth / 2}`);
+        tile.setAttribute("x", `${(i - 2) * tileWidth}`);
         tile.setAttribute("y", `${doraCaptionHeight + tileHeight / 2}`);
         doraElement.appendChild(tile);
     }
@@ -183,16 +242,17 @@ const createHandElement = (
         for (let i = 0; i < 5; ++i) {
             const tile = createTile(hiddenDora[i] ?? null, false);
             tile.setAttribute("opacity", "1");
-            tile.setAttribute("x", `${i * tileWidth + tileWidth / 2}`);
+            tile.setAttribute("x", `${(i - 2) * tileWidth}`);
             tile.setAttribute("y", `${doraCaptionHeight + tileHeight + tileHeight / 2}`);
             doraElement.appendChild(tile);
         }
     }
-    doraElement.setAttribute("x", `${handWidth / 2 - 5 * tileWidth}`);
-    doraElement.setAttribute("y", `${handHeight}`);
+    doraElement.setAttribute("x", `${yakuDoraWidth / 2 - yakuDoraPadding - doraWidth * doraScale}`);
+    doraElement.setAttribute("y", `${handHeight + tileWidth / 4}`);
 
-    const width = handWidth + tileWidth;
+    const width = Math.max(yakuDoraWidth, handWidth + tileWidth);
     const height = handHeight + Math.max(yakuHeight, doraHeight);
+    // Origin: UpperMiddle
     const container = document.createElementNS(svgNS, "svg");
     container.setAttribute("width", `${width}`);
     container.setAttribute("height", `${height}`);
@@ -213,7 +273,7 @@ const createGameResult = (event: PositionEventGameResult): SVGGElement => {
     result.setAttribute("id", gameResultId);
     let scoreY = -gameResultScoreHeight / 2;
     if (event.kind === "gameResultWin") {
-        const hand = createHandElement(event.handTileStates, event.yakuList, event.dora, event.hiddenDora);
+        const hand = createHandElement(event);
         const handWidth = hand.getAttribute("width");
         assertNonNull(handWidth, "handWidth");
         hand.setAttribute("x", `${-parseInt(handWidth) / 2}`);

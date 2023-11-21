@@ -532,6 +532,10 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                                   { ...sides[gameResult.player], drawTile: lastTileId },
                                   0, // gameResult表示用のため回転移動の必要なし
                               ),
+                              winScore: gameResult.winScore,
+                              isDealer: game.round % 4 === gameResult.player,
+                              isSelfDraw: gameResult.from == null,
+                              points: gameResult.points,
                               yakuList: gameResult.yakuList,
                               dora: game.dora,
                               hiddenDora: game.hiddenDora ?? [],

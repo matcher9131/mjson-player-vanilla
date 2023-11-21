@@ -29,9 +29,13 @@ type PositionEventGameResultBase = {
     readonly players: ReadonlyArray<{ readonly name: string; readonly increment: number; readonly newScore: number }>;
 };
 
-type PositionEventGameResultWin = PositionEventGameResultBase & {
+export type PositionEventGameResultWin = PositionEventGameResultBase & {
     readonly kind: "gameResultWin";
     readonly handTileStates: ReadonlyMap<number, TileState>;
+    readonly winScore: number;
+    readonly isDealer: boolean;
+    readonly isSelfDraw: boolean;
+    readonly points: number;
     readonly yakuList: readonly YakuDoubles[];
     readonly dora: readonly number[];
     readonly hiddenDora: readonly number[];
