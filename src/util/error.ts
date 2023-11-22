@@ -4,3 +4,7 @@ export const assertNonNull: <T>(value: T | null | undefined, name?: string) => a
 ) => {
     if (value == null) throw new Error(`'${name ?? ""}' should not be nullish.`);
 };
+
+export const assertFiniteNumber = (value: number, name?: string): void => {
+    if (!isFinite(value)) throw new Error(`'${name ?? "value"}' should be a finite number.`);
+};
