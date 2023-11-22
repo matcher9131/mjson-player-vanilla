@@ -13,7 +13,7 @@ export const createScoreText = (sideIndex: number): SVGTextElement => {
         text: `${score[sideIndex]}`,
         x: 0,
         y: 0,
-        fontSize: 500,
+        fontSize: 450,
         dominantBaseline: "alphabetic",
     });
     element.setAttribute("id", scoreTextId(sideIndex));

@@ -1,5 +1,5 @@
 import { getElementByIdOrThrowError } from "@/util/domHelper";
-import { svgNS, tileHeight, tileWidth } from "@/const";
+import { doraDisplayScale, svgNS, tileHeight, tileWidth } from "@/const";
 import { createTile, getSrcTileId } from "./tile";
 
 const doraDisplayTileId = (index: number): string => `dora_display_tile${index}`;
@@ -10,8 +10,8 @@ let doraTileIds: readonly number[] = [];
 export const createDoraDisplay = (): SVGSVGElement => {
     const element = document.createElementNS(svgNS, "svg");
     const width = 5 * tileWidth;
-    element.setAttribute("width", `${width}`);
-    element.setAttribute("height", `${tileHeight}`);
+    element.setAttribute("width", `${width * doraDisplayScale}`);
+    element.setAttribute("height", `${tileHeight * doraDisplayScale}`);
     element.setAttribute("viewBox", `0 0 ${width} ${tileHeight}`);
     for (let i = 0; i < 5; ++i) {
         const tile = createTile(null, false);

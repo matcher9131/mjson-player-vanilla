@@ -11,18 +11,24 @@ export const drawGapX = tileWidth / 5;
 export const drawGapY = tileWidth + 20;
 export const meldGapX = tileWidth / 3;
 
-export const centerDisplayWidth = 7 * tileWidth;
-export const centerDisplayHeight = 7 * tileWidth;
+export const centerDisplayWidth = 6 * tileWidth;
+export const centerDisplayHeight = 6 * tileWidth;
 export const centerDisplayOffsetX = -centerDisplayWidth / 2;
 export const centerDisplayOffsetY = -centerDisplayHeight / 2;
 export const gameNumberTextOffsetX = 0;
-export const gameNumberTextOffsetY = -tileWidth * 1.5;
+export const gameNumberTextOffsetY = -tileWidth * 1.25;
 export const scoreTextOffsetX = 0;
 export const scoreTextOffsetY = centerDisplayHeight / 2 - 20;
 export const betsDisplayOffsetX = 0;
 export const betsDisplayOffsetY = 0;
 export const betsDisplayWidth = centerDisplayWidth;
 export const betsDisplayHeight = betsDisplayWidth / 8; // 要調整
+export const doraDisplayScale = 0.8;
+export const doraDisplayOffsetX = -tileWidth * 2.5 * doraDisplayScale;
+export const doraDisplayOffsetY = tileWidth * 0.5;
+export const riichiStickHeight = 180;
+export const riichiStickOffsetX = 0;
+export const riichiStickOffsetY = tileWidth * 3.5 - riichiStickHeight / 2;
 
 export const overlayTextOffsetX = 0;
 export const overlayTextOffsetY = boardOneSize * 0.35;
