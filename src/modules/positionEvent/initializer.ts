@@ -545,8 +545,9 @@ export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
                               players: mJson.players.map(({ name }, sideIndex) => ({
                                   name,
                                   increment: gameResult.scoreIncrements[sideIndex],
-                                  newScore: -1, // NOT IMPLEMENTED
+                                  newScore: gameResultScores[gameResultIndex][sideIndex],
                               })),
+                              drawKind: gameResult.drawKind,
                           },
                 ]),
             );

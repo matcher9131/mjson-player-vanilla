@@ -1,3 +1,4 @@
+import { type DrawKind } from "../mJson/types/drawKind";
 import { type YakuDoubles } from "../mJson/types/yakuDoubles";
 import { type TileState } from "../tileState/types";
 
@@ -43,6 +44,7 @@ export type PositionEventGameResultWin = PositionEventGameResultBase & {
 
 type PositionEventGameResultDraw = PositionEventGameResultBase & {
     readonly kind: "gameResultDraw";
+    readonly drawKind: DrawKind;
 };
 
 export type PositionEventGameResult = PositionEventGameResultWin | PositionEventGameResultDraw;

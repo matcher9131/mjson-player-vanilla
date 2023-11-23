@@ -6,12 +6,15 @@ import {
     centerDisplayOffsetX,
     centerDisplayOffsetY,
     centerDisplayWidth,
+    doraDisplayOffsetX,
+    doraDisplayOffsetY,
     gameNumberTextOffsetX,
     gameNumberTextOffsetY,
+    riichiStickOffsetX,
+    riichiStickOffsetY,
     scoreTextOffsetX,
     scoreTextOffsetY,
     svgNS,
-    tileWidth,
 } from "@/const";
 import { getMJson } from "@/modules/mJson/states";
 import { type GameIndex } from "@/modules/positionEvent/types";
@@ -37,7 +40,7 @@ const createRoundText = (): SVGTextElement => {
         text: "",
         x: gameNumberTextOffsetX,
         y: gameNumberTextOffsetY,
-        fontSize: 1000,
+        fontSize: 900,
     });
     element.setAttribute("id", roundTextId);
     return element;
@@ -54,17 +57,13 @@ export const createCenterDisplay = (): SVGGElement => {
     cd.appendChild(roundText);
     // 積み棒表示
     const betsDisplay = createBetsDisplay();
-    // temporary
     betsDisplay.setAttribute("x", `${-betsDisplayWidth / 2}`);
     betsDisplay.setAttribute("y", `${-betsDisplayHeight / 2}`);
-    // end temporary
     cd.appendChild(betsDisplay);
     // ドラ表示
     const doraDisplay = createDoraDisplay();
-    // temporary
-    doraDisplay.setAttribute("x", `${-tileWidth * 2.5}`);
-    doraDisplay.setAttribute("y", `${tileWidth * 0.75}`);
-    // end temporary
+    doraDisplay.setAttribute("x", `${doraDisplayOffsetX}`);
+    doraDisplay.setAttribute("y", `${doraDisplayOffsetY}`);
     cd.appendChild(doraDisplay);
     // 点棒表示・リーチ棒表示
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
@@ -75,12 +74,10 @@ export const createCenterDisplay = (): SVGGElement => {
         );
         cd.appendChild(scoreText);
         const riichiStick = createRiichiStickDisplay(sideIndex);
-        // temporary
         riichiStick.setAttribute(
             "transform",
-            `rotate(${-90 * sideIndex}) translate(${scoreTextOffsetX} ${scoreTextOffsetY})`,
+            `rotate(${-90 * sideIndex}) translate(${riichiStickOffsetX} ${riichiStickOffsetY})`,
         );
-        // end temporary
         cd.appendChild(riichiStick);
     }
     // 初期状態
