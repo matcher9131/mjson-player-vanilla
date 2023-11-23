@@ -14,10 +14,6 @@ export const createBoard = (): SVGSVGElement => {
 
     // 背景
     board.classList.add("flex-none", "bg-green-950");
-    // temporary
-    board.setAttribute("width", "500");
-    board.setAttribute("height", "500");
-    // end temporary
 
     // Center Display
     const centerDisplay = createCenterDisplay();

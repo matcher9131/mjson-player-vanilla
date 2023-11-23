@@ -27,7 +27,7 @@ const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
     const button = document.createElement("button");
     button.textContent = text;
     button.onclick = onClick;
-    button.classList.add("bg-slate-700", "text-white", "px-2", "py-2", "rounded");
+    button.classList.add("flex-auto", "bg-slate-700", "text-white", "px-2", "py-2", "rounded");
     button.classList.add(positionNavigatorButtonClassName);
     // 初期状態
     button.disabled = true;
@@ -144,11 +144,17 @@ export const createControlPanel = (): HTMLDivElement => {
     };
     const panel = document.createElement("div");
     panel.append(
+        createButton(handleGoToPreviousGame, "←←"),
         createButton(handleGoToPreviousPosition, "←"),
         createButton(handleGoToNextPosition, "→"),
-        createButton(handleGoToPreviousGame, "←←"),
         createButton(handleGoToNextGame, "→→"),
     );
-    panel.classList.add("grid-cols-2");
+    panel.classList.add(
+        "flex",
+        "portrait:w-[min(100vw,100vh)]",
+        "portrait:flex-row",
+        "landscape:h-[min(100vw,100vh)]",
+        "landscape:flex-col",
+    );
     return panel;
 };
