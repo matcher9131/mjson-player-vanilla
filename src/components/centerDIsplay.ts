@@ -15,12 +15,15 @@ import {
     scoreTextOffsetX,
     scoreTextOffsetY,
     svgNS,
+    windDisplayOffsetX,
+    windDisplayOffsetY,
 } from "@/const";
 import { getMJson } from "@/modules/mJson/states";
 import { type GameIndex } from "@/modules/positionEvent/types";
 import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
 import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";
+import { createWindDisplay } from "./windDisplay";
 
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";
@@ -65,7 +68,7 @@ export const createCenterDisplay = (): SVGGElement => {
     doraDisplay.setAttribute("x", `${doraDisplayOffsetX}`);
     doraDisplay.setAttribute("y", `${doraDisplayOffsetY}`);
     cd.appendChild(doraDisplay);
-    // 点棒表示・リーチ棒表示
+    // 点棒表示・リーチ棒表示・自風表示
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const scoreText = createScoreText(sideIndex);
         scoreText.setAttribute(
@@ -79,6 +82,12 @@ export const createCenterDisplay = (): SVGGElement => {
             `rotate(${-90 * sideIndex}) translate(${riichiStickOffsetX} ${riichiStickOffsetY})`,
         );
         cd.appendChild(riichiStick);
+        const windDisplay = createWindDisplay(sideIndex);
+        windDisplay.setAttribute(
+            "transform",
+            `rotate(${-90 * sideIndex}) translate(${windDisplayOffsetX} ${windDisplayOffsetY})`,
+        );
+        cd.appendChild(windDisplay);
     }
     // 初期状態
     cd.setAttribute("opacity", "0");

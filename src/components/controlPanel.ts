@@ -20,6 +20,7 @@ import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
 import { showOverlay } from "./overlayText";
 import { resetScoreDisplay, setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
+import { updateWindDisplay } from "./windDisplay";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -35,7 +36,6 @@ const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
 };
 
 const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
-    updateRoundText(newGameIndex);
     setCenterDisplayVisibility(newGameIndex);
     setTileAnimationAll(false);
     if (newGameIndex === "pre") {
@@ -49,7 +49,8 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     } else {
         setOpeningDisplayVisible(false);
         setClosingDisplayVisibility(false);
-        // ドラをセットする
+        updateRoundText(newGameIndex);
+        updateWindDisplay(getMJson().games[newGameIndex].round % 4);
         updateDoraTileIds(getMJson().games[newGameIndex].dora);
         updateDoraRightIndex(0);
     }
