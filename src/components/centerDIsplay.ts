@@ -22,8 +22,9 @@ import { getMJson } from "@/modules/mJson/states";
 import { type GameIndex } from "@/modules/positionEvent/types";
 import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
-import { createRiichiStickDisplay, createScoreText } from "./scoreDisplay";
+import { createScoreText } from "./scoreDisplay";
 import { createWindDisplay } from "./windDisplay";
+import { createRiichiStickDisplay } from "./riichiStickDisplay";
 
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";

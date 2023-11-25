@@ -41,3 +41,7 @@ export const gameResultScoreHeight = gameResultScoreWidth / 2;
 export const defaultTextColor = "floralwhite";
 export const positiveNumberColor = "#dc2626";
 export const negativeNumberColor = "#2563eb";
+
+export const defaultTextColorClassName = "text-[#fffaf0]";
+export const positiveNumberColorClassName = "text-[#dc2626]";
+export const negativeNumberColorClassName = "text-[#2563eb]";

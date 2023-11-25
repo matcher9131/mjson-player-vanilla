@@ -1,8 +1,9 @@
 import {
+    defaultTextColorClassName,
     gameResultScoreHeight,
     gameResultScoreWidth,
-    negativeNumberColor,
-    positiveNumberColor,
+    negativeNumberColorClassName,
+    positiveNumberColorClassName,
     svgNS,
     tileHeight,
     tileWidth,
@@ -39,62 +40,114 @@ const yakuDoraGap = tileWidth * 0.75;
 // |<-- yakuDoraPadding -->|<-- yakuWidth -->|<-- yakuDoraGap -->|<-- doraWidth * doraScale -->|<-- yakuDoraPadding -->|
 const yakuDoraWidth = yakuDoraPadding * 2 + yakuWidth + yakuDoraGap + doraWidth * doraScale;
 
-const scoreLocationX = [0, gameResultScoreWidth / 3, 0, -gameResultScoreWidth / 3];
-const scorePlayerNameLocationY = [
-    gameResultScoreHeight * (1 / 3 - 1 / 9),
-    gameResultScoreHeight * (0 - 1 / 9),
-    gameResultScoreHeight * (-1 / 3 - 1 / 9),
-    gameResultScoreHeight * (0 - 1 / 9),
+// const scoreLocationX = [0, gameResultScoreWidth / 3, 0, -gameResultScoreWidth / 3];
+// const scorePlayerNameLocationY = [
+//     gameResultScoreHeight * (1 / 3 - 1 / 9),
+//     gameResultScoreHeight * (0 - 1 / 9),
+//     gameResultScoreHeight * (-1 / 3 - 1 / 9),
+//     gameResultScoreHeight * (0 - 1 / 9),
+// ];
+// const scoreIncrementLocationY = [(gameResultScoreHeight * 1) / 3, 0, gameResultScoreHeight * (-1 / 3), 0];
+// const scoreLocationY = [
+//     gameResultScoreHeight * (1 / 3 + 1 / 9),
+//     gameResultScoreHeight * (0 + 1 / 9),
+//     gameResultScoreHeight * (-1 / 3 + 1 / 9),
+//     gameResultScoreHeight * (0 + 1 / 9),
+// ];
+
+const scoreGridClasses = [
+    ["row-start-2", "row-end-3", "col-start-2", "col-end-3"],
+    ["row-start-1", "row-end-3", "col-start-3", "col-end-4"],
+    ["row-start-1", "row-end-2", "col-start-2", "col-end-3"],
+    ["row-start-1", "row-end-3", "col-start-1", "col-end-2"],
 ];
-const scoreIncrementLocationY = [(gameResultScoreHeight * 1) / 3, 0, gameResultScoreHeight * (-1 / 3), 0];
-const scoreLocationY = [
-    gameResultScoreHeight * (1 / 3 + 1 / 9),
-    gameResultScoreHeight * (0 + 1 / 9),
-    gameResultScoreHeight * (-1 / 3 + 1 / 9),
-    gameResultScoreHeight * (0 + 1 / 9),
-];
+const scoreFontSizeClassName = "text-[200px]";
 
 const createScoreElement = (
     players: ReadonlyArray<{ readonly name: string; readonly newScore: number; readonly increment: number }>,
-): SVGSVGElement => {
-    const container = document.createElementNS(svgNS, "svg");
+): SVGForeignObjectElement => {
+    const container = document.createElementNS(svgNS, "foreignObject");
     container.setAttribute("width", `${gameResultScoreWidth}`);
     container.setAttribute("height", `${gameResultScoreHeight}`);
-    container.setAttribute(
-        "viewBox",
-        `${-gameResultScoreWidth / 2} ${-gameResultScoreHeight / 2} ${gameResultScoreWidth} ${gameResultScoreHeight}`,
+
+    const gridRoot = document.createElement("div");
+    gridRoot.classList.add(
+        "w-full",
+        "h-full",
+        "grid",
+        "grid-cols-3",
+        "grid-rows-2",
+        scoreFontSizeClassName,
+        defaultTextColorClassName,
     );
 
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const name = createSVGTextElement({
-            text: players[sideIndex].name,
-            x: scoreLocationX[sideIndex],
-            y: scorePlayerNameLocationY[sideIndex],
-            fontSize: scoreFontSize,
-        });
-        const increment = createSVGTextElement({
-            text:
-                players[sideIndex].increment === 0
-                    ? ""
-                    : players[sideIndex].increment > 0
-                    ? `+${players[sideIndex].increment}`
-                    : `${players[sideIndex].increment}`,
-            x: scoreLocationX[sideIndex],
-            y: scoreIncrementLocationY[sideIndex],
-            fontSize: scoreFontSize,
-            color: players[sideIndex].increment > 0 ? positiveNumberColor : negativeNumberColor,
-        });
-        const score = createSVGTextElement({
-            text: `${players[sideIndex].newScore}`,
-            x: scoreLocationX[sideIndex],
-            y: scoreLocationY[sideIndex],
-            fontSize: scoreFontSize,
-        });
-        container.append(name, increment, score);
+        const element = document.createElement("div");
+        element.classList.add("flex", "flex-col", ...scoreGridClasses[sideIndex]);
+        const nameElement = document.createElement("div");
+        nameElement.textContent = players[sideIndex].name;
+        const scoreElement = document.createElement("div");
+        scoreElement.textContent = `${players[sideIndex].newScore}`;
+        const incrementElement = document.createElement("div");
+        incrementElement.textContent =
+            players[sideIndex].increment === 0
+                ? ""
+                : players[sideIndex].increment > 0
+                ? `+${players[sideIndex].increment}`
+                : `${players[sideIndex].increment}`;
+        incrementElement.classList.add(
+            players[sideIndex].increment >= 0 ? positiveNumberColorClassName : negativeNumberColorClassName,
+        );
+        element.append(nameElement, scoreElement, incrementElement);
+        gridRoot.appendChild(element);
     }
+
+    container.appendChild(gridRoot);
 
     return container;
 };
+
+// const createScoreElement = (
+//     players: ReadonlyArray<{ readonly name: string; readonly newScore: number; readonly increment: number }>,
+// ): SVGSVGElement => {
+//     const container = document.createElementNS(svgNS, "svg");
+//     container.setAttribute("width", `${gameResultScoreWidth}`);
+//     container.setAttribute("height", `${gameResultScoreHeight}`);
+//     container.setAttribute(
+//         "viewBox",
+//         `${-gameResultScoreWidth / 2} ${-gameResultScoreHeight / 2} ${gameResultScoreWidth} ${gameResultScoreHeight}`,
+//     );
+
+//     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
+//         const name = createSVGTextElement({
+//             text: players[sideIndex].name,
+//             x: scoreLocationX[sideIndex],
+//             y: scorePlayerNameLocationY[sideIndex],
+//             fontSize: scoreFontSize,
+//         });
+//         const increment = createSVGTextElement({
+//             text:
+//                 players[sideIndex].increment === 0
+//                     ? ""
+//                     : players[sideIndex].increment > 0
+//                     ? `+${players[sideIndex].increment}`
+//                     : `${players[sideIndex].increment}`,
+//             x: scoreLocationX[sideIndex],
+//             y: scoreIncrementLocationY[sideIndex],
+//             fontSize: scoreFontSize,
+//             color: players[sideIndex].increment > 0 ? positiveNumberColor : negativeNumberColor,
+//         });
+//         const score = createSVGTextElement({
+//             text: `${players[sideIndex].newScore}`,
+//             x: scoreLocationX[sideIndex],
+//             y: scoreLocationY[sideIndex],
+//             fontSize: scoreFontSize,
+//         });
+//         container.append(name, increment, score);
+//     }
+
+//     return container;
+// };
 
 const createHandElement = (
     tileStates: ReadonlyMap<number, TileState>,
