@@ -18,7 +18,7 @@ import { type TileState } from "@/modules/tileState/types";
 import { type YakuDoubles } from "@/modules/mJson/types/yakuDoubles";
 import { type DrawKind } from "@/modules/mJson/types/drawKind";
 
-const gameResultId = "game_result";
+const gameResultDisplayId = "game_result_display";
 const scoreFontSize = 400;
 const yakuFontSize = 350;
 const yakuSummaryFontSize = 500;
@@ -64,13 +64,6 @@ const createScoreElement = (
         "viewBox",
         `${-gameResultScoreWidth / 2} ${-gameResultScoreHeight / 2} ${gameResultScoreWidth} ${gameResultScoreHeight}`,
     );
-    // const bg = document.createElementNS(svgNS, "rect");
-    // bg.setAttribute("fill", "#111827");
-    // bg.setAttribute("x", `${-gameResultScoreWidth / 2}`);
-    // bg.setAttribute("y", `${-gameResultScoreHeight / 2}`);
-    // bg.setAttribute("width", `${gameResultScoreWidth}`);
-    // bg.setAttribute("height", `${gameResultScoreHeight}`);
-    // container.appendChild(bg);
 
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const name = createSVGTextElement({
@@ -310,13 +303,6 @@ const createWinHandElement = ({
     element.setAttribute("width", `${width}`);
     element.setAttribute("height", `${height}`);
     element.setAttribute("viewBox", `${-width / 2} 0 ${width} ${height}`);
-    // const bg = document.createElementNS(svgNS, "rect");
-    // bg.setAttribute("fill", "#111827");
-    // bg.setAttribute("width", `${width}`);
-    // bg.setAttribute("height", `${height}`);
-    // bg.setAttribute("x", `${-width / 2}`);
-    // bg.setAttribute("y", `${0}`);
-    // element.appendChild(bg);
     element.append(handElement, yakuElement, doraElement);
 
     return {
@@ -350,9 +336,9 @@ const createDrawKindElement = (
     };
 };
 
-const createGameResult = (event: PositionEventGameResult): SVGGElement => {
+const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement => {
     const container = document.createElementNS(svgNS, "g");
-    container.setAttribute("id", gameResultId);
+    container.setAttribute("id", gameResultDisplayId);
     const {
         element: topElement,
         width: topElementWidth,
@@ -378,13 +364,13 @@ const createGameResult = (event: PositionEventGameResult): SVGGElement => {
     return container;
 };
 
-export const showGameResult = (event: PositionEventGameResult): void => {
+export const showGameResultDisplay = (event: PositionEventGameResult): void => {
     const board = getElementByIdOrThrowError(boardId);
-    const gameResult = createGameResult(event);
+    const gameResult = createGameResultDisplay(event);
     board.appendChild(gameResult);
 };
 
-export const hideGameResult = (): void => {
-    const gameResult = document.getElementById(gameResultId);
+export const hideGameResultDisplay = (): void => {
+    const gameResult = document.getElementById(gameResultDisplayId);
     gameResult?.remove();
 };

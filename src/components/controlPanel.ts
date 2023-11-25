@@ -15,7 +15,7 @@ import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
 import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
 import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
-import { hideGameResult, showGameResult } from "./gameResult";
+import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";
 import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
 import { showOverlay } from "./overlayText";
 import { resetScoreDisplay, setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
@@ -64,7 +64,7 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 break;
             case "gameResultDraw":
             case "gameResultWin":
-                showGameResult(event);
+                showGameResultDisplay(event);
                 break;
             case "meld":
                 if (goesForward) showOverlay(event);
@@ -115,14 +115,14 @@ export const handleMJsonChanged = (newMJson: MJson): void => {
 
 export const createControlPanel = (): HTMLDivElement => {
     const handleGoToPreviousPosition = (): void => {
-        hideGameResult();
+        hideGameResultDisplay();
         setTileAnimationAll(false);
         const gameIsChanged = goToPreviousPosition();
         if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
         handlePositionEvents(getCurrentPositionEvents(), false);
     };
     const handleGoToNextPosition = (): void => {
-        hideGameResult();
+        hideGameResultDisplay();
         setTileAnimationAll(true);
         const gameIsChanged = goToNextPosition();
         if (gameIsChanged) {
@@ -132,13 +132,13 @@ export const createControlPanel = (): HTMLDivElement => {
         handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const handleGoToPreviousGame = (): void => {
-        hideGameResult();
+        hideGameResultDisplay();
         goToPreviousGame();
         handleGameIndexChanged(getCurrentGameIndex());
         handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const handleGoToNextGame = (): void => {
-        hideGameResult();
+        hideGameResultDisplay();
         goToNextGame();
         handleGameIndexChanged(getCurrentGameIndex());
         handlePositionEvents(getCurrentPositionEvents(), true);
