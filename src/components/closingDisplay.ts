@@ -1,4 +1,4 @@
-import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileHeight } from "@/const";
+import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileWidth } from "@/const";
 import { type PlayerGameResult } from "@/modules/mJson/types/playerGameResult";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { rotateVector2D } from "@/util/vector2D";
@@ -7,7 +7,7 @@ const closingDisplayId = "closing_display";
 const playerNameTextId = (sideIndex: number): string => `closing_display_player_name${sideIndex}`;
 const scoreTextId = (sideIndex: number): string => `closing_display_score${sideIndex}`;
 const incomeTextId = (sideIndex: number): string => `closing_display_income${sideIndex}`;
-const rowHeight = tileHeight;
+const rowHeight = tileWidth;
 const fontSize = 400;
 
 export const createClosingDisplay = (): SVGGElement => {

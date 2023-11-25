@@ -36,7 +36,7 @@ export const overlayTextOffsetX = 0;
 export const overlayTextOffsetY = boardOneSize * 0.35;
 
 export const gameResultScoreWidth = boardOneSize * 0.75;
-export const gameResultScoreHeight = gameResultScoreWidth / 2;
+export const gameResultScoreHeight = boardOneSize * 0.3;
 
 export const defaultTextColor = "floralwhite";
 export const positiveNumberColor = "#dc2626";
