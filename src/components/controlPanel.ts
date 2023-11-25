@@ -18,9 +18,10 @@ import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";
 import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
 import { showOverlay } from "./overlayText";
-import { resetScoreDisplay, setShowsRiichiStick, updateScoreText } from "./scoreDisplay";
+import { resetScoreDisplayAll, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 import { updateWindDisplay } from "./windDisplay";
+import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -106,7 +107,8 @@ export const handleMJsonChanged = (newMJson: MJson): void => {
     // ClosingDisplay
     setPlayerMatchResults(newMJson.players);
     // ScoreDisplay
-    resetScoreDisplay();
+    resetScoreDisplayAll();
+    resetRiichiStickAll();
     // ControlPanel
     enablePositionNavigatorButtons();
     // あとはhandleGameIndexChangedに任せる
