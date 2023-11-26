@@ -20,12 +20,7 @@ export const createBoard = (): SVGSVGElement => {
     const centerDisplay = createCenterDisplay();
     board.appendChild(centerDisplay);
 
-    // Tiles
-    for (let i = 0; i < 136; ++i) {
-        const tile = createTile(i);
-        board.appendChild(tile);
-    }
-
+    // 重なり順を考慮してPlayerNameDisplay, Tiles, OverlayTextの順で追加する
     // PlayerNameDisplay
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const playerName = createPlayerNameDisplay(sideIndex);
@@ -34,6 +29,12 @@ export const createBoard = (): SVGSVGElement => {
             `rotate(${-90 * sideIndex}) translate(${playerNameDisplayOffsetX} ${playerNameDisplayOffsetY})`,
         );
         board.appendChild(playerName);
+    }
+
+    // Tiles
+    for (let i = 0; i < 136; ++i) {
+        const tile = createTile(i);
+        board.appendChild(tile);
     }
 
     // OverlayText
