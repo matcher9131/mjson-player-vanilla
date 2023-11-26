@@ -11,7 +11,7 @@ import {
 import { getYakuName } from "@/modules/mJson/types/yaku";
 import { type PositionEventGameResultWin, type PositionEventGameResult } from "@/modules/positionEvent/types";
 import { maxBy } from "@/util/arrayExtensions";
-import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 import { boardId } from "./board";
 import { createTile } from "./tile";
@@ -350,19 +350,23 @@ const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement =>
 
     const width = Math.max(topElementWidth, gameResultScoreWidth);
     const height = topElementHeight + gameResultScoreHeight;
-    const bg = document.createElementNS(svgNS, "rect");
-    bg.setAttribute("x", `${-width / 2}`);
-    bg.setAttribute("y", `${-height / 2}`);
-    bg.setAttribute("width", `${width}`);
-    bg.setAttribute("height", `${height}`);
-    bg.setAttribute("fill", "#111827");
+
+    container.appendChild(
+        createSVGRectElement({
+            x: -width / 2,
+            y: -height / 2,
+            width,
+            height,
+            color: "#111827",
+        }),
+    );
 
     topElement.setAttribute("x", `${-topElementWidth / 2}`);
     topElement.setAttribute("y", `${-height / 2}`);
     const scoreElement = createScoreElement(event.players);
     scoreElement.setAttribute("x", `${-gameResultScoreWidth / 2}`);
     scoreElement.setAttribute("y", `${-height / 2 + topElementHeight}`);
-    container.append(bg, topElement, scoreElement);
+    container.append(topElement, scoreElement);
 
     return container;
 };

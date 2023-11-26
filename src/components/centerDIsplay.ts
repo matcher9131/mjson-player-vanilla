@@ -1,4 +1,4 @@
-import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import {
     betsDisplayHeight,
     betsDisplayWidth,
@@ -29,16 +29,6 @@ import { createRiichiStickDisplay } from "./riichiStickDisplay";
 const centerDisplayId = "center_display";
 const roundTextId = "round_text";
 
-const createBackground = (): SVGRectElement => {
-    const element = document.createElementNS(svgNS, "rect");
-    element.setAttribute("fill", "black");
-    element.setAttribute("x", `${centerDisplayOffsetX}`);
-    element.setAttribute("y", `${centerDisplayOffsetY}`);
-    element.setAttribute("width", `${centerDisplayWidth}`);
-    element.setAttribute("height", `${centerDisplayHeight}`);
-    return element;
-};
-
 const createRoundText = (): SVGTextElement => {
     const element = createSVGTextElement({
         text: "",
@@ -54,8 +44,15 @@ export const createCenterDisplay = (): SVGGElement => {
     const cd = document.createElementNS(svgNS, "g");
     cd.setAttribute("id", centerDisplayId);
     // 背景
-    const bg = createBackground();
-    cd.appendChild(bg);
+    cd.appendChild(
+        createSVGRectElement({
+            x: centerDisplayOffsetX,
+            y: centerDisplayOffsetY,
+            width: centerDisplayWidth,
+            height: centerDisplayHeight,
+            color: "black",
+        }),
+    );
     // 局表示
     const roundText = createRoundText();
     cd.appendChild(roundText);
