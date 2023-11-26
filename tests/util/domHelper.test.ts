@@ -1,5 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { createCenterOriginSVG, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import {
+    createCenterOriginSVG,
+    createSVGRectElement,
+    createSVGTextElement,
+    getElementByIdOrThrowError,
+} from "@/util/domHelper";
 
 describe("domHelper", () => {
     describe("createSVGTextElement", () => {
@@ -87,6 +92,38 @@ describe("domHelper", () => {
             while (document.body.firstChild != null) {
                 document.body.removeChild(document.body.firstChild);
             }
+        });
+    });
+
+    describe("createSVGRectElement", () => {
+        test("rx, ryを指定しない", () => {
+            const element = createSVGRectElement({ x: 100, y: 50, width: 200, height: 300, color: "red" });
+            expect(element.tagName).toBe("rect");
+            expect(element.getAttribute("x")).toBe("100");
+            expect(element.getAttribute("y")).toBe("50");
+            expect(element.getAttribute("width")).toBe("200");
+            expect(element.getAttribute("height")).toBe("300");
+            expect(element.getAttribute("fill")).toBe("red");
+        });
+
+        test("全てのプロパティを指定", () => {
+            const element = createSVGRectElement({
+                x: 100,
+                y: 50,
+                width: 200,
+                height: 300,
+                color: "red",
+                rx: 20,
+                ry: 40,
+            });
+            expect(element.tagName).toBe("rect");
+            expect(element.getAttribute("x")).toBe("100");
+            expect(element.getAttribute("y")).toBe("50");
+            expect(element.getAttribute("width")).toBe("200");
+            expect(element.getAttribute("height")).toBe("300");
+            expect(element.getAttribute("fill")).toBe("red");
+            expect(element.getAttribute("rx")).toBe("20");
+            expect(element.getAttribute("ry")).toBe("40");
         });
     });
 });

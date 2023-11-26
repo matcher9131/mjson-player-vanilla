@@ -65,3 +65,32 @@ export const getElementByIdOrThrowError = (id: string): HTMLElement => {
     assertNonNull(element, id);
     return element;
 };
+
+type CreateSVGRectElementOptions = {
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+    readonly color: string;
+    readonly rx?: number;
+    readonly ry?: number;
+};
+export const createSVGRectElement = ({
+    x,
+    y,
+    width,
+    height,
+    color,
+    rx,
+    ry,
+}: CreateSVGRectElementOptions): SVGRectElement => {
+    const element = document.createElementNS(svgNS, "rect");
+    element.setAttribute("x", `${x}`);
+    element.setAttribute("y", `${y}`);
+    element.setAttribute("width", `${width}`);
+    element.setAttribute("height", `${height}`);
+    element.setAttribute("fill", `${color}`);
+    if (rx != null) element.setAttribute("rx", `${rx}`);
+    if (ry != null) element.setAttribute("ry", `${ry}`);
+    return element;
+};
