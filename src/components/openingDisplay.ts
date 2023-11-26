@@ -1,5 +1,5 @@
-import { boardOneSize, svgNS } from "@/const";
-import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import { boardOneSize, svgNS, tileWidth } from "@/const";
+import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { rotateVector2D } from "@/util/vector2D";
 
 const openingDisplayId = "opening_display";
@@ -7,16 +7,29 @@ const playerNameTextId = (sideIndex: number): string => `opening_display_player_
 const windIconId = (sideIndex: number): string => `opening_display_wind_icon${sideIndex}`;
 const windSrcId = (windIndex: number): string =>
     "winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
+const bgOneSize = (boardOneSize * 2) / 3;
+const rowHeight = tileWidth * 1.25;
 
 export const createOpeningDisplay = (): SVGGElement => {
     const element = document.createElementNS(svgNS, "g");
     element.setAttribute("id", openingDisplayId);
+
+    element.appendChild(
+        createSVGRectElement({
+            x: -bgOneSize / 2,
+            y: -bgOneSize / 2,
+            width: bgOneSize,
+            height: bgOneSize,
+            color: "black",
+        }),
+    );
+
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        const { x, y } = rotateVector2D({ x: 0, y: boardOneSize / 4 }, -90 * sideIndex);
+        const { x, y } = rotateVector2D({ x: 0, y: boardOneSize / 6 }, -90 * sideIndex);
         const textElement = createSVGTextElement({
             text: "",
             x,
-            y: y - 350,
+            y: y - rowHeight / 2,
             fontSize: 400,
         });
         textElement.setAttribute("id", playerNameTextId(sideIndex));
@@ -25,7 +38,7 @@ export const createOpeningDisplay = (): SVGGElement => {
         const iconElement = document.createElementNS(svgNS, "use");
         iconElement.setAttribute("id", windIconId(sideIndex));
         iconElement.setAttribute("x", `${x}`);
-        iconElement.setAttribute("y", `${y + 350}`);
+        iconElement.setAttribute("y", `${y + rowHeight / 2}`);
         iconElement.setAttribute("href", windSrcId(sideIndex));
         element.appendChild(iconElement);
     }
