@@ -1,9 +1,10 @@
-import { boardOneSize, svgNS } from "@/const";
-import { createCenterDisplay } from "./centerDisplay";
+import { boardOneSize, playerNameDisplayOffsetX, playerNameDisplayOffsetY, svgNS } from "@/const";
+import { createCenterDisplay } from "./centerDIsplay";
 import { createClosingDisplay } from "./closingDisplay";
 import { createOpeningDisplay } from "./openingDisplay";
 import { createOverlayText } from "./overlayText";
 import { createTile } from "./tile";
+import { createPlayerNameDisplay } from "./playerNameDisplay";
 
 export const boardId = "board";
 
@@ -15,7 +16,7 @@ export const createBoard = (): SVGSVGElement => {
     // 背景
     board.classList.add("flex-none", "bg-green-950");
 
-    // Center Display
+    // CenterDisplay
     const centerDisplay = createCenterDisplay();
     board.appendChild(centerDisplay);
 
@@ -25,17 +26,27 @@ export const createBoard = (): SVGSVGElement => {
         board.appendChild(tile);
     }
 
-    // Overlay Text
+    // PlayerNameDisplay
+    for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
+        const playerName = createPlayerNameDisplay(sideIndex);
+        playerName.setAttribute(
+            "transform",
+            `rotate(${-90 * sideIndex}) translate(${playerNameDisplayOffsetX} ${playerNameDisplayOffsetY})`,
+        );
+        board.appendChild(playerName);
+    }
+
+    // OverlayText
     for (let i = 0; i < 4; ++i) {
         const overlay = createOverlayText(i);
         board.appendChild(overlay);
     }
 
-    // Opening Display
+    // OpeningDisplay
     const openingDisplay = createOpeningDisplay();
     board.appendChild(openingDisplay);
 
-    // Closing Display
+    // ClosingDisplay
     const closingDisplay = createClosingDisplay();
     board.appendChild(closingDisplay);
 

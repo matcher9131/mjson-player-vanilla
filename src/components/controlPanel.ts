@@ -12,7 +12,7 @@ import {
 } from "@/modules/positionEvent/states";
 import { type GameIndex, type PositionEvent } from "@/modules/positionEvent/types";
 import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
-import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
+import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
 import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";
@@ -22,6 +22,7 @@ import { resetScoreDisplayAll, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 import { updateWindDisplay } from "./windDisplay";
 import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
+import { setPlayerNamesVisibility, updatePlayerNames } from "./playerNameDisplay";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -43,13 +44,16 @@ const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
         resetAllTiles();
         setClosingDisplayVisibility(false);
         setOpeningDisplayVisible(true);
+        setPlayerNamesVisibility(false);
     } else if (newGameIndex === "post") {
         resetAllTiles();
         setOpeningDisplayVisible(false);
         setClosingDisplayVisibility(true);
+        setPlayerNamesVisibility(false);
     } else {
         setOpeningDisplayVisible(false);
         setClosingDisplayVisibility(false);
+        setPlayerNamesVisibility(true);
         updateRoundText(newGameIndex);
         updateWindDisplay(getMJson().games[newGameIndex].round % 4);
         updateDoraTileIds(getMJson().games[newGameIndex].dora);
@@ -109,6 +113,8 @@ export const handleMJsonChanged = (newMJson: MJson): void => {
     // ScoreDisplay
     resetScoreDisplayAll();
     resetRiichiStickAll();
+    // PlayerNameDisplay
+    updatePlayerNames(newMJson.players.map(({ name }) => name));
     // ControlPanel
     enablePositionNavigatorButtons();
     // あとはhandleGameIndexChangedに任せる

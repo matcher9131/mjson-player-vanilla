@@ -31,6 +31,8 @@ export const riichiStickOffsetX = 0;
 export const riichiStickOffsetY = tileWidth * 3.5 - riichiStickHeight / 2;
 export const windDisplayOffsetX = centerDisplayWidth / 2 - 300;
 export const windDisplayOffsetY = centerDisplayHeight / 2 - 300;
+export const playerNameDisplayOffsetX = 0;
+export const playerNameDisplayOffsetY = regularTileY - tileWidth * 1.25;
 
 export const overlayTextOffsetX = 0;
 export const overlayTextOffsetY = boardOneSize * 0.35;
