@@ -23,18 +23,36 @@ import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 import { updateWindDisplay } from "./windDisplay";
 import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
 import { setPlayerNamesVisibility, updatePlayerNames } from "./playerNameDisplay";
+import { svgNS } from "@/const";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
-const createButton = (onClick: () => void, text: string): HTMLButtonElement => {
+const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
+    const container = document.createElement("div");
+    container.classList.add("flex-1", "flex", "justify-center", "item-stretch");
     const button = document.createElement("button");
-    button.textContent = text;
+    button.appendChild(icon);
     button.onclick = onClick;
-    button.classList.add("flex-auto", "bg-slate-700", "text-white", "px-2", "py-2", "rounded");
+    button.classList.add(
+        "flex-auto",
+        "bg-slate-700",
+        "hover:bg-slate-500",
+        "text-white",
+        "mx-0.5",
+        "my-0.5",
+        "px-[min(2vw,2vh)]",
+        "py-[min(2vw,2vh)]",
+        "rounded",
+        "flex",
+        "justify-center",
+        "items-center",
+    );
     button.classList.add(positionNavigatorButtonClassName);
     // 初期状態
     button.disabled = true;
-    return button;
+
+    container.appendChild(button);
+    return container;
 };
 
 const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
@@ -101,6 +119,15 @@ const enablePositionNavigatorButtons = (): void => {
     }
 };
 
+const createIcon = (iconId: string): SVGSVGElement => {
+    const container = document.createElementNS(svgNS, "svg");
+    container.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]");
+    const element = document.createElementNS(svgNS, "use");
+    element.setAttribute("href", iconId);
+    container.appendChild(element);
+    return container;
+};
+
 // exportはtemporary
 export const handleMJsonChanged = (newMJson: MJson): void => {
     // PositionEvent
@@ -152,11 +179,12 @@ export const createControlPanel = (): HTMLDivElement => {
         handlePositionEvents(getCurrentPositionEvents(), true);
     };
     const panel = document.createElement("div");
+
     panel.append(
-        createButton(handleGoToPreviousGame, "←←"),
-        createButton(handleGoToPreviousPosition, "←"),
-        createButton(handleGoToNextPosition, "→"),
-        createButton(handleGoToNextGame, "→→"),
+        createButton(handleGoToPreviousGame, createIcon("icons.svg#double_left_arrow")),
+        createButton(handleGoToPreviousPosition, createIcon("icons.svg#left_arrow")),
+        createButton(handleGoToNextPosition, createIcon("icons.svg#right_arrow")),
+        createButton(handleGoToNextGame, createIcon("icons.svg#double_right_arrow")),
     );
     panel.classList.add(
         "flex",

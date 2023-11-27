@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" display="none">
+    <defs>
+        <polygon id="left_arrow_base" points="0,20 20,40 25,35 10,20 25,5 20,0" fill="floralwhite" />
+    </defs>
+    <symbol id="left_arrow" viewBox="0 -5 25 50">
+        <use href="#left_arrow_base" />
+    </symbol>
+    <symbol id="right_arrow" viewBox="-25 -5 25 50">
+        <use href="#left_arrow_base" transform="scale(-1 1)" />
+    </symbol>
+    <symbol id="double_left_arrow" viewBox="0 -5 45 50">
+        <use href="#left_arrow_base" />
+        <use href="#left_arrow_base" x="20" />
+    </symbol>
+    <symbol id="double_right_arrow" viewBox="-45 -5 45 50">
+        <use href="#left_arrow_base" transform="scale(-1 1)" />
+        <use href="#left_arrow_base" x="20" transform="scale(-1 1)" />
+    </symbol>
+</svg>
