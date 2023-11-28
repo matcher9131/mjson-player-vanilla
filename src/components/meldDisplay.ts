@@ -6,7 +6,7 @@ import { rotateVector2D } from "@/util/vector2D";
 const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;
 const animationClassName = "animate-[fadeOut_0.5s]";
 
-export const createOverlayText = (sideIndex: number): SVGTextElement => {
+export const createMeldDisplay = (sideIndex: number): SVGTextElement => {
     const element = document.createElementNS(svgNS, "text");
     element.setAttribute("id", overlayTextId(sideIndex));
     element.setAttribute("opacity", "0");
@@ -21,7 +21,7 @@ export const createOverlayText = (sideIndex: number): SVGTextElement => {
     return element;
 };
 
-export const showOverlay = ({ sideIndex, text }: PositionEventMeld): void => {
+export const showMeldDisplay = ({ sideIndex, text }: PositionEventMeld): void => {
     const element = getElementByIdOrThrowError(overlayTextId(sideIndex));
     element.textContent = text;
     element.classList.remove(animationClassName);

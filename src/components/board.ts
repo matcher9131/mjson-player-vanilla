@@ -2,7 +2,7 @@ import { boardOneSize, playerNameDisplayOffsetX, playerNameDisplayOffsetY, svgNS
 import { createCenterDisplay } from "./centerDIsplay";
 import { createClosingDisplay } from "./closingDisplay";
 import { createOpeningDisplay } from "./openingDisplay";
-import { createOverlayText } from "./overlayText";
+import { createMeldDisplay } from "./meldDisplay";
 import { createTile } from "./tile";
 import { createPlayerNameDisplay } from "./playerNameDisplay";
 
@@ -39,7 +39,7 @@ export const createBoard = (): SVGSVGElement => {
 
     // OverlayText
     for (let i = 0; i < 4; ++i) {
-        const overlay = createOverlayText(i);
+        const overlay = createMeldDisplay(i);
         board.appendChild(overlay);
     }
 

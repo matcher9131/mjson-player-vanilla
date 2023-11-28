@@ -17,7 +17,7 @@ import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDis
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";
 import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
-import { showOverlay } from "./overlayText";
+import { showMeldDisplay } from "./meldDisplay";
 import { resetScoreDisplayAll, updateScoreText } from "./scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 import { updateWindDisplay } from "./windDisplay";
@@ -90,7 +90,7 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 showGameResultDisplay(event);
                 break;
             case "meld":
-                if (goesForward) showOverlay(event);
+                if (goesForward) showMeldDisplay(event);
                 break;
             case "riichiStick":
                 setShowsRiichiStick(event);
