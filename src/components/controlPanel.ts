@@ -12,7 +12,7 @@ import {
 } from "@/modules/positionEvent/states";
 import { type GameIndex, type PositionEvent } from "@/modules/positionEvent/types";
 import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
-import { setCenterDisplayVisibility, updateRoundText } from "./centerDIsplay";
+import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
 import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
 import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";

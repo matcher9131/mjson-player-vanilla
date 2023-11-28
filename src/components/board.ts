@@ -1,5 +1,5 @@
 import { boardOneSize, playerNameDisplayOffsetX, playerNameDisplayOffsetY, svgNS } from "@/const";
-import { createCenterDisplay } from "./centerDIsplay";
+import { createCenterDisplay } from "./centerDisplay";
 import { createClosingDisplay } from "./closingDisplay";
 import { createOpeningDisplay } from "./openingDisplay";
 import { createMeldDisplay } from "./meldDisplay";
