@@ -24,6 +24,7 @@ import { updateWindDisplay } from "./windDisplay";
 import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
 import { setPlayerNamesVisibility, updatePlayerNames } from "./playerNameDisplay";
 import { svgNS } from "@/const";
+import { setMatchSelectWindowVisibility } from "./matchSelectWindow";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -178,13 +179,22 @@ export const createControlPanel = (): HTMLDivElement => {
         handleGameIndexChanged(getCurrentGameIndex());
         handlePositionEvents(getCurrentPositionEvents(), true);
     };
-    const panel = document.createElement("div");
+    const handleShowMatchSelectWindowButton = (): void => {
+        setMatchSelectWindowVisibility(true);
+    };
 
+    // temporary
+    const t = document.createElement("span");
+    t.textContent = "t";
+    // end temporary
+
+    const panel = document.createElement("div");
     panel.append(
         createButton(handleGoToPreviousGame, createIcon("icons.svg#double_left_arrow")),
         createButton(handleGoToPreviousPosition, createIcon("icons.svg#left_arrow")),
         createButton(handleGoToNextPosition, createIcon("icons.svg#right_arrow")),
         createButton(handleGoToNextGame, createIcon("icons.svg#double_right_arrow")),
+        createButton(handleShowMatchSelectWindowButton, t),
     );
     panel.classList.add(
         "flex",

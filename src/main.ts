@@ -4,6 +4,7 @@ import "./index.css";
 import { getMJson, setMJson } from "./modules/mJson/states";
 import sampleMJson from "@/data/sample1.json";
 import { type MJson } from "./modules/mJson/types/mJson";
+import { createMatchSelectWindow } from "./components/matchSelectWindow";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
@@ -14,7 +15,8 @@ setMJson(sampleMJson as MJson);
 
 const board = createBoard();
 const controlPanel = createControlPanel();
-root.append(board, controlPanel);
+const matchSelectWindow = createMatchSelectWindow();
+root.append(board, controlPanel, matchSelectWindow);
 root.classList.add("flex", "flex-wrap");
 
 // temporary
