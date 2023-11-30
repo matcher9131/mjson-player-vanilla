@@ -23,7 +23,6 @@ import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
 import { updateWindDisplay } from "./windDisplay";
 import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
 import { setPlayerNamesVisibility, updatePlayerNames } from "./playerNameDisplay";
-import { svgNS } from "@/const";
 import { setMatchSelectWindowVisibility } from "./matchSelectWindow";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
@@ -120,14 +119,21 @@ const enablePositionNavigatorButtons = (): void => {
     }
 };
 
-const createIcon = (iconId: string): SVGSVGElement => {
-    const container = document.createElementNS(svgNS, "svg");
-    container.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]");
-    const element = document.createElementNS(svgNS, "use");
-    element.setAttribute("href", iconId);
-    container.appendChild(element);
-    return container;
+const createIcon = (filename: string): HTMLObjectElement => {
+    const element = document.createElement("object");
+    element.setAttribute("type", "image/svg+xml");
+    element.setAttribute("data", filename);
+    element.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]", "fill-floralwhite");
+    return element;
 };
+// const createIcon = (iconId: string): SVGSVGElement => {
+//     const container = document.createElementNS(svgNS, "svg");
+//     container.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]");
+//     const element = document.createElementNS(svgNS, "use");
+//     element.setAttribute("href", iconId);
+//     container.appendChild(element);
+//     return container;
+// };
 
 // exportはtemporary
 export const handleMJsonChanged = (newMJson: MJson): void => {
@@ -190,10 +196,10 @@ export const createControlPanel = (): HTMLDivElement => {
 
     const panel = document.createElement("div");
     panel.append(
-        createButton(handleGoToPreviousGame, createIcon("icons.svg#double_left_arrow")),
-        createButton(handleGoToPreviousPosition, createIcon("icons.svg#left_arrow")),
-        createButton(handleGoToNextPosition, createIcon("icons.svg#right_arrow")),
-        createButton(handleGoToNextGame, createIcon("icons.svg#double_right_arrow")),
+        createButton(handleGoToPreviousGame, createIcon("./arrows/white_double_left.svg")),
+        createButton(handleGoToPreviousPosition, createIcon("./arrows/white_left.svg")),
+        createButton(handleGoToNextPosition, createIcon("./arrows/white_right.svg")),
+        createButton(handleGoToNextGame, createIcon("./arrows/white_double_right.svg")),
         createButton(handleShowMatchSelectWindowButton, t),
     );
     panel.classList.add(
