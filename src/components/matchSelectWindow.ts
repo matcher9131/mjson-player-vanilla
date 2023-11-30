@@ -116,7 +116,7 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
                         // listItem.setAttribute("aria-selected", listItem === e.target ? "true" : "false");
                     }
                 };
-                itemElement.classList.add("aria-selected:bg-blue-200", "aria-selected:text-[#fffaf0]");
+                itemElement.classList.add("aria-selected:bg-blue-500", "aria-selected:text-[#fffaf0]");
                 listElement.appendChild(itemElement);
             }
 
@@ -193,7 +193,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         setMatchSelectWindowVisibility(false);
     };
     buttonElement.classList.add(
-        "text-[#fffaf0]",
+        "text-floralwhite",
         "bg-blue-500",
         "enabled:hover:brightness-125",
         "disabled:brightness-75",
