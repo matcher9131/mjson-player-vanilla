@@ -119,21 +119,13 @@ const enablePositionNavigatorButtons = (): void => {
     }
 };
 
-const createIcon = (filename: string): HTMLObjectElement => {
+const createIcon = (filepath: string): HTMLObjectElement => {
     const element = document.createElement("object");
     element.setAttribute("type", "image/svg+xml");
-    element.setAttribute("data", filename);
-    element.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]", "fill-floralwhite");
+    element.setAttribute("data", filepath);
+    element.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]", "fill-floralwhite", "pointer-events-none");
     return element;
 };
-// const createIcon = (iconId: string): SVGSVGElement => {
-//     const container = document.createElementNS(svgNS, "svg");
-//     container.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]");
-//     const element = document.createElementNS(svgNS, "use");
-//     element.setAttribute("href", iconId);
-//     container.appendChild(element);
-//     return container;
-// };
 
 // exportはtemporary
 export const handleMJsonChanged = (newMJson: MJson): void => {
