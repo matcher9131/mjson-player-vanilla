@@ -14,7 +14,7 @@ export const createBoard = (): SVGSVGElement => {
     board.setAttribute("viewBox", `${-boardOneSize / 2} ${-boardOneSize / 2} ${boardOneSize} ${boardOneSize}`);
 
     // 背景
-    board.classList.add("flex-none", "bg-green-950");
+    board.classList.add("flex-none", "bg-green-950", "select-none");
 
     // CenterDisplay
     const centerDisplay = createCenterDisplay();
