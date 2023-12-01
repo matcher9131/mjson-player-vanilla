@@ -3,6 +3,9 @@ export default {
     content: ["index.html", "./src/**/*.{html,ts}"],
     theme: {
         extend: {
+            colors: {
+                floralwhite: "#fffaf0",
+            },
             keyframes: {
                 fadeOut: {
                     "0%, 50%": { opacity: "1" },

@@ -1,6 +1,8 @@
 import { getElementByIdOrThrowError } from "@/util/domHelper";
+import { assertNonNull } from "@/util/error";
 
 const matchSelectWindowContainerId = "match_select_container";
+const treeViewElementId = "match_select_tree_view";
 const listElementId = "match_select_list";
 const listItemElementClassName = "match-select-list-item";
 const okButtonId = "match_select_ok_button";
@@ -52,6 +54,42 @@ const mJsonTreeData: TreeViewNode = {
                             label: "3日",
                             items: [],
                         },
+                        {
+                            label: "4日",
+                            items: [],
+                        },
+                        {
+                            label: "5日",
+                            items: [],
+                        },
+                        {
+                            label: "6日",
+                            items: [],
+                        },
+                        {
+                            label: "7日",
+                            items: [],
+                        },
+                        {
+                            label: "8日",
+                            items: [],
+                        },
+                        {
+                            label: "9日",
+                            items: [],
+                        },
+                        {
+                            label: "10日",
+                            items: [],
+                        },
+                        {
+                            label: "11日",
+                            items: [],
+                        },
+                        {
+                            label: "12日",
+                            items: [],
+                        },
                     ],
                 },
             ],
@@ -62,28 +100,43 @@ const mJsonTreeData: TreeViewNode = {
 
 const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
     const container = document.createElement("li");
-    container.classList.add("list-none");
+    container.classList.add(
+        "list-none",
+        "before:inline-block",
+        "before:w-[0.8em]",
+        "before:h-[0.8em]",
+        "before:bg-[url('/arrows/black_right.svg')]",
+        "before:aria-expanded:bg-[url('/arrows/black_down.svg')]",
+        "before:bg-no-repeat",
+        "before:bg-contain",
+        "before:bg-center",
+        "before:mx-1",
+    );
 
-    const labelElement = document.createElement("div");
+    const labelElement = document.createElement("span");
     labelElement.textContent = node.label;
     labelElement.classList.add(
         "aria-selected:bg-blue-500",
-        "aria-selected:text-[#fffaf0]",
+        "aria-selected:text-floralwhite",
         "hover:bg-blue-300",
-        "hover:text-[#fffaf0]",
+        "hover:text-floralwhite",
+        "select-none",
     );
     container.appendChild(labelElement);
 
     if ("children" in node) {
         container.onclick = (e) => {
-            const root = e.currentTarget as HTMLLIElement;
-            // 子要素のみを見る（孫要素を見たくない）のでgetElementsByTagNameは使わない
-            for (const child of root.children) {
-                if (child.tagName !== "UL") continue;
-                const isOpen = child.ariaExpanded === "true";
-                child.ariaExpanded = `${!isOpen}`;
+            const target = e.currentTarget as HTMLLIElement;
+            const newIsOpen = target.ariaExpanded !== "true";
+            target.ariaExpanded = `${newIsOpen}`;
+            for (const child of target.children) {
+                if (child.tagName === "UL") {
+                    child.ariaHidden = `${!newIsOpen}`;
+                } else if (child.tagName === "SPAN") {
+                    child.ariaExpanded = `${newIsOpen}`;
+                }
             }
-            // 親コンテナのMouseClickが処理されてしまうので伝播を止める
+            // 親のMouseClickが処理されてしまうので伝播を止める
             e.stopPropagation();
         };
         // 子ul
@@ -92,15 +145,29 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
             const childElement = createTreeViewItemElement(childNode);
             childContainer.appendChild(childElement);
         }
+        childContainer.classList.add("block", "aria-hidden:hidden", "pl-3");
         // 初期状態
-        childContainer.ariaExpanded = "false";
-        childContainer.classList.add("hidden", "aria-expanded:block");
+        childContainer.ariaHidden = "true";
         container.appendChild(childContainer);
     } else {
         container.onclick = (e) => {
-            // リストで選択中のIDをリセット
+            const target = e.currentTarget as HTMLLIElement;
+            const targetLabel = target.querySelector("span");
+            assertNonNull(targetLabel, "targetChild");
+            // この要素以外の選択を解除する
+            const treeViewRoot = getElementByIdOrThrowError(treeViewElementId);
+            for (const childLabel of treeViewRoot.getElementsByTagName("span")) {
+                if (childLabel === targetLabel) {
+                    childLabel.ariaSelected = "true";
+                } else if (childLabel.ariaSelected === "true") {
+                    childLabel.ariaSelected = "false";
+                }
+            }
+
+            // リストで選択中のIDをリセットする
             setSelectedMatchId(null);
 
+            // リストを初期化してアイテムをセットする
             const listElement = getElementByIdOrThrowError(listElementId);
             while (listElement.firstChild != null) {
                 listElement.removeChild(listElement.firstChild);
@@ -113,14 +180,13 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
                     setSelectedMatchId(item.id);
                     for (const listItem of document.getElementsByClassName(listItemElementClassName)) {
                         listItem.ariaSelected = `${listItem === e.target}`;
-                        // listItem.setAttribute("aria-selected", listItem === e.target ? "true" : "false");
                     }
                 };
-                itemElement.classList.add("aria-selected:bg-blue-500", "aria-selected:text-[#fffaf0]");
+                itemElement.classList.add("aria-selected:bg-blue-500", "aria-selected:text-floralwhite", "select-none");
                 listElement.appendChild(itemElement);
             }
 
-            // 親コンテナのMouseClickが処理されてしまうので伝播を止める
+            // TreeViewの親のMouseClickが処理されてしまうので伝播を止める
             e.stopPropagation();
         };
     }
@@ -130,9 +196,10 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
 
 const createTreeView = (): HTMLDivElement => {
     const container = document.createElement("div");
-    container.classList.add("overflow-y-scroll", "w-full", "h-full"); // w要調整
+    container.classList.add("overflow-y-auto", "w-full", "h-full", "bg-slate-100");
 
     const element = document.createElement("ul");
+    element.setAttribute("id", treeViewElementId);
     for (const node of mJsonTreeData.children) {
         const childElement = createTreeViewItemElement(node);
         element.appendChild(childElement);
@@ -145,7 +212,15 @@ const createTreeView = (): HTMLDivElement => {
 const createSelectList = (): HTMLDivElement => {
     const container = document.createElement("div");
     container.setAttribute("id", listElementId);
-    container.classList.add("overflow-y-scroll", "w-full", "h-full", "flex", "flex-col", "justify-items-stretch"); // w要調整
+    container.classList.add(
+        "overflow-y-auto",
+        "w-full",
+        "h-full",
+        "bg-slate-100",
+        "flex",
+        "flex-col",
+        "justify-items-stretch",
+    );
     return container;
 };
 
@@ -178,6 +253,8 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         "grid-cols-[1fr_2fr]",
         "grid-rows-[1fr_auto]",
         "justify-center",
+        "gap-1",
+        "p-1",
     ); // w,h,grid-cols要調整
     root.onclick = (e) => {
         e.stopPropagation();
@@ -201,6 +278,8 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         "rounded",
         "px-4",
         "py-2",
+        "mx-auto",
+        "my-2",
         "col-span-2",
     );
     // 初期状態
