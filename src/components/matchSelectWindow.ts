@@ -39,7 +39,10 @@ const mJsonTreeData: TreeViewNode = {
                     children: [
                         {
                             label: "21日",
-                            items: [{ id: "20041201", label: "01" }],
+                            items: [
+                                { id: "20041201", label: "01" },
+                                { id: "foo", label: "dummy" },
+                            ],
                         },
                         {
                             label: "31日",
@@ -103,8 +106,8 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
     container.classList.add(
         "list-none",
         "before:inline-block",
-        "before:w-[0.8em]",
-        "before:h-[0.8em]",
+        "before:w-[0.8rem]",
+        "before:h-[0.8rem]",
         "before:bg-[url('/arrows/black_right.svg')]",
         "before:aria-expanded:bg-[url('/arrows/black_down.svg')]",
         "before:bg-no-repeat",
@@ -196,7 +199,7 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
 
 const createTreeView = (): HTMLDivElement => {
     const container = document.createElement("div");
-    container.classList.add("overflow-y-auto", "w-full", "h-full", "bg-slate-100");
+    container.classList.add("overflow-auto", "w-full", "h-full", "bg-slate-100");
 
     const element = document.createElement("ul");
     element.setAttribute("id", treeViewElementId);
@@ -213,7 +216,7 @@ const createSelectList = (): HTMLDivElement => {
     const container = document.createElement("div");
     container.setAttribute("id", listElementId);
     container.classList.add(
-        "overflow-y-auto",
+        "overflow-auto",
         "w-full",
         "h-full",
         "bg-slate-100",
@@ -246,8 +249,9 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
 
     const root = document.createElement("div");
     root.classList.add(
-        "w-1/2",
-        "h-1/2",
+        "w-[max(50%,400px)]",
+        "portrait:w-[max(50%,300px)]",
+        "h-[max(50%,300px)]",
         "bg-white",
         "grid",
         "grid-cols-[1fr_2fr]",
@@ -279,7 +283,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         "px-4",
         "py-2",
         "mx-auto",
-        "my-2",
+        "my-1",
         "col-span-2",
     );
     // 初期状態
