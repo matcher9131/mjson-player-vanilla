@@ -1,29 +1,10 @@
-import { type MJson } from "@/modules/mJson/types/mJson";
-import { getMJson } from "@/modules/mJson/states";
 import {
-    getCurrentGameIndex,
-    getCurrentPositionEvents,
-    goToNextGame,
-    goToNextPosition,
-    goToPreviousGame,
-    goToPreviousPosition,
-    resetPositionIndex,
-    setPositionEvents,
-} from "@/modules/positionEvent/states";
-import { type GameIndex, type PositionEvent } from "@/modules/positionEvent/types";
-import { updateNumHundredSticks, updateNumThousandSticks } from "./betsDisplay";
-import { setCenterDisplayVisibility, updateRoundText } from "./centerDisplay";
-import { setClosingDisplayVisibility, setPlayerMatchResults } from "./closingDisplay";
-import { updateDoraRightIndex, updateDoraTileIds } from "./doraDisplay";
-import { hideGameResultDisplay, showGameResultDisplay } from "./gameResultDisplay";
-import { setOpeningDisplayVisible, setPlayerNames } from "./openingDisplay";
-import { showMeldDisplay } from "./meldDisplay";
-import { resetScoreDisplayAll, updateScoreText } from "./scoreDisplay";
-import { resetAllTiles, setTileAnimationAll, updateTile } from "./tile";
-import { updateWindDisplay } from "./windDisplay";
-import { resetRiichiStickAll, setShowsRiichiStick } from "./riichiStickDisplay";
-import { setPlayerNamesVisibility, updatePlayerNames } from "./playerNameDisplay";
-import { setMatchSelectWindowVisibility } from "./matchSelectWindow";
+    handleGoToNextGame,
+    handleGoToNextPosition,
+    handleGoToPreviousGame,
+    handleGoToPreviousPosition,
+    handleShowMatchSelectWindowButton,
+} from "@/controllers/positionEventController";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -55,65 +36,7 @@ const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
     return container;
 };
 
-const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
-    setCenterDisplayVisibility(newGameIndex);
-    setTileAnimationAll(false);
-    if (newGameIndex === "pre") {
-        resetAllTiles();
-        setClosingDisplayVisibility(false);
-        setOpeningDisplayVisible(true);
-        setPlayerNamesVisibility(false);
-    } else if (newGameIndex === "post") {
-        resetAllTiles();
-        setOpeningDisplayVisible(false);
-        setClosingDisplayVisibility(true);
-        setPlayerNamesVisibility(false);
-    } else {
-        setOpeningDisplayVisible(false);
-        setClosingDisplayVisibility(false);
-        setPlayerNamesVisibility(true);
-        updateRoundText(newGameIndex);
-        updateWindDisplay(getMJson().games[newGameIndex].round % 4);
-        updateDoraTileIds(getMJson().games[newGameIndex].dora);
-        updateDoraRightIndex(0);
-    }
-};
-
-const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boolean): void => {
-    for (const event of events) {
-        switch (event.kind) {
-            case "dora":
-                updateDoraRightIndex(event.rightIndex);
-                break;
-            case "gameResultDraw":
-            case "gameResultWin":
-                showGameResultDisplay(event);
-                break;
-            case "meld":
-                if (goesForward) showMeldDisplay(event);
-                break;
-            case "riichiStick":
-                setShowsRiichiStick(event);
-                break;
-            case "score":
-                updateScoreText(event);
-                break;
-            case "tileTransition":
-                if (goesForward === event.isForward) updateTile(event);
-                break;
-            case "hundredSticks":
-                updateNumHundredSticks(event.value);
-                break;
-            case "thousandSticks":
-                updateNumThousandSticks(event.value);
-                break;
-            default:
-                break;
-        }
-    }
-};
-
-const enablePositionNavigatorButtons = (): void => {
+export const enablePositionNavigatorButtons = (): void => {
     for (const element of document.getElementsByClassName(positionNavigatorButtonClassName)) {
         (element as HTMLButtonElement).disabled = false;
     }
@@ -127,60 +50,7 @@ const createIcon = (filepath: string): HTMLObjectElement => {
     return element;
 };
 
-// exportはtemporary
-export const handleMJsonChanged = (newMJson: MJson): void => {
-    // PositionEvent
-    setPositionEvents(newMJson);
-    resetPositionIndex();
-    // OpeningDisplay
-    setPlayerNames(newMJson.players.map(({ name }) => name));
-    // ClosingDisplay
-    setPlayerMatchResults(newMJson.players);
-    // ScoreDisplay
-    resetScoreDisplayAll();
-    resetRiichiStickAll();
-    // PlayerNameDisplay
-    updatePlayerNames(newMJson.players.map(({ name }) => name));
-    // ControlPanel
-    enablePositionNavigatorButtons();
-    // あとはhandleGameIndexChangedに任せる
-    handleGameIndexChanged("pre");
-};
-
 export const createControlPanel = (): HTMLDivElement => {
-    const handleGoToPreviousPosition = (): void => {
-        hideGameResultDisplay();
-        setTileAnimationAll(false);
-        const gameIsChanged = goToPreviousPosition();
-        if (gameIsChanged) handleGameIndexChanged(getCurrentGameIndex());
-        handlePositionEvents(getCurrentPositionEvents(), false);
-    };
-    const handleGoToNextPosition = (): void => {
-        hideGameResultDisplay();
-        setTileAnimationAll(true);
-        const gameIsChanged = goToNextPosition();
-        if (gameIsChanged) {
-            setTileAnimationAll(false);
-            handleGameIndexChanged(getCurrentGameIndex());
-        }
-        handlePositionEvents(getCurrentPositionEvents(), true);
-    };
-    const handleGoToPreviousGame = (): void => {
-        hideGameResultDisplay();
-        goToPreviousGame();
-        handleGameIndexChanged(getCurrentGameIndex());
-        handlePositionEvents(getCurrentPositionEvents(), true);
-    };
-    const handleGoToNextGame = (): void => {
-        hideGameResultDisplay();
-        goToNextGame();
-        handleGameIndexChanged(getCurrentGameIndex());
-        handlePositionEvents(getCurrentPositionEvents(), true);
-    };
-    const handleShowMatchSelectWindowButton = (): void => {
-        setMatchSelectWindowVisibility(true);
-    };
-
     // temporary
     const t = document.createElement("span");
     t.textContent = "t";
