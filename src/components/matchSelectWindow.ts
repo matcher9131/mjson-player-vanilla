@@ -3,6 +3,7 @@ import { assertNonNull } from "@/util/error";
 
 const matchSelectWindowContainerId = "match_select_container";
 const treeViewElementId = "match_select_tree_view";
+const treeViewListContainerClassName = "match-select-list-container";
 const treeViewItemLabelClassName = "match-select-tree-view-item-label";
 const listElementId = "match_select_list";
 const listItemElementClassName = "match-select-list-item";
@@ -134,18 +135,19 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
             const target = e.currentTarget as HTMLLIElement;
             const newIsOpen = target.ariaExpanded !== "true";
             target.ariaExpanded = `${newIsOpen}`;
-            for (const child of target.children) {
-                if (child.tagName === "UL") {
-                    child.ariaHidden = `${!newIsOpen}`;
-                } else if (child.tagName === "SPAN") {
-                    child.ariaExpanded = `${newIsOpen}`;
-                }
-            }
+            const childContainer = target.querySelector(`.${treeViewListContainerClassName}`);
+            assertNonNull(childContainer, "childContainer");
+            childContainer.ariaHidden = `${!newIsOpen}`;
+            const labelElement = target.querySelector(`.${treeViewItemLabelClassName}`);
+            assertNonNull(labelElement, "labelElement");
+            labelElement.ariaExpanded = `${newIsOpen}`;
+
             // 親のMouseClickが処理されてしまうので伝播を止める
             e.stopPropagation();
         };
         // 子ul
         const childContainer = document.createElement("ul");
+        childContainer.classList.add(treeViewListContainerClassName);
         for (const childNode of node.children) {
             const childElement = createTreeViewItemElement(childNode);
             childContainer.appendChild(childElement);
