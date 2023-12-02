@@ -3,6 +3,7 @@ import { assertNonNull } from "@/util/error";
 
 const matchSelectWindowContainerId = "match_select_container";
 const treeViewElementId = "match_select_tree_view";
+const treeViewItemLabelClassName = "match-select-tree-view-item-label";
 const listElementId = "match_select_list";
 const listItemElementClassName = "match-select-list-item";
 const okButtonId = "match_select_ok_button";
@@ -118,6 +119,7 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
 
     const labelElement = document.createElement("span");
     labelElement.textContent = node.label;
+    labelElement.classList.add(treeViewItemLabelClassName);
     labelElement.classList.add(
         "aria-selected:bg-blue-500",
         "aria-selected:text-floralwhite",
@@ -155,11 +157,11 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
     } else {
         container.onclick = (e) => {
             const target = e.currentTarget as HTMLLIElement;
-            const targetLabel = target.querySelector("span");
+            const targetLabel = target.querySelector(`.${treeViewItemLabelClassName}`);
             assertNonNull(targetLabel, "targetChild");
             // この要素以外の選択を解除する
             const treeViewRoot = getElementByIdOrThrowError(treeViewElementId);
-            for (const childLabel of treeViewRoot.getElementsByTagName("span")) {
+            for (const childLabel of treeViewRoot.getElementsByClassName(treeViewItemLabelClassName)) {
                 if (childLabel === targetLabel) {
                     childLabel.ariaSelected = "true";
                 } else if (childLabel.ariaSelected === "true") {
