@@ -6,7 +6,7 @@ const openingDisplayId = "opening_display";
 const playerNameTextId = (sideIndex: number): string => `opening_display_player_name${sideIndex}`;
 const windIconId = (sideIndex: number): string => `opening_display_wind_icon${sideIndex}`;
 const windSrcId = (windIndex: number): string =>
-    "winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
+    "resources/winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
 const bgOneSize = (boardOneSize * 2) / 3;
 const rowHeight = tileWidth * 1.25;
 

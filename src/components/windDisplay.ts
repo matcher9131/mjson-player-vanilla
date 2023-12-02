@@ -3,7 +3,7 @@ import { getElementByIdOrThrowError } from "@/util/domHelper";
 
 const windDisplayId = (sideIndex: number): string => `wind_display${sideIndex}`;
 const windSrcId = (windIndex: number): string =>
-    "winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
+    "resources/winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
 
 export const createWindDisplay = (sideIndex: number): SVGUseElement => {
     const element = document.createElementNS(svgNS, "use");

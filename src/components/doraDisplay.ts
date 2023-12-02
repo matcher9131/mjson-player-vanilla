@@ -34,10 +34,10 @@ export const updateDoraRightIndex = (value: number): void => {
     let i = 0;
     for (; i <= rightIndex && i < doraTileIds.length; ++i) {
         const element = getElementByIdOrThrowError(doraDisplayTileId(i));
-        element.setAttribute("href", `tiles.svg#${getSrcTileId(doraTileIds[i])}`);
+        element.setAttribute("href", `resources/tiles.svg#${getSrcTileId(doraTileIds[i])}`);
     }
     for (; i < 5; ++i) {
         const element = getElementByIdOrThrowError(doraDisplayTileId(i));
-        element.setAttribute("href", `tiles.svg#${getSrcTileId(null)}`);
+        element.setAttribute("href", `resources/tiles.svg#${getSrcTileId(null)}`);
     }
 };

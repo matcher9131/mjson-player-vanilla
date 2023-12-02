@@ -8,7 +8,7 @@ const riichiStickId = (sideIndex: number): string => `riichi_stick${sideIndex}`;
 export const createRiichiStickDisplay = (sideIndex: number): SVGUseElement => {
     const element = document.createElementNS(svgNS, "use");
     element.setAttribute("id", riichiStickId(sideIndex));
-    element.setAttribute("href", `sticks.svg#thousand_point_stick`);
+    element.setAttribute("href", `resources/sticks.svg#thousand_point_stick`);
     // 初期状態
     element.setAttribute("opacity", "0");
     return element;

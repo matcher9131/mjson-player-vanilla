@@ -58,10 +58,10 @@ export const createControlPanel = (): HTMLDivElement => {
 
     const panel = document.createElement("div");
     panel.append(
-        createButton(handleGoToPreviousGame, createIcon("./arrows/white_double_left.svg")),
-        createButton(handleGoToPreviousPosition, createIcon("./arrows/white_left.svg")),
-        createButton(handleGoToNextPosition, createIcon("./arrows/white_right.svg")),
-        createButton(handleGoToNextGame, createIcon("./arrows/white_double_right.svg")),
+        createButton(handleGoToPreviousGame, createIcon("resources/arrows/white_double_left.svg")),
+        createButton(handleGoToPreviousPosition, createIcon("resources/arrows/white_left.svg")),
+        createButton(handleGoToNextPosition, createIcon("resources/arrows/white_right.svg")),
+        createButton(handleGoToNextGame, createIcon("resources/arrows/white_double_right.svg")),
         createButton(handleShowMatchSelectWindowButton, t),
     );
     panel.classList.add(

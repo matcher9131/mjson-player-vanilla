@@ -32,11 +32,11 @@ export const createBetsDisplay = (): SVGSVGElement => {
     });
     const hundredStick = document.createElementNS(svgNS, "use");
     hundredStick.setAttribute("id", hundredStickId);
-    hundredStick.setAttribute("href", "sticks.svg#short_hundred_point_stick");
+    hundredStick.setAttribute("href", "resources/sticks.svg#short_hundred_point_stick");
     element.appendChild(hundredStick);
     const thousandStick = document.createElementNS(svgNS, "use");
     thousandStick.setAttribute("id", thousandStickId);
-    thousandStick.setAttribute("href", "sticks.svg#short_thousand_point_stick");
+    thousandStick.setAttribute("href", "resources/sticks.svg#short_thousand_point_stick");
     element.appendChild(thousandStick);
     const numHundredsText = createSVGTextElement({
         text: "×0",

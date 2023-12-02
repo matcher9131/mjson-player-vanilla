@@ -110,8 +110,8 @@ const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
         "before:inline-block",
         "before:w-[0.8rem]",
         "before:h-[0.8rem]",
-        "before:bg-[url('/arrows/black_right.svg')]",
-        "before:aria-expanded:bg-[url('/arrows/black_down.svg')]",
+        "before:bg-[url('/resources/arrows/black_right.svg')]",
+        "before:aria-expanded:bg-[url('/resources/arrows/black_down.svg')]",
         "before:bg-no-repeat",
         "before:bg-contain",
         "before:bg-center",
@@ -274,7 +274,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
     const buttonElement = document.createElement("button");
     buttonElement.setAttribute("id", okButtonId);
     buttonElement.textContent = "読み込み";
-    buttonElement.onclick = (e) => {
+    buttonElement.onclick = () => {
         // MJson読み込みをここに
         setMatchSelectWindowVisibility(false);
     };
