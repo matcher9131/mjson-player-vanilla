@@ -266,6 +266,11 @@ const createDoraElement = ({
     return { doraHeight, doraElement };
 };
 
+type CreateWinHandElementReturnType = {
+    readonly element: SVGSVGElement;
+    readonly width: number;
+    readonly height: number;
+};
 const createWinHandElement = ({
     handTileStates,
     winScore,
@@ -275,11 +280,7 @@ const createWinHandElement = ({
     yakuList,
     dora,
     hiddenDora,
-}: PositionEventGameResultWin): {
-    readonly element: SVGSVGElement;
-    readonly width: number;
-    readonly height: number;
-} => {
+}: PositionEventGameResultWin): CreateWinHandElementReturnType => {
     const { handElement, handWidth, handHeight } = createHandElement(handTileStates);
     handElement.setAttribute("x", `${-handWidth / 2}`);
     handElement.setAttribute("y", "0");
