@@ -238,7 +238,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         "absolute",
         "w-full",
         "h-full",
-        "z-50",
+        "transition-opacity",
         "bg-white/50",
         "flex",
         "justify-center",
@@ -249,7 +249,8 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         e.stopPropagation();
     };
     // 初期状態
-    container.classList.add("hidden");
+    container.style.zIndex = "-50";
+    container.style.opacity = "0";
 
     const root = document.createElement("div");
     root.classList.add(
@@ -289,6 +290,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         "mx-auto",
         "my-1",
         "col-span-2",
+        "select-none",
     );
     // 初期状態
     buttonElement.disabled = true;
@@ -302,9 +304,12 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
 export const setMatchSelectWindowVisibility = (isVisible: boolean): void => {
     const container = getElementByIdOrThrowError(matchSelectWindowContainerId);
     if (isVisible) {
-        // setSelectedMatchId(null);
-        container.classList.remove("hidden");
+        container.style.zIndex = "50";
+        container.style.opacity = "1";
     } else {
-        container.classList.add("hidden");
+        container.style.opacity = "0";
+        setTimeout(() => {
+            container.style.zIndex = "-50";
+        }, 150);
     }
 };
