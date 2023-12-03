@@ -167,8 +167,8 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         e.stopPropagation();
     };
     // 初期状態
-    container.style.zIndex = "-50";
-    container.style.opacity = "0";
+    container.style.zIndex = "50";
+    container.style.opacity = "1";
 
     const root = document.createElement("div");
     root.classList.add(
