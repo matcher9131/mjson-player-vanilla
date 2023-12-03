@@ -1,19 +1,43 @@
 {
-    "label": "2020年",
+    "label": "root",
     "children": [
         {
-            "label": "4月",
+            "label": "2020年",
             "children": [
                 {
-                    "label": "12日",
-                    "items": [
+                    "label": "4月",
+                    "children": [
                         {
-                            "id": "sample1",
-                            "label": "sample1"
-                        },
+                            "label": "12日",
+                            "items": [
+                                {
+                                    "id": "sample1",
+                                    "label": "sample1"
+                                },
+                                {
+                                    "id": "sample2",
+                                    "label": "sample2"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "2022年",
+            "children": [
+                {
+                    "label": "12月",
+                    "children": [
                         {
-                            "id": "sample2",
-                            "label": "sample2"
+                            "label": "11日",
+                            "items": [
+                                {
+                                    "id": "sample3",
+                                    "label": "sample3"
+                                }
+                            ]
                         }
                     ]
                 }
