@@ -7,6 +7,7 @@ import { resetScoreDisplayAll } from "@/components/scoreDisplay";
 import { type MJson } from "@/modules/mJson/types/mJson";
 import { resetPositionIndex, setPositionEvents } from "@/modules/positionEvent/states";
 import { handleGameIndexChanged } from "./positionEventController";
+import { loadMJson, setMJson } from "@/modules/mJson/states";
 
 export const handleMJsonChanged = (newMJson: MJson): void => {
     // PositionEvent
@@ -25,4 +26,10 @@ export const handleMJsonChanged = (newMJson: MJson): void => {
     enablePositionNavigatorButtons();
     // あとはhandleGameIndexChangedに任せる
     handleGameIndexChanged("pre");
+};
+
+export const loadNewMJson = async (id: string): Promise<void> => {
+    const newMJson = await loadMJson(id);
+    setMJson(newMJson);
+    handleMJsonChanged(newMJson);
 };

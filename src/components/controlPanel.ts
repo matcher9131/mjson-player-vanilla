@@ -8,7 +8,7 @@ import {
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
-const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
+const createButton = (onClick: () => void, icon: Element, isAlwaysEnabled = false): HTMLDivElement => {
     const container = document.createElement("div");
     container.classList.add("flex-1", "flex", "justify-center", "item-stretch");
     const button = document.createElement("button");
@@ -17,8 +17,10 @@ const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
     button.classList.add(
         "flex-auto",
         "bg-neutral-800",
-        "hover:bg-neutral-500",
         "text-white",
+        "enabled:hover:brightness-125",
+        "disabled:brightness-75",
+        "disabled:cursor-not-allowed",
         "mx-0.5",
         "my-0.5",
         "px-[min(2vw,2vh)]",
@@ -30,7 +32,7 @@ const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
     );
     button.classList.add(positionNavigatorButtonClassName);
     // 初期状態
-    button.disabled = true;
+    button.disabled = !isAlwaysEnabled;
 
     container.appendChild(button);
     return container;
@@ -62,7 +64,7 @@ export const createControlPanel = (): HTMLDivElement => {
         createButton(handleGoToPreviousPosition, createIcon("resources/arrows/white_left.svg")),
         createButton(handleGoToNextPosition, createIcon("resources/arrows/white_right.svg")),
         createButton(handleGoToNextGame, createIcon("resources/arrows/white_double_right.svg")),
-        createButton(handleShowMatchSelectWindowButton, t),
+        createButton(handleShowMatchSelectWindowButton, t, true),
     );
     panel.classList.add(
         "flex",

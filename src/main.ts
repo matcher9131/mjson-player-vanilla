@@ -1,17 +1,15 @@
 import { createBoard } from "./components/board";
 import { createControlPanel } from "./components/controlPanel";
 import "./index.css";
-import { getMJson, setMJson } from "./modules/mJson/states";
-import sampleMJson from "@/data/sample1.json";
-import { type MJson } from "./modules/mJson/types/mJson";
+// import { getMJson } from "./modules/mJson/states";
 import { createMatchSelectWindow } from "./components/matchSelectWindow";
-import { handleMJsonChanged } from "./controllers/mJsonController";
+// import { handleMJsonChanged } from "./controllers/mJsonController";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
 
 // temporary
-setMJson(sampleMJson as MJson);
+// setMJson(sampleMJson as MJson);
 // end temporary
 
 const board = createBoard();
@@ -21,5 +19,5 @@ root.append(board, controlPanel, matchSelectWindow);
 root.classList.add("flex", "flex-wrap");
 
 // temporary
-handleMJsonChanged(getMJson());
+// handleMJsonChanged(getMJson());
 // end temporary

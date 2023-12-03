@@ -1,3 +1,6 @@
+import { loadNewMJson } from "@/controllers/mJsonController";
+import { loadMJsonIndex } from "@/modules/mJsonIndex/states";
+import { type MJsonIndexNode } from "@/modules/mJsonIndex/types";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 
@@ -16,94 +19,9 @@ const setSelectedMatchId = (newValue: string | null): void => {
     (okButtonElement as HTMLButtonElement).disabled = selectedMatchId == null;
 };
 
-// temporary
-type TreeViewNodeBase = {
-    readonly label: string;
-};
-type TreeViewParentNode = TreeViewNodeBase & {
-    readonly children: readonly TreeViewNode[];
-};
-type TreeViewChildNode = TreeViewNodeBase & {
-    readonly items: ReadonlyArray<{
-        readonly id: string;
-        readonly label: string;
-    }>;
-};
-type TreeViewNode = TreeViewParentNode | TreeViewChildNode;
-const mJsonTreeData: TreeViewNode = {
-    label: "root",
-    children: [
-        {
-            label: "2023年",
-            children: [
-                {
-                    label: "10月",
-                    children: [
-                        {
-                            label: "21日",
-                            items: [
-                                { id: "20041201", label: "01" },
-                                { id: "foo", label: "dummy" },
-                            ],
-                        },
-                        {
-                            label: "31日",
-                            items: [],
-                        },
-                    ],
-                },
-                {
-                    label: "11月",
-                    children: [
-                        {
-                            label: "3日",
-                            items: [],
-                        },
-                        {
-                            label: "4日",
-                            items: [],
-                        },
-                        {
-                            label: "5日",
-                            items: [],
-                        },
-                        {
-                            label: "6日",
-                            items: [],
-                        },
-                        {
-                            label: "7日",
-                            items: [],
-                        },
-                        {
-                            label: "8日",
-                            items: [],
-                        },
-                        {
-                            label: "9日",
-                            items: [],
-                        },
-                        {
-                            label: "10日",
-                            items: [],
-                        },
-                        {
-                            label: "11日",
-                            items: [],
-                        },
-                        {
-                            label: "12日",
-                            items: [],
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-};
-// end temporary
+const mJsonIndex = await loadMJsonIndex();
 
-const createTreeViewItemElement = (node: TreeViewNode): HTMLLIElement => {
+const createTreeViewItemElement = (node: MJsonIndexNode): HTMLLIElement => {
     const container = document.createElement("li");
     container.classList.add(
         "list-none",
@@ -207,7 +125,7 @@ const createTreeView = (): HTMLDivElement => {
 
     const element = document.createElement("ul");
     element.setAttribute("id", treeViewElementId);
-    for (const node of mJsonTreeData.children) {
+    for (const node of mJsonIndex.children) {
         const childElement = createTreeViewItemElement(node);
         element.appendChild(childElement);
     }
@@ -274,8 +192,9 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
     const buttonElement = document.createElement("button");
     buttonElement.setAttribute("id", okButtonId);
     buttonElement.textContent = "読み込み";
-    buttonElement.onclick = () => {
-        // MJson読み込みをここに
+    buttonElement.onclick = async () => {
+        if (selectedMatchId == null) return;
+        await loadNewMJson(selectedMatchId);
         setMatchSelectWindowVisibility(false);
     };
     buttonElement.classList.add(

@@ -1,0 +1,23 @@
+{
+    "label": "2020年",
+    "children": [
+        {
+            "label": "4月",
+            "children": [
+                {
+                    "label": "12日",
+                    "items": [
+                        {
+                            "id": "sample1",
+                            "label": "sample1"
+                        },
+                        {
+                            "id": "sample2",
+                            "label": "sample2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
