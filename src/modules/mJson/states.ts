@@ -13,7 +13,7 @@ export const setMJson = (value: MJson): void => {
     mJson = value;
 };
 
-export const loadMJson = async (id: string): Promise<MJson> => {
+export const fetchMJson = async (id: string): Promise<MJson> => {
     const response = await fetch(`/data/${id}.json`);
     if (!response.ok) throw new Error(`Failed loading MJson file. id = ${id}`);
     const json = await response.json();

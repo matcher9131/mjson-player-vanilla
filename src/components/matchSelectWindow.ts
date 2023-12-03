@@ -1,5 +1,5 @@
 import { loadNewMJson } from "@/controllers/mJsonController";
-import { loadMJsonIndex } from "@/modules/mJsonIndex/states";
+import { fetchMJsonIndex } from "@/modules/mJsonIndex/states";
 import { type MJsonIndexNode } from "@/modules/mJsonIndex/types";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
@@ -19,7 +19,7 @@ const setSelectedMatchId = (newValue: string | null): void => {
     (okButtonElement as HTMLButtonElement).disabled = selectedMatchId == null;
 };
 
-const mJsonIndex = await loadMJsonIndex();
+const mJsonIndex = await fetchMJsonIndex();
 
 const createTreeViewItemElement = (node: MJsonIndexNode): HTMLLIElement => {
     const container = document.createElement("li");
