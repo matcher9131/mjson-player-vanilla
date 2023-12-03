@@ -358,7 +358,7 @@ const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement =>
             y: -height / 2,
             width,
             height,
-            color: "#111827",
+            color: "#262626",
         }),
     );
 

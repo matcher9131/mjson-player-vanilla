@@ -50,7 +50,7 @@ export const createCenterDisplay = (): SVGGElement => {
             y: centerDisplayOffsetY,
             width: centerDisplayWidth,
             height: centerDisplayHeight,
-            color: "black",
+            color: "#171717",
         }),
     );
     // 局表示

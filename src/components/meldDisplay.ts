@@ -1,5 +1,5 @@
-import { getElementByIdOrThrowError } from "@/util/domHelper";
-import { overlayTextOffsetX, overlayTextOffsetY, svgNS } from "@/const";
+import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
+import { overlayTextOffsetX, overlayTextOffsetY } from "@/const";
 import { type PositionEventMeld } from "@/modules/positionEvent/types";
 import { rotateVector2D } from "@/util/vector2D";
 
@@ -7,17 +7,19 @@ const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;
 const animationClassName = "animate-[fadeOut_0.5s]";
 
 export const createMeldDisplay = (sideIndex: number): SVGTextElement => {
-    const element = document.createElementNS(svgNS, "text");
+    const { x, y } = rotateVector2D({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
+    const element = createSVGTextElement({
+        text: "",
+        x,
+        y,
+        fontSize: 1000,
+    });
     element.setAttribute("id", overlayTextId(sideIndex));
     element.setAttribute("opacity", "0");
-    const { x, y } = rotateVector2D({ x: overlayTextOffsetX, y: overlayTextOffsetY }, -90 * sideIndex);
-    element.setAttribute("x", `${x}`);
-    element.setAttribute("y", `${y}`);
-    element.setAttribute("text-anchor", "middle");
-    element.setAttribute("dominant-baseline", "middle");
-    element.setAttribute("font-size", "1000");
-    element.setAttribute("fill", "floralwhite");
-    element.setAttribute("style", "text-shadow: 2px 2px 0 gray;");
+    element.setAttribute("stroke", "#171717");
+    element.setAttribute("stroke-width", "100");
+    element.setAttribute("stroke-linejoin", "round");
+    element.setAttribute("style", "paint-order: stroke;");
     return element;
 };
 

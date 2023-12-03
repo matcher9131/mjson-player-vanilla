@@ -21,7 +21,7 @@ export const createClosingDisplay = (): SVGGElement => {
             y: -bgOneSize / 2,
             width: bgOneSize,
             height: bgOneSize,
-            color: "black",
+            color: "#262626",
         }),
     );
 

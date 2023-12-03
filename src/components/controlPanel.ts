@@ -16,8 +16,8 @@ const createButton = (onClick: () => void, icon: Element): HTMLDivElement => {
     button.onclick = onClick;
     button.classList.add(
         "flex-auto",
-        "bg-slate-700",
-        "hover:bg-slate-500",
+        "bg-neutral-800",
+        "hover:bg-neutral-500",
         "text-white",
         "mx-0.5",
         "my-0.5",
