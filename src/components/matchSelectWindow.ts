@@ -1,5 +1,5 @@
 import { loadNewMJson } from "@/controllers/mJsonController";
-import { fetchMJsonIndex } from "@/modules/mJsonIndex/states";
+import { getMJsonIndex } from "@/modules/mJsonIndex/states";
 import { type MJsonIndexNode } from "@/modules/mJsonIndex/types";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
@@ -18,8 +18,6 @@ const setSelectedMatchId = (newValue: string | null): void => {
     const okButtonElement = getElementByIdOrThrowError(okButtonId);
     (okButtonElement as HTMLButtonElement).disabled = selectedMatchId == null;
 };
-
-const mJsonIndex = await fetchMJsonIndex();
 
 const createTreeViewItemElement = (node: MJsonIndexNode): HTMLLIElement => {
     const container = document.createElement("li");
@@ -119,12 +117,13 @@ const createTreeViewItemElement = (node: MJsonIndexNode): HTMLLIElement => {
     return container;
 };
 
-const createTreeView = (): HTMLDivElement => {
+const createTreeView = async (): Promise<HTMLDivElement> => {
     const container = document.createElement("div");
     container.classList.add("overflow-auto", "w-full", "h-full", "bg-slate-100");
 
     const element = document.createElement("ul");
     element.setAttribute("id", treeViewElementId);
+    const mJsonIndex = await getMJsonIndex();
     for (const node of mJsonIndex.children) {
         const childElement = createTreeViewItemElement(node);
         element.appendChild(childElement);
@@ -149,7 +148,7 @@ const createSelectList = (): HTMLDivElement => {
     return container;
 };
 
-export const createMatchSelectWindow = (): HTMLDivElement => {
+export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
     const container = document.createElement("div");
     container.setAttribute("id", matchSelectWindowContainerId);
     container.classList.add(
@@ -187,7 +186,7 @@ export const createMatchSelectWindow = (): HTMLDivElement => {
         e.stopPropagation();
     };
 
-    const treeViewElement = createTreeView();
+    const treeViewElement = await createTreeView();
     const selectListElement = createSelectList();
     const buttonElement = document.createElement("button");
     buttonElement.setAttribute("id", okButtonId);
