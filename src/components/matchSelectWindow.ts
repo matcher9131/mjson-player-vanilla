@@ -166,8 +166,8 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
         e.stopPropagation();
     };
     // 初期状態
-    container.style.zIndex = "50";
-    container.style.opacity = "1";
+    container.style.zIndex = "-50";
+    container.style.opacity = "0";
 
     const root = document.createElement("div");
     root.classList.add(
@@ -195,6 +195,10 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
         if (selectedMatchId == null) return;
         await loadNewMJson(selectedMatchId);
         setMatchSelectWindowVisibility(false);
+        // クエリ引数を書き換える
+        const url = new URL(window.location.toString());
+        url.searchParams.set("id", selectedMatchId);
+        history.pushState({}, "", url);
     };
     buttonElement.classList.add(
         "text-floralwhite",

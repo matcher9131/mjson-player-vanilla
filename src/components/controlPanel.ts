@@ -38,9 +38,9 @@ const createButton = (onClick: () => void, icon: Element, isAlwaysEnabled = fals
     return container;
 };
 
-export const enablePositionNavigatorButtons = (): void => {
+export const setPositionNavigatorButtonsEnabled = (isEnabled: boolean): void => {
     for (const element of document.getElementsByClassName(positionNavigatorButtonClassName)) {
-        (element as HTMLButtonElement).disabled = false;
+        (element as HTMLButtonElement).disabled = !isEnabled;
     }
 };
 

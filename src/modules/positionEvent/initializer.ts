@@ -159,7 +159,8 @@ const getAllTilesState = (sides: readonly Side[]): TileState[] => {
     return states;
 };
 
-export const createPositionEvents = (mJson: MJson): MatchPositionEvents => {
+export const createPositionEvents = (mJson: MJson | null): MatchPositionEvents => {
+    if (mJson == null) return new Map();
     return new Map<GameIndex, GamePositionEvents>([
         ["pre", [[{ kind: "beginningMatch", players: mJson.players.map((player) => player.name) }]]],
         ...mJson.games.map((game, gameIndex) => {

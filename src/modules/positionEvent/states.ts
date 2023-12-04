@@ -88,7 +88,7 @@ export const goToNextGame = (): void => {
     }
 };
 
-export const setPositionEvents = (mJson: MJson): void => {
+export const setPositionEvents = (mJson: MJson | null): void => {
     positionEvents = createPositionEvents(mJson);
 };
 

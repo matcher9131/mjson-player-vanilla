@@ -1,5 +1,5 @@
 import { assertNonNull } from "@/util/error";
-import { type MJsonIndex } from "./types";
+import { type MJsonIndexNode, type MJsonIndex, type MJsonIndexItem } from "./types";
 
 let mJsonIndex: MJsonIndex | null = null;
 
@@ -16,4 +16,21 @@ export const getMJsonIndex = async (): Promise<MJsonIndex> => {
     }
     assertNonNull(mJsonIndex);
     return mJsonIndex;
+};
+
+const getMJsonIndexItems = function* (node: MJsonIndexNode): IterableIterator<MJsonIndexItem> {
+    if ("children" in node) {
+        for (const child of node.children) {
+            yield* getMJsonIndexItems(child);
+        }
+    } else {
+        for (const item of node.items) {
+            yield item;
+        }
+    }
+};
+
+export const getAllMatchIds = async (): Promise<string[]> => {
+    const mji = await getMJsonIndex();
+    return [...getMJsonIndexItems(mji)].map((item) => item.id);
 };

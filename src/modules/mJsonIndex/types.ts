@@ -1,7 +1,8 @@
-type MJsonIndexItem = {
+export type MJsonIndexItem = {
     readonly id: string;
     readonly label: string;
 };
+
 type MJsonIndexBase = {
     readonly label: string;
 };
