@@ -8,7 +8,8 @@
     "build": "tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .tsx,.ts src/",
-    "test": "npx vitest run"
+    "test": "npx vitest run",
+    "create-index": "node --loader ts-node/esm tools/createMJsonIndex.ts"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.9.0",
