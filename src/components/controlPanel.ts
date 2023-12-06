@@ -29,6 +29,7 @@ const createButton = (onClick: () => void, icon: Element, isAlwaysEnabled = fals
         "flex",
         "justify-center",
         "items-center",
+        "select-none",
     );
     button.classList.add(positionNavigatorButtonClassName);
     // 初期状態
@@ -48,23 +49,18 @@ const createIcon = (filepath: string): HTMLObjectElement => {
     const element = document.createElement("object");
     element.setAttribute("type", "image/svg+xml");
     element.setAttribute("data", filepath);
-    element.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]", "fill-floralwhite", "pointer-events-none");
+    element.classList.add("w-[min(5vw,5vh)]", "h-[min(5vw,5vh)]", "pointer-events-none", "select-none");
     return element;
 };
 
 export const createControlPanel = (): HTMLDivElement => {
-    // temporary
-    const t = document.createElement("span");
-    t.textContent = "t";
-    // end temporary
-
     const panel = document.createElement("div");
     panel.append(
         createButton(handleGoToPreviousGame, createIcon("resources/arrows/white_double_left.svg")),
         createButton(handleGoToPreviousPosition, createIcon("resources/arrows/white_left.svg")),
         createButton(handleGoToNextPosition, createIcon("resources/arrows/white_right.svg")),
         createButton(handleGoToNextGame, createIcon("resources/arrows/white_double_right.svg")),
-        createButton(handleShowMatchSelectWindowButton, t, true),
+        createButton(handleShowMatchSelectWindowButton, createIcon("resources/folder.svg"), true),
     );
     panel.classList.add(
         "flex",
