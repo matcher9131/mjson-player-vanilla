@@ -1,13 +1,4 @@
 {
     "printWidth": 120,
-    "tabWidth": 4,
-    "parser": "typescript",
-    "overrides": [
-        {
-            "files": "*.html",
-            "options": {
-                "parser": "html"
-            }
-        }
-    ]
+    "tabWidth": 4
 }

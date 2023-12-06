@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" display="none">
+    <defs>
+        <rect id="wind_background" x="-300" y="-300" width="600" height="600" rx="100" ry="100" fill="royalblue" />
+        <g id="wind_east">
+            <use href="#wind_background" />
+            <text dominant-baseline="central" text-anchor="middle" font-size="500" fill="floralwhite" style="font-family: 'M PLUS Rounded 1c', sans-serif;">東</text>
+        </g>
+        <g id="wind_south">
+            <use href="#wind_background" />
+            <text dominant-baseline="central" text-anchor="middle" font-size="500" fill="floralwhite" style="font-family: 'M PLUS Rounded 1c', sans-serif;">南</text>
+        </g>
+        <g id="wind_west">
+            <use href="#wind_background" />
+            <text dominant-baseline="central" text-anchor="middle" font-size="500" fill="floralwhite" style="font-family: 'M PLUS Rounded 1c', sans-serif;">西</text>
+        </g>
+        <g id="wind_north">
+            <use href="#wind_background" />
+            <text dominant-baseline="central" text-anchor="middle" font-size="500" fill="floralwhite" style="font-family: 'M PLUS Rounded 1c', sans-serif;">北</text>
+        </g>
+    </defs>
+</svg>

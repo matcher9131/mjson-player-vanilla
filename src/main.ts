@@ -1,50 +1,45 @@
-import { boardOneSize, svgNS, tileHeight, tileWidth } from "./const";
+import { createBoard } from "./components/board";
+import { createControlPanel } from "./components/controlPanel";
 import "./index.css";
+import { createMatchSelectWindow, setMatchSelectWindowVisibility } from "./components/matchSelectWindow";
+import { getAllMatchIds } from "./modules/mJsonIndex/states";
+import { loadNewMJson } from "./controllers/mJsonController";
+import { assertNonNull } from "./util/error";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
 
-const board = document.createElementNS(svgNS, "svg");
-// temporary
-board.setAttribute("width", "500");
-board.setAttribute("height", "500");
-// end temporary
-board.classList.add("flex-none", "bg-gray-400");
-board.setAttribute("viewBox", `${-boardOneSize / 2} ${-boardOneSize / 2} ${boardOneSize} ${boardOneSize}`);
+root.appendChild(document.createTextNode("Loading..."));
 
-// temporary
-new Array(36).fill(0).forEach((_, tileId) => {
-    const svgTileId =
-        tileId === 16 ? "tile4r" : tileId === 52 ? "tile13r" : tileId === 88 ? "tile22r" : `tile${tileId >> 2}`;
-    const tile = document.createElementNS(svgNS, "use");
-    tile.setAttribute("id", `board_tile${tileId}`);
-    if (tileId <= 1) {
-        tile.classList.add("transition-all");
-    }
-    // tile.setAttributeNS(svgNS, "width", `${tileWidth}`);
-    // tile.setAttributeNS(svgNS, "height", `${tileHeight}`);
-    tile.setAttribute("href", `#${svgTileId}`);
-    // tile.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `#${svgTileId}`);
-    const x = (tileId % 9) * tileWidth;
-    const y = Math.floor(tileId / 9) * tileHeight;
-    tile.setAttribute("transform", `translate(${x} ${y})`);
-    board.appendChild(tile);
-});
-// end temporary
+const resourceContainer = document.getElementById("resource_container");
+assertNonNull(resourceContainer);
 
-root.append(board);
+const responses = await Promise.all([
+    fetch(`resources/sticks.svg`),
+    fetch(`resources/tiles.svg`),
+    fetch(`resources/winds.svg`),
+]);
+if (responses.some((response) => !response.ok)) throw new Error("Failed loading resources.");
+const contents = await Promise.all(responses.map(async (response) => await response.text()));
+resourceContainer.innerHTML = contents.join("");
 
-let count: number = 0;
-const button = document.createElement("button");
-button.textContent = "→";
-button.onclick = () => {
-    const tile0 = document.getElementById("board_tile0");
-    if (tile0 == null) throw new Error("'board_tile0' is not found.");
-    const tile1 = document.getElementById("board_tile1");
-    if (tile1 == null) throw new Error("'board_tile1' is not found.");
-    ++count;
-    tile0.setAttribute("transform", `translate(${-tileWidth * count} ${0})`);
-    tile1.setAttribute("transform", `translate(${tileWidth} ${-tileHeight * count})`);
-};
+const board = createBoard();
+const controlPanel = createControlPanel();
+const matchSelectWindow = await createMatchSelectWindow();
+root.firstChild?.remove();
+root.append(board, controlPanel, matchSelectWindow);
+root.classList.add("flex", "flex-wrap");
 
-root.append(button);
+const matchId = await (async (): Promise<string | null> => {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (!searchParams.has("id")) return null;
+    const matchId = searchParams.get("id");
+    if (matchId == null) return null;
+    const allMatchIds = await getAllMatchIds();
+    return allMatchIds.includes(matchId) ? matchId : null;
+})();
+if (matchId != null) {
+    await loadNewMJson(matchId);
+} else {
+    setMatchSelectWindowVisibility(true);
+}

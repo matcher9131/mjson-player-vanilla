@@ -1,0 +1,10 @@
+Copyright © 2023 matcher9131
+Released under the MIT license
+https://opensource.org/licenses/mit-license.php
+
+This program uses a font "GL-MahjongTile" (http://gutenberg.osdn.jp/ja/license.html)
+© Gutenberg Labo
+
+This program uses a font "M PLUS Rounded 1c" (https://fonts.google.com/specimen/M+PLUS+Rounded+1c)
+Licensed under SIL Open Font License 1.1 (http://scripts.sil.org/OFL)
+© 2021 The M+ FONTS Project Authors (https://github.com/coz-m/MPLUS_FONTS)
