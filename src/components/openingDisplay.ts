@@ -5,8 +5,7 @@ import { rotateVector2D } from "@/util/vector2D";
 const openingDisplayId = "opening_display";
 const playerNameTextId = (sideIndex: number): string => `opening_display_player_name${sideIndex}`;
 const windIconId = (sideIndex: number): string => `opening_display_wind_icon${sideIndex}`;
-const windSrcId = (windIndex: number): string =>
-    "resources/winds.svg#" + ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
+const windSrcId = (windIndex: number): string => ["wind_east", "wind_south", "wind_west", "wind_north"][windIndex % 4];
 const bgOneSize = (boardOneSize * 2) / 3;
 const rowHeight = tileWidth * 1.25;
 
@@ -39,7 +38,7 @@ export const createOpeningDisplay = (): SVGGElement => {
         iconElement.setAttribute("id", windIconId(sideIndex));
         iconElement.setAttribute("x", `${x}`);
         iconElement.setAttribute("y", `${y + rowHeight / 2}`);
-        iconElement.setAttribute("href", windSrcId(sideIndex));
+        iconElement.setAttribute("href", `#${windSrcId(sideIndex)}`);
         element.appendChild(iconElement);
     }
     // 初期状態

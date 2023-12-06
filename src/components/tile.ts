@@ -22,7 +22,7 @@ export const createTile = (tileId: number | null, setsId = true): SVGUseElement 
     const tile = document.createElementNS(svgNS, "use");
     if (setsId && tileId != null) tile.setAttribute("id", tileDomId(tileId));
     tile.classList.add("board-tile");
-    tile.setAttribute("href", `resources/tiles.svg#${srcTileId}`);
+    tile.setAttribute("href", `#${srcTileId}`);
     // 初期状態
     tile.setAttribute("opacity", "0");
     return tile;
