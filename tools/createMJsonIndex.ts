@@ -3,8 +3,8 @@ import { type MJsonIndexItem, type MJsonIndex } from "../src/modules/mJsonIndex/
 import { promises as fs } from "fs";
 import path from "path";
 
-const arrayToGroup = <T>(arr: readonly T[], keySelector: (element: T) => string): Map<string, T[]> => {
-    const map = new Map<string, T[]>();
+const arrayToGroup = <T, K>(arr: readonly T[], keySelector: (element: T) => K): Map<K, T[]> => {
+    const map = new Map<K, T[]>();
     for (const element of arr) {
         const key = keySelector(element);
         map.set(key, [...(map.get(key) ?? []), element]);
@@ -16,9 +16,9 @@ const indexFileName = "mjson_index.json";
 const targetDir = path.resolve("public", "data");
 
 type DatedMJsonIndexItem = MJsonIndexItem & {
-    readonly year: string;
-    readonly month: string;
-    readonly date: string;
+    readonly year: number;
+    readonly month: number;
+    readonly date: number;
 };
 const items: DatedMJsonIndexItem[] = [];
 
@@ -30,11 +30,10 @@ for (const fileName of fileNames) {
     try {
         const content = await fs.readFile(path.join(targetDir, fileName), { encoding: "utf-8" });
         const mJson = JSON.parse(content) as MJson;
-        const year = `${Math.floor(mJson.id / 1000000) + 2000}年`;
-        const month = `${Math.floor(mJson.id / 10000) % 100}月`;
-        const date = `${Math.floor(mJson.id / 100) % 100}日`;
-        const order = `${mJson.id % 100}`.padStart(2, "0");
-        const label = `${order} (${mJson.players
+        const year = Math.floor(mJson.id / 1000000) + 2000;
+        const month = Math.floor(mJson.id / 10000) % 100;
+        const date = Math.floor(mJson.id / 100) % 100;
+        const label = `${mJson.id} (${mJson.players
             .toSorted((x, y) => x.rank - y.rank)
             .map(({ name, income }) => `${name} ${income > 0 ? `+${income}` : income}`)
             .join(" / ")})`;
@@ -46,18 +45,22 @@ for (const fileName of fileNames) {
 
 const mJsonIndex: MJsonIndex = {
     label: "root",
-    children: [...arrayToGroup(items, (item) => item.year).entries()].map(([year, yearItems]) => ({
-        label: year,
-        children: [...arrayToGroup(yearItems, (yearItem) => yearItem.month).entries()].map(([month, monthItems]) => ({
-            label: month,
-            children: [...arrayToGroup(monthItems, (monthItem) => monthItem.date).entries()].map(
-                ([date, dateItems]) => ({
-                    label: date,
-                    items: dateItems.map(({ id, label }) => ({ id, label })),
-                }),
-            ),
+    children: [...arrayToGroup(items, (item) => item.year).entries()]
+        .toSorted(([xKey], [yKey]) => xKey - yKey)
+        .map(([year, yearItems]) => ({
+            label: `${year}年`,
+            children: [...arrayToGroup(yearItems, (yearItem) => yearItem.month).entries()]
+                .toSorted(([xKey], [yKey]) => xKey - yKey)
+                .map(([month, monthItems]) => ({
+                    label: `${month}月`,
+                    children: [...arrayToGroup(monthItems, (monthItem) => monthItem.date).entries()]
+                        .toSorted(([xKey], [yKey]) => xKey - yKey)
+                        .map(([date, dateItems]) => ({
+                            label: `${date}日`,
+                            items: dateItems.map(({ id, label }) => ({ id, label })),
+                        })),
+                })),
         })),
-    })),
 };
 
 await fs.writeFile(path.join(targetDir, indexFileName), JSON.stringify(mJsonIndex), { encoding: "utf-8" });
