@@ -125,6 +125,7 @@ export const getHandTileStates = (side: Side, sideIndex: number): ReadonlyMap<nu
                         x: tileLeft + tileHeight / 2,
                         y: rotatedTileY - tileWidth,
                         sideIndex,
+                        isRotated: true,
                     });
                 }
                 tileLeft += tileHeight;
@@ -133,6 +134,7 @@ export const getHandTileStates = (side: Side, sideIndex: number): ReadonlyMap<nu
                     x: tileLeft + tileWidth / 2,
                     y: regularTileY,
                     sideIndex,
+                    isFacedown: meld.tiles[j].isUnrevealed,
                 });
                 tileLeft += tileWidth;
             }
