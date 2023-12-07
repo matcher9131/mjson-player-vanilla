@@ -42,9 +42,10 @@ export const setTileAnimationAll = (animates: boolean): void => {
 
 export const updateTile = ({
     tileId,
-    newState: { x, y, sideIndex, isRotated, isInvisible },
+    newState: { x, y, sideIndex, isRotated, isInvisible, isFacedown },
 }: Omit<PositionEventTileTransition, "kind" | "isForward">): void => {
     const tile = getElementByIdOrThrowError(tileDomId(tileId));
+    tile.setAttribute("href", isFacedown ?? false ? `#${getSrcTileId(null)}` : `#${getSrcTileId(tileId)}`);
     tile.setAttribute(
         "transform",
         `rotate(${-sideIndex * 90}) translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`,
