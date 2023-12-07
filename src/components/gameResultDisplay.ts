@@ -18,6 +18,7 @@ import { createTile } from "./tile";
 import { type TileState } from "@/modules/tileState/types";
 import { type YakuDoubles } from "@/modules/mJson/types/yakuDoubles";
 import { type DrawKind } from "@/modules/mJson/types/drawKind";
+import { getDoraTileId } from "@/util/mahjongHelper";
 
 const gameResultDisplayId = "game_result_display";
 const scoreFontSize = 400;
@@ -248,7 +249,7 @@ const createDoraElement = ({
         }),
     );
     for (let i = 0; i < 5; ++i) {
-        const tile = createTile(dora[i] ?? null, false);
+        const tile = createTile(getDoraTileId(dora[i]), false);
         tile.setAttribute("opacity", "1");
         tile.setAttribute("x", `${(i - 2) * tileWidth}`);
         tile.setAttribute("y", `${doraCaptionHeight + tileHeight / 2}`);
@@ -256,7 +257,7 @@ const createDoraElement = ({
     }
     if (hiddenDora.length > 0) {
         for (let i = 0; i < 5; ++i) {
-            const tile = createTile(hiddenDora[i] ?? null, false);
+            const tile = createTile(getDoraTileId(hiddenDora[i]), false);
             tile.setAttribute("opacity", "1");
             tile.setAttribute("x", `${(i - 2) * tileWidth}`);
             tile.setAttribute("y", `${doraCaptionHeight + tileHeight + tileHeight / 2}`);
