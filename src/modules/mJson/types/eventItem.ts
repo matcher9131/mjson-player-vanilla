@@ -16,7 +16,6 @@ export type EventDraw = EventItemBase & {
 
 type EventMeldBase = EventItemBase & {
     readonly k: "c" | "p" | "a" | "m" | "k";
-    readonly from: number;
 };
 
 export type EventAdditionalKong = EventMeldBase & {
@@ -26,6 +25,7 @@ export type EventAdditionalKong = EventMeldBase & {
 
 export type EventChow = EventMeldBase & {
     readonly k: "c";
+    readonly from: number;
     readonly t: number;
     readonly tiles: readonly number[];
 };
@@ -37,12 +37,14 @@ export type EventConcealedKong = EventMeldBase & {
 
 export type EventOpenKong = EventMeldBase & {
     readonly k: "m";
+    readonly from: number;
     readonly t: number;
     readonly tiles: readonly number[];
 };
 
 export type EventPung = EventMeldBase & {
     readonly k: "p";
+    readonly from: number;
     readonly t: number;
     readonly tiles: readonly number[];
 };
