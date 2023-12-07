@@ -4,6 +4,8 @@ import { describe, expect, test } from "vitest";
 describe("mahjongHelper", () => {
     describe("getDoraTileIdが正しいtileIdを返す", () => {
         test.each([
+            [undefined, null],
+            [null, null],
             [0, 5], // 一萬→二萬
             [5, 9], // 二萬→三萬
             [10, 13], // 三萬→四萬
@@ -21,8 +23,8 @@ describe("mahjongHelper", () => {
             [124, 128], // 白→発
             [129, 132], // 発→中
             [134, 124], // 中→白
-        ])("display tile id: %i, expected return tile id: %i", (doraDisplayTileId, expected) => {
-            expect(getDoraTileId(doraDisplayTileId)).toBe(expected);
+        ])("display tile id: %i, expected return tile id: %i", (doraIndicatorTileId, expected) => {
+            expect(getDoraTileId(doraIndicatorTileId)).toBe(expected);
         });
     });
 });

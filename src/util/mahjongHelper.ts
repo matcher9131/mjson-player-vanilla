@@ -1,5 +1,6 @@
-export const getDoraTileId = (doraDisplayTileId: number): number => {
-    const tileKindId = doraDisplayTileId >> 2;
+export const getDoraTileId = (doraIndicatorTileId: number | null | undefined): number | null => {
+    if (doraIndicatorTileId == null) return null;
+    const tileKindId = doraIndicatorTileId >> 2;
     if (tileKindId < 27) {
         // 数牌
         const color = Math.floor(tileKindId / 9);
