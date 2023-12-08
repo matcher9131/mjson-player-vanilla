@@ -8,7 +8,7 @@ import { type MJson } from "@/modules/mJson/types/mJson";
 import { resetPositionIndex, setPositionEvents } from "@/modules/positionEvent/states";
 import { handleGameIndexChanged } from "./positionEventController";
 import { fetchMJson, setMJson } from "@/modules/mJson/states";
-import { hideGameResultDisplay } from "@/components/gameResultDisplay";
+import { hideGameResultDisplay } from "@/components/gameResultDisplay/gameResultDisplay";
 
 export const handleMJsonChanged = (newMJson: MJson | null): void => {
     // GameResultWindowを閉じる
