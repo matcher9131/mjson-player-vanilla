@@ -155,7 +155,7 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
         "absolute",
         "w-full",
         "h-full",
-        "transition-opacity",
+        "transition-opacity-visibility",
         "bg-white/50",
         "flex",
         "justify-center",
@@ -166,8 +166,8 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
         e.stopPropagation();
     };
     // 初期状態
-    container.style.zIndex = "-50";
     container.style.opacity = "0";
+    container.style.visibility = "hidden";
 
     const root = document.createElement("div");
     root.classList.add(
@@ -226,12 +226,10 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
 export const setMatchSelectWindowVisibility = (isVisible: boolean): void => {
     const container = getElementByIdOrThrowError(matchSelectWindowContainerId);
     if (isVisible) {
-        container.style.zIndex = "50";
+        container.style.visibility = "visible";
         container.style.opacity = "1";
     } else {
         container.style.opacity = "0";
-        setTimeout(() => {
-            container.style.zIndex = "-50";
-        }, 150);
+        container.style.visibility = "hidden";
     }
 };

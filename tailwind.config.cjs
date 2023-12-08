@@ -12,6 +12,9 @@ export default {
                     "100%": { opacity: "0" },
                 },
             },
+            transitionProperty: {
+                "opacity-visibility": "opacity, visibility",
+            },
         },
     },
     plugins: [],
