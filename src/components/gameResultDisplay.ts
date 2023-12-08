@@ -1,4 +1,6 @@
 import {
+    additionalKongTileY,
+    boardOneSize,
     defaultTextColorClassName,
     gameResultScoreHeight,
     gameResultScoreWidth,
@@ -32,6 +34,8 @@ const yakuColumnWidth = tileWidth * 4.5;
 // |<-- yakuColumnWidth -->|<-- yakuColumnGap -->|<-- yakuColumnWidth -->|
 const yakuWidth = yakuColumnWidth * 2 + yakuColumnGap;
 
+const drawKindRowHeight = yakuRowHeight;
+
 const doraCaptionHeight = tileWidth;
 const doraWidth = tileWidth * 5;
 const doraScale = 0.8;
@@ -40,6 +44,9 @@ const yakuDoraPadding = tileWidth / 2;
 const yakuDoraGap = tileWidth * 0.75;
 // |<-- yakuDoraPadding -->|<-- yakuWidth -->|<-- yakuDoraGap -->|<-- doraWidth * doraScale -->|<-- yakuDoraPadding -->|
 const yakuDoraWidth = yakuDoraPadding * 2 + yakuWidth + yakuDoraGap + doraWidth * doraScale;
+
+const paddingTop = tileWidth / 2;
+const paddingBottom = tileWidth / 4;
 
 const scoreGridClasses = [
     ["row-start-2", "row-end-3", "col-start-2", "col-end-3"],
@@ -103,27 +110,24 @@ const createScoreElement = (
 const createHandElement = (
     tileStates: ReadonlyMap<number, TileState>,
 ): { readonly handElement: SVGSVGElement; readonly handWidth: number; readonly handHeight: number } => {
+    const hasAdditionalKong = [...tileStates.values()].find((tileState) => tileState.y === additionalKongTileY) != null;
+
     const left = Math.min(...[...tileStates.values()].map((state) => state.x)) - tileWidth / 2;
     const rightTile = maxBy([...tileStates.values()], (state) => state.x);
     assertNonNull(rightTile, "rightTile");
     const right = rightTile.x + (rightTile.isRotated ?? false ? tileHeight / 2 : tileWidth / 2);
     const width = right - left;
-    const height = tileWidth * 2; // 加槓の場合に備えて高さは牌の幅x2
+    const height = hasAdditionalKong ? tileWidth * 2 : tileHeight;
 
     // Origin: UpperMiddle
     const handElement = document.createElementNS(svgNS, "svg");
     handElement.setAttribute("width", `${width}`);
     handElement.setAttribute("height", `${height}`);
-    handElement.setAttribute("viewBox", `${-width / 2} ${0} ${width} ${height}`);
-    for (const [tileId, { x, isRotated, isFacedown }] of tileStates) {
+    handElement.setAttribute("viewBox", `${-width / 2} ${boardOneSize / 2 - height} ${width} ${height}`);
+    for (const [tileId, { x, y, isRotated, isFacedown }] of tileStates) {
         const tile = createTile(isFacedown === true ? null : tileId, false);
         tile.setAttribute("opacity", "1");
-        tile.setAttribute(
-            "transform",
-            `translate(${x} ${height - (isRotated === true ? tileWidth / 2 : tileHeight / 2)}) rotate(${
-                isRotated ?? false ? 90 : 0
-            })`,
-        );
+        tile.setAttribute("transform", `translate(${x} ${y}) rotate(${isRotated ?? false ? 90 : 0})`);
         handElement.appendChild(tile);
     }
 
@@ -322,10 +326,10 @@ const createDrawKindElement = (
 ): { readonly element: SVGSVGElement; readonly width: number; readonly height: number } => {
     const drawKindElement = document.createElementNS(svgNS, "svg");
     drawKindElement.setAttribute("width", `${gameResultScoreWidth}`);
-    drawKindElement.setAttribute("height", `${yakuSummaryRowHeight}`);
+    drawKindElement.setAttribute("height", `${drawKindRowHeight}`);
     drawKindElement.setAttribute(
         "viewBox",
-        `${-gameResultScoreWidth / 2} ${-yakuSummaryRowHeight / 2} ${gameResultScoreWidth} ${yakuSummaryRowHeight}`,
+        `${-gameResultScoreWidth / 2} ${-drawKindRowHeight / 2} ${gameResultScoreWidth} ${drawKindRowHeight}`,
     );
     const text = createSVGTextElement({
         text: drawKind,
@@ -337,7 +341,7 @@ const createDrawKindElement = (
     return {
         element: drawKindElement,
         width: gameResultScoreWidth,
-        height: yakuSummaryRowHeight,
+        height: drawKindRowHeight,
     };
 };
 
@@ -351,7 +355,7 @@ const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement =>
     } = event.kind === "gameResultWin" ? createWinHandElement(event) : createDrawKindElement(event.drawKind);
 
     const width = Math.max(topElementWidth, gameResultScoreWidth);
-    const height = topElementHeight + gameResultScoreHeight;
+    const height = topElementHeight + gameResultScoreHeight + paddingTop + paddingBottom;
 
     container.appendChild(
         createSVGRectElement({
@@ -364,10 +368,10 @@ const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement =>
     );
 
     topElement.setAttribute("x", `${-topElementWidth / 2}`);
-    topElement.setAttribute("y", `${-height / 2}`);
+    topElement.setAttribute("y", `${-height / 2 + paddingTop}`);
     const scoreElement = createScoreElement(event.players);
     scoreElement.setAttribute("x", `${-gameResultScoreWidth / 2}`);
-    scoreElement.setAttribute("y", `${-height / 2 + topElementHeight}`);
+    scoreElement.setAttribute("y", `${-height / 2 + topElementHeight + paddingTop}`);
     container.append(topElement, scoreElement);
 
     return container;

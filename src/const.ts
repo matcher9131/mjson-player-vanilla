@@ -5,6 +5,7 @@ export const tileHeight = 830;
 export const boardOneSize = tileWidth * 21;
 export const regularTileY = boardOneSize / 2 - tileHeight / 2;
 export const rotatedTileY = boardOneSize / 2 - tileWidth / 2;
+export const additionalKongTileY = rotatedTileY - tileWidth;
 export const discardsOffsetX = -2 * tileWidth - tileWidth / 2;
 export const discardsOffsetY = 4.5 * tileWidth;
 export const drawGapX = tileWidth / 5;
