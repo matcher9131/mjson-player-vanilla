@@ -115,12 +115,12 @@ const createHandElement = (
     handElement.setAttribute("width", `${width}`);
     handElement.setAttribute("height", `${height}`);
     handElement.setAttribute("viewBox", `${-width / 2} ${0} ${width} ${height}`);
-    for (const [tileId, { x, isRotated }] of tileStates) {
-        const tile = createTile(tileId, false);
+    for (const [tileId, { x, isRotated, isFacedown }] of tileStates) {
+        const tile = createTile(isFacedown === true ? null : tileId, false);
         tile.setAttribute("opacity", "1");
         tile.setAttribute(
             "transform",
-            `translate(${x} ${height - (isRotated ?? false ? tileWidth / 2 : tileHeight / 2)}) rotate(${
+            `translate(${x} ${height - (isRotated === true ? tileWidth / 2 : tileHeight / 2)}) rotate(${
                 isRotated ?? false ? 90 : 0
             })`,
         );
