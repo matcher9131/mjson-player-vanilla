@@ -1,4 +1,5 @@
 import {
+    additionalKongTileY,
     discardsOffsetX,
     discardsOffsetY,
     drawGapX,
@@ -123,7 +124,7 @@ export const getHandTileStates = (side: Side, sideIndex: number): ReadonlyMap<nu
                 if (meld.addedTileId != null) {
                     map.set(meld.addedTileId, {
                         x: tileLeft + tileHeight / 2,
-                        y: rotatedTileY - tileWidth,
+                        y: additionalKongTileY,
                         sideIndex,
                         isRotated: true,
                     });

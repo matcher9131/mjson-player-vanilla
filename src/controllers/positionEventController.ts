@@ -2,7 +2,7 @@ import { updateNumHundredSticks, updateNumThousandSticks } from "@/components/be
 import { setCenterDisplayVisibility, updateRoundText } from "@/components/centerDisplay";
 import { setClosingDisplayVisibility } from "@/components/closingDisplay";
 import { updateDoraRightIndex, updateDoraTileIds } from "@/components/doraDisplay";
-import { hideGameResultDisplay, showGameResultDisplay } from "@/components/gameResultDisplay";
+import { hideGameResultDisplay, showGameResultDisplay } from "@/components/gameResultDisplay/gameResultDisplay";
 import { setMatchSelectWindowVisibility } from "@/components/matchSelectWindow";
 import { showMeldDisplay } from "@/components/meldDisplay";
 import { setOpeningDisplayVisible } from "@/components/openingDisplay";
