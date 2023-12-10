@@ -26,11 +26,12 @@ const createTreeViewItemElement = (node: MJsonIndexNode): HTMLLIElement => {
         "before:inline-block",
         "before:w-[0.8rem]",
         "before:h-[0.8rem]",
-        "before:bg-[url('/resources/arrows/black_right.svg')]",
-        "before:aria-expanded:bg-[url('/resources/arrows/black_down.svg')]",
-        "before:bg-no-repeat",
-        "before:bg-contain",
-        "before:bg-center",
+        "before:[mask-image:url('resources/arrows/left.svg')]",
+        "before:[mask-repeat:no-repeat]",
+        "before:[mask-position:center]",
+        "before:bg-black",
+        "before:scale-x-flip",
+        "before:aria-expanded:rotate-90",
         "before:mx-1",
     );
 
