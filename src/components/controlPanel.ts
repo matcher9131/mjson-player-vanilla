@@ -75,7 +75,6 @@ export const createControlPanel = (): HTMLDivElement => {
         createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]"),
         createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]", "scale-x-flip"),
         createButton(handleShowMatchSelectWindowButton, true, "[mask-image:url('resources/folder.svg')]"),
-        document.createElement("div"),
     );
     panel.classList.add(
         "grid",

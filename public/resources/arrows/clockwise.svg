@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200">
     <defs>
-        <marker id="arrow_head" markerUnits="strokeWidth" markerWidth="4" markerHeight="4" viewBox="-50 -50 100 100" orient="auto">
+        <marker id="arrow_head" markerUnits="strokeWidth" markerWidth="5" markerHeight="5" viewBox="-50 -50 100 100" orient="auto">
             <polygon points="49,0 -1,50 -1,-50" fill="black" />
         </marker>
     </defs>
-    <path id="clockwise_arrow" d="M -53,53 A 75 75 0 1 1 53,53" fill="none" stroke="black" stroke-width="10" marker-end="url(#arrow_head)" />
+    <path id="clockwise_arrow" d="M -53,53 A 75 75 0 1 1 53,53" fill="none" stroke="black" stroke-width="15" marker-end="url(#arrow_head)" />
 </svg>
