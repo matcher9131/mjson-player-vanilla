@@ -71,14 +71,20 @@ export const createControlPanel = (): HTMLDivElement => {
         createButton(handleGoToPreviousPosition, false, "[mask-image:url('resources/arrows/left.svg')]"),
         createButton(handleGoToNextPosition, false, "[mask-image:url('resources/arrows/left.svg')]", "scale-x-flip"),
         createButton(handleGoToNextGame, false, "[mask-image:url('resources/arrows/double_left.svg')]", "scale-x-flip"),
+        // TODO: onClick
+        createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]"),
+        createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]", "scale-x-flip"),
         createButton(handleShowMatchSelectWindowButton, true, "[mask-image:url('resources/folder.svg')]"),
+        document.createElement("div"),
     );
     panel.classList.add(
-        "flex",
+        "grid",
         "portrait:w-[min(100vw,100vh)]",
-        "portrait:flex-row",
+        "portrait:grid-flow-row",
+        "portrait:grid-cols-4",
         "landscape:h-[min(100vw,100vh)]",
-        "landscape:flex-col",
+        "landscape:grid-flow-col",
+        "landscape:grid-rows-4",
     );
     return panel;
 };
