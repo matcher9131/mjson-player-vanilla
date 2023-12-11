@@ -204,9 +204,11 @@ export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
     buttonElement.classList.add(
         "text-floralwhite",
         "bg-blue-500",
+        "transition-transform",
         "enabled:hover:brightness-125",
         "disabled:brightness-75",
         "disabled:cursor-not-allowed",
+        "active:scale-95",
         "rounded",
         "px-4",
         "py-2",
