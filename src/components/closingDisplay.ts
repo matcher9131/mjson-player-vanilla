@@ -1,5 +1,5 @@
 import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileWidth } from "@/const";
-import { type PlayerGameResult } from "@/modules/mJson/types/playerGameResult";
+import { type PlayerGameResult } from "@/models/mJson/types/playerGameResult";
 import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { rotateVector2D } from "@/util/vector2D";
 

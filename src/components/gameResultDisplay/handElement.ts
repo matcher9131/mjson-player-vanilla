@@ -1,5 +1,5 @@
 import { additionalKongTileY, boardOneSize, svgNS, tileHeight, tileWidth } from "@/const";
-import { type TileState } from "@/modules/tileState/types";
+import { type TileState } from "@/models/tileState/types";
 import { createTile } from "../tile";
 import { assertNonNull } from "@/util/error";
 import { maxBy } from "@/util/arrayExtensions";

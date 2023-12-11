@@ -1,5 +1,5 @@
 import { gameResultScoreWidth, svgNS, tileWidth } from "@/const";
-import { type DrawKind } from "@/modules/mJson/types/drawKind";
+import { type DrawKind } from "@/models/mJson/types/drawKind";
 import { createSVGTextElement } from "@/util/domHelper";
 
 const drawRowHeight = tileWidth * 1.25;

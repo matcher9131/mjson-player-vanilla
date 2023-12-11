@@ -1,5 +1,5 @@
 import { gameResultScoreHeight, gameResultScoreWidth, svgNS, tileWidth } from "@/const";
-import { type PositionEventGameResult } from "@/modules/positionEvent/types";
+import { type PositionEventGameResult } from "@/models/positionEvent/types";
 import { createSVGRectElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { boardId } from "../board";
 import { createScoreElement } from "./scoreElement";

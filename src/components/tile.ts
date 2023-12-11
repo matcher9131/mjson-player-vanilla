@@ -1,6 +1,6 @@
-import { type PositionEventTileTransition } from "@/modules/positionEvent/types";
+import { type PositionEventTileTransition } from "@/models/positionEvent/types";
 import { svgNS } from "@/const";
-import { getDefaultTileState } from "@/modules/tileState/states";
+import { getDefaultTileState } from "@/models/tileState/states";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 
 const tileDomId = (tileId: number): string => `tile${tileId}`;

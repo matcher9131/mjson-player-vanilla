@@ -1,4 +1,4 @@
-import { type PositionEventGameResultWin } from "@/modules/positionEvent/types";
+import { type PositionEventGameResultWin } from "@/models/positionEvent/types";
 import { createHandElement } from "./handElement";
 import { createYakuElement, yakuWidth } from "./yakuElement";
 import { createDoraElement, scaledDoraWidth } from "./doraElement";

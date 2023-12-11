@@ -4,10 +4,10 @@ import { setPlayerNames } from "@/components/openingDisplay";
 import { updatePlayerNames } from "@/components/playerNameDisplay";
 import { resetRiichiStickAll } from "@/components/riichiStickDisplay";
 import { resetScoreDisplayAll } from "@/components/scoreDisplay";
-import { type MJson } from "@/modules/mJson/types/mJson";
-import { resetPositionIndex, setPositionEvents } from "@/modules/positionEvent/states";
+import { type MJson } from "@/models/mJson/types/mJson";
+import { resetPositionIndex, setPositionEvents } from "@/models/positionEvent/states";
 import { handleGameIndexChanged } from "./positionEventController";
-import { fetchMJson, setMJson } from "@/modules/mJson/states";
+import { fetchMJson, setMJson } from "@/models/mJson/states";
 import { hideGameResultDisplay } from "@/components/gameResultDisplay/gameResultDisplay";
 
 export const handleMJsonChanged = (newMJson: MJson | null): void => {

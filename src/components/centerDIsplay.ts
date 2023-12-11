@@ -18,8 +18,8 @@ import {
     windDisplayOffsetX,
     windDisplayOffsetY,
 } from "@/const";
-import { getMJson } from "@/modules/mJson/states";
-import { type GameIndex } from "@/modules/positionEvent/types";
+import { getMJson } from "@/models/mJson/states";
+import { type GameIndex } from "@/models/positionEvent/types";
 import { createBetsDisplay } from "./betsDisplay";
 import { createDoraDisplay } from "./doraDisplay";
 import { createScoreText } from "./scoreDisplay";

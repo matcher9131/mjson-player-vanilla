@@ -1,5 +1,5 @@
 import { svgNS } from "@/const";
-import { type PositionEventRiichiStick } from "@/modules/positionEvent/types";
+import { type PositionEventRiichiStick } from "@/models/positionEvent/types";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 
 const showsRiichiStick = [false, false, false, false];

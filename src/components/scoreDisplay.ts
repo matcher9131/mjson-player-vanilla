@@ -1,4 +1,4 @@
-import { type PositionEventScore } from "@/modules/positionEvent/types";
+import { type PositionEventScore } from "@/models/positionEvent/types";
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 
 const score = [25000, 25000, 25000, 25000];

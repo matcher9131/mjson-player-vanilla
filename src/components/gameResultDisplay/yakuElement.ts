@@ -1,6 +1,6 @@
 import { svgNS, tileWidth } from "@/const";
-import { getYakuName } from "@/modules/mJson/types/yaku";
-import { type YakuDoubles } from "@/modules/mJson/types/yakuDoubles";
+import { getYakuName } from "@/models/mJson/types/yaku";
+import { type YakuDoubles } from "@/models/mJson/types/yakuDoubles";
 import { createSVGTextElement } from "@/util/domHelper";
 
 const yakuFontSize = 350;

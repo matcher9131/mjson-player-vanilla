@@ -1,6 +1,6 @@
 import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { overlayTextOffsetX, overlayTextOffsetY } from "@/const";
-import { type PositionEventMeld } from "@/modules/positionEvent/types";
+import { type PositionEventMeld } from "@/models/positionEvent/types";
 import { rotateVector2D } from "@/util/vector2D";
 
 const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;

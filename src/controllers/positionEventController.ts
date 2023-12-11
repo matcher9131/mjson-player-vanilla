@@ -11,7 +11,7 @@ import { setShowsRiichiStick } from "@/components/riichiStickDisplay";
 import { updateScoreText } from "@/components/scoreDisplay";
 import { resetAllTiles, setTileAnimationAll, updateTile } from "@/components/tile";
 import { updateWindDisplay } from "@/components/windDisplay";
-import { getMJson } from "@/modules/mJson/states";
+import { getMJson } from "@/models/mJson/states";
 import {
     getCurrentGameIndex,
     getCurrentPositionEvents,
@@ -19,8 +19,8 @@ import {
     goToNextPosition,
     goToPreviousGame,
     goToPreviousPosition,
-} from "@/modules/positionEvent/states";
-import { type PositionEvent, type GameIndex } from "@/modules/positionEvent/types";
+} from "@/models/positionEvent/states";
+import { type PositionEvent, type GameIndex } from "@/models/positionEvent/types";
 
 export const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     setCenterDisplayVisibility(newGameIndex);

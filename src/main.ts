@@ -2,7 +2,7 @@ import { createBoard } from "./components/board";
 import { createControlPanel } from "./components/controlPanel";
 import "./index.css";
 import { createMatchSelectWindow, setMatchSelectWindowVisibility } from "./components/matchSelectWindow";
-import { getAllMatchIds } from "./modules/mJsonIndex/states";
+import { getAllMatchIds } from "./models/mJsonIndex/states";
 import { loadNewMJson } from "./controllers/mJsonController";
 import { assertNonNull } from "./util/error";
 

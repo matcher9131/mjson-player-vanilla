@@ -1,6 +1,6 @@
 import { loadNewMJson } from "@/controllers/mJsonController";
-import { getMJsonIndex } from "@/modules/mJsonIndex/states";
-import { type MJsonIndexNode } from "@/modules/mJsonIndex/types";
+import { getMJsonIndex } from "@/models/mJsonIndex/states";
+import { type MJsonIndexNode } from "@/models/mJsonIndex/types";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { assertNonNull } from "@/util/error";
 
