@@ -25,6 +25,8 @@ import {
 import { type PositionEvent, type GameIndex } from "@/models/positionEvent/types";
 import { hideBoard, showBoard } from "@/components/boardContainer/boardContainer";
 import { updateRoundDisplay } from "@/components/boardContainer/board/roundDisplay";
+import { getElementByIdOrThrowError } from "@/util/domHelper";
+import { boardId } from "@/components/boardContainer/board/board";
 
 export const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
     setTileAnimationAll(false);
@@ -60,7 +62,7 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 break;
             case "gameResultDraw":
             case "gameResultWin":
-                showGameResultDisplay(event);
+                showGameResultDisplay(event, getElementByIdOrThrowError(boardId));
                 break;
             case "meld":
                 if (goesForward) showMeldDisplay(event);
