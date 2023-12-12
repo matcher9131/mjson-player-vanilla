@@ -6,7 +6,7 @@ import { createDoraDisplay } from "./doraDisplay";
 import { createRotationBoard } from "./rotationBoard/rotationBoard";
 import { createMeldDisplay } from "./meldDisplay";
 
-const boardId = "board";
+export const boardId = "board";
 
 export const createBoard = (): SVGGElement => {
     const board = document.createElementNS(svgNS, "g");
@@ -35,6 +35,9 @@ export const createBoard = (): SVGGElement => {
         const overlay = createMeldDisplay(i);
         board.appendChild(overlay);
     }
+
+    // 初期状態
+    board.setAttribute("opacity", "0");
 
     return board;
 };
