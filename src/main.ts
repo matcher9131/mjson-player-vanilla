@@ -1,4 +1,3 @@
-import { createBoard } from "./components/board";
 import { createControlPanel } from "./components/controlPanel";
 import "./index.css";
 import {
@@ -8,6 +7,7 @@ import {
 import { getAllMatchIds } from "./models/mJsonIndex/states";
 import { loadNewMJson } from "./controllers/mJsonController";
 import { assertNonNull } from "./util/error";
+import { createBoardContainer } from "./components/boardContainer/boardContainer";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
@@ -26,11 +26,11 @@ if (responses.some((response) => !response.ok)) throw new Error("Failed loading 
 const contents = await Promise.all(responses.map(async (response) => await response.text()));
 resourceContainer.innerHTML = contents.join("");
 
-const board = createBoard();
+const boardContainer = createBoardContainer();
 const controlPanel = createControlPanel();
 const matchSelectWindow = await createMatchSelectWindow();
 root.firstChild?.remove();
-root.append(board, controlPanel, matchSelectWindow);
+root.append(boardContainer, controlPanel, matchSelectWindow);
 root.classList.add("flex", "flex-wrap");
 
 const matchId = await (async (): Promise<string | null> => {

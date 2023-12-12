@@ -1,6 +1,6 @@
 import { additionalKongTileY, boardOneSize, svgNS, tileHeight, tileWidth } from "@/const";
 import { type TileState } from "@/models/tileState/types";
-import { createTile } from "../tile";
+import { createTile } from "../rotationBoard/tile";
 import { assertNonNull } from "@/util/error";
 import { maxBy } from "@/util/arrayExtensions";
 

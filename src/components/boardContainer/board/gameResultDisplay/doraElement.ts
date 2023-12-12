@@ -1,7 +1,7 @@
 import { svgNS, tileHeight, tileWidth } from "@/const";
 import { createSVGTextElement } from "@/util/domHelper";
-import { createTile } from "../tile";
 import { getDoraTileId } from "@/util/mahjongHelper";
+import { createTile } from "../rotationBoard/tile";
 
 const doraCaptionHeight = tileWidth;
 const doraWidth = tileWidth * 5;

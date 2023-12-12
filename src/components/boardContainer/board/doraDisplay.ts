@@ -1,6 +1,6 @@
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { doraDisplayScale, svgNS, tileHeight, tileWidth } from "@/const";
-import { createTile, getSrcTileId } from "./tile";
+import { createTile, getSrcTileId } from "./rotationBoard/tile";
 
 const doraDisplayTileId = (index: number): string => `dora_display_tile${index}`;
 

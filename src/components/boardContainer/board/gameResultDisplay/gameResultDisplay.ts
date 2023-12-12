@@ -1,7 +1,7 @@
 import { gameResultScoreHeight, gameResultScoreWidth, svgNS, tileWidth } from "@/const";
 import { type PositionEventGameResult } from "@/models/positionEvent/types";
 import { createSVGRectElement, getElementByIdOrThrowError } from "@/util/domHelper";
-import { boardId } from "../board";
+import { boardContainerId } from "../../boardContainer";
 import { createScoreElement } from "./scoreElement";
 import { createWinHandElement } from "./winHandElement";
 import { createDrawKindElement } from "./drawElement";
@@ -58,7 +58,7 @@ const createGameResultDisplay = (event: PositionEventGameResult): SVGGElement =>
 };
 
 export const showGameResultDisplay = (event: PositionEventGameResult): void => {
-    const board = getElementByIdOrThrowError(boardId);
+    const board = getElementByIdOrThrowError(boardContainerId);
     const gameResult = createGameResultDisplay(event);
     board.appendChild(gameResult);
 };

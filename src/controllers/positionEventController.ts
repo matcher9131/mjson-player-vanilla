@@ -1,16 +1,18 @@
-import { updateNumHundredSticks, updateNumThousandSticks } from "@/components/betsDisplay";
-import { setCenterDisplayVisibility, updateRoundText } from "@/components/centerDisplay";
-import { setClosingDisplayVisibility } from "@/components/closingDisplay";
-import { updateDoraRightIndex, updateDoraTileIds } from "@/components/doraDisplay";
-import { hideGameResultDisplay, showGameResultDisplay } from "@/components/gameResultDisplay/gameResultDisplay";
+import { updateNumHundredSticks, updateNumThousandSticks } from "@/components/boardContainer/board/betsDisplay";
+import { setClosingDisplayVisibility } from "@/components/boardContainer/closingDisplay";
+import { updateDoraRightIndex, updateDoraTileIds } from "@/components/boardContainer/board/doraDisplay";
+import {
+    hideGameResultDisplay,
+    showGameResultDisplay,
+} from "@/components/boardContainer/board/gameResultDisplay/gameResultDisplay";
 import { setMatchSelectWindowVisibility } from "@/components/matchSelectWindow/matchSelectWindow";
-import { showMeldDisplay } from "@/components/meldDisplay";
-import { setOpeningDisplayVisible } from "@/components/openingDisplay";
-import { setPlayerNamesVisibility } from "@/components/playerNameDisplay";
-import { setShowsRiichiStick } from "@/components/riichiStickDisplay";
-import { updateScoreText } from "@/components/scoreDisplay";
-import { resetAllTiles, setTileAnimationAll, updateTile } from "@/components/tile";
-import { updateWindDisplay } from "@/components/windDisplay";
+import { showMeldDisplay } from "@/components/boardContainer/board/meldDisplay";
+import { setOpeningDisplayVisible } from "@/components/boardContainer/openingDisplay";
+import { setPlayerNamesVisibility } from "@/components/boardContainer/board/rotationBoard/playerNameDisplay";
+import { setShowsRiichiStick } from "@/components/boardContainer/board/rotationBoard/riichiStickDisplay";
+import { updateScoreDisplay } from "@/components/boardContainer/board/rotationBoard/scoreDisplay";
+import { resetAllTiles, setTileAnimationAll, updateTile } from "@/components/boardContainer/board/rotationBoard/tile";
+import { updateWindDisplay } from "@/components/boardContainer/board/rotationBoard/windDisplay";
 import { getMJson } from "@/models/mJson/states";
 import {
     getCurrentGameIndex,
@@ -21,25 +23,29 @@ import {
     goToPreviousPosition,
 } from "@/models/positionEvent/states";
 import { type PositionEvent, type GameIndex } from "@/models/positionEvent/types";
+import { hideBoard, showBoard } from "@/components/boardContainer/boardContainer";
+import { updateRoundDisplay } from "@/components/boardContainer/board/roundDisplay";
 
 export const handleGameIndexChanged = (newGameIndex: GameIndex): void => {
-    setCenterDisplayVisibility(newGameIndex);
     setTileAnimationAll(false);
     if (newGameIndex === "pre") {
+        hideBoard();
         resetAllTiles();
         setClosingDisplayVisibility(false);
         setOpeningDisplayVisible(true);
         setPlayerNamesVisibility(false);
     } else if (newGameIndex === "post") {
+        hideBoard();
         resetAllTiles();
         setOpeningDisplayVisible(false);
         setClosingDisplayVisibility(true);
         setPlayerNamesVisibility(false);
     } else {
+        showBoard();
         setOpeningDisplayVisible(false);
         setClosingDisplayVisibility(false);
         setPlayerNamesVisibility(true);
-        updateRoundText(newGameIndex);
+        updateRoundDisplay(newGameIndex);
         updateWindDisplay(getMJson().games[newGameIndex].round % 4);
         updateDoraTileIds(getMJson().games[newGameIndex].dora);
         updateDoraRightIndex(0);
@@ -63,7 +69,7 @@ const handlePositionEvents = (events: readonly PositionEvent[], goesForward: boo
                 setShowsRiichiStick(event);
                 break;
             case "score":
-                updateScoreText(event);
+                updateScoreDisplay(event);
                 break;
             case "tileTransition":
                 if (goesForward === event.isForward) updateTile(event);

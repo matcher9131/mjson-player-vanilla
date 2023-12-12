@@ -5,7 +5,7 @@ const score = [25000, 25000, 25000, 25000];
 
 const scoreTextId = (sideIndex: number): string => `score_text${sideIndex}`;
 
-export const createScoreText = (sideIndex: number): SVGTextElement => {
+export const createScoreDisplay = (sideIndex: number): SVGTextElement => {
     const element = createSVGTextElement({
         text: `${score[sideIndex]}`,
         x: 0,
@@ -17,7 +17,7 @@ export const createScoreText = (sideIndex: number): SVGTextElement => {
     return element;
 };
 
-export const updateScoreText = ({ newScore, sideIndex }: Omit<PositionEventScore, "kind">): void => {
+export const updateScoreDisplay = ({ newScore, sideIndex }: Omit<PositionEventScore, "kind">): void => {
     const element = getElementByIdOrThrowError(scoreTextId(sideIndex));
     element.textContent = `${newScore}`;
     score[sideIndex] = newScore;
@@ -25,6 +25,6 @@ export const updateScoreText = ({ newScore, sideIndex }: Omit<PositionEventScore
 
 export const resetScoreDisplayAll = (): void => {
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
-        updateScoreText({ newScore: 25000, sideIndex });
+        updateScoreDisplay({ newScore: 25000, sideIndex });
     }
 };
