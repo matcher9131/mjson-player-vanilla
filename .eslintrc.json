@@ -12,7 +12,29 @@
     "plugins": ["import"],
     "rules": {
         "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-        "import/no-cycle": ["error"]
+        "import/no-cycle": ["error"],
+        "import/no-restricted-paths": [
+            "error",
+            {
+                "zones": [
+                    {
+                        "target": "./src/components/**/*",
+                        "from": "./src/controllers/**/*",
+                        "message": "No imports from upper layer"
+                    },
+                    {
+                        "target": "./src/models/**/*",
+                        "from": "./src/(controllers|components)/**/*",
+                        "message": "No imports from upper layer"
+                    },
+                    {
+                        "target": "./src/util/**/*",
+                        "from": "./src/!(util)/**/*",
+                        "message": "'util' should not import any modules except those in 'util'"
+                    }
+                ]
+            }
+        ]
     },
     "settings": {
         "import/parsers": {
