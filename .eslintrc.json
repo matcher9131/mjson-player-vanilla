@@ -9,8 +9,18 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
+    "plugins": ["import"],
     "rules": {
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "import/no-cycle": ["error"]
+    },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": true
+        }
     },
     "ignorePatterns": ["*.cjs", "*.config.ts"]
 }
