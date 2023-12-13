@@ -18,6 +18,11 @@
             {
                 "zones": [
                     {
+                        "target": "./src/**/*",
+                        "from": "./src/main.ts",
+                        "message": "No imports from main.ts"
+                    },
+                    {
                         "target": "./src/components/**/*",
                         "from": "./src/controllers/**/*",
                         "message": "No imports from upper layer"
@@ -31,6 +36,11 @@
                         "target": "./src/util/**/*",
                         "from": "./src/!(util)/**/*",
                         "message": "'util' should not import any modules except those in 'util'"
+                    },
+                    {
+                        "target": "./src/const.ts",
+                        "from": "./src/**/*",
+                        "message": "No imports from upper layer"
                     }
                 ]
             }
