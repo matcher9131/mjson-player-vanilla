@@ -15,6 +15,9 @@ export default {
             transitionProperty: {
                 "opacity-visibility": "opacity, visibility",
             },
+            scale: {
+                flip: "-1",
+            },
         },
     },
     plugins: [],

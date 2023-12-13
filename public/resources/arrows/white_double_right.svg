@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -50 100 100">
-    <use href="arrow_base.svg#left_arrow" transform="translate(-15 0) rotate(180)" fill="floralwhite" />
-    <use href="arrow_base.svg#left_arrow" transform="translate(15 0) rotate(180)" fill="floralwhite" />
-</svg>

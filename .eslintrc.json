@@ -9,8 +9,50 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
+    "plugins": ["import"],
     "rules": {
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "import/no-cycle": ["error"],
+        "import/no-restricted-paths": [
+            "error",
+            {
+                "zones": [
+                    {
+                        "target": "./src/**/*",
+                        "from": "./src/main.ts",
+                        "message": "No imports from main.ts"
+                    },
+                    {
+                        "target": "./src/components/**/*",
+                        "from": "./src/controllers/**/*",
+                        "message": "No imports from upper layer"
+                    },
+                    {
+                        "target": "./src/models/**/*",
+                        "from": "./src/(controllers|components)/**/*",
+                        "message": "No imports from upper layer"
+                    },
+                    {
+                        "target": "./src/util/**/*",
+                        "from": "./src/!(util)/**/*",
+                        "message": "'util' should not import any modules except those in 'util'"
+                    },
+                    {
+                        "target": "./src/const.ts",
+                        "from": "./src/**/*",
+                        "message": "No imports from upper layer"
+                    }
+                ]
+            }
+        ]
+    },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": true
+        }
     },
     "ignorePatterns": ["*.cjs", "*.config.ts"]
 }
