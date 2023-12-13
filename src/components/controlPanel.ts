@@ -1,10 +1,10 @@
-import {
-    handleGoToNextGame,
-    handleGoToNextPosition,
-    handleGoToPreviousGame,
-    handleGoToPreviousPosition,
-    handleShowMatchSelectWindowButton,
-} from "@/controllers/positionEventController";
+// import {
+//     handleGoToNextGame,
+//     handleGoToNextPosition,
+//     handleGoToPreviousGame,
+//     handleGoToPreviousPosition,
+//     handleShowMatchSelectWindowButton,
+// } from "@/controllers/positionEventController";
 
 const positionNavigatorButtonClassName = "position-navigator-button";
 
@@ -64,7 +64,24 @@ export const setPositionNavigatorButtonsEnabled = (isEnabled: boolean): void => 
     }
 };
 
-export const createControlPanel = (): HTMLDivElement => {
+type CreateControlPanelParameters = {
+    readonly handleGoToPreviousGame: () => void;
+    readonly handleGoToPreviousPosition: () => void;
+    readonly handleGoToNextPosition: () => void;
+    readonly handleGoToNextGame: () => void;
+    readonly handleRotateClockwise: () => void;
+    readonly handleRotateCounterClockwise: () => void;
+    readonly handleShowMatchSelectWindow: () => void;
+};
+export const createControlPanel = ({
+    handleGoToPreviousGame,
+    handleGoToPreviousPosition,
+    handleGoToNextPosition,
+    handleGoToNextGame,
+    handleRotateClockwise,
+    handleRotateCounterClockwise,
+    handleShowMatchSelectWindow,
+}: CreateControlPanelParameters): HTMLDivElement => {
     const panel = document.createElement("div");
     panel.append(
         createButton(handleGoToPreviousGame, false, "[mask-image:url('resources/arrows/double_left.svg')]"),
@@ -72,9 +89,14 @@ export const createControlPanel = (): HTMLDivElement => {
         createButton(handleGoToNextPosition, false, "[mask-image:url('resources/arrows/left.svg')]", "scale-x-flip"),
         createButton(handleGoToNextGame, false, "[mask-image:url('resources/arrows/double_left.svg')]", "scale-x-flip"),
         // TODO: onClick
-        createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]"),
-        createButton(() => {}, false, "[mask-image:url('resources/arrows/clockwise.svg')]", "scale-x-flip"),
-        createButton(handleShowMatchSelectWindowButton, true, "[mask-image:url('resources/folder.svg')]"),
+        createButton(handleRotateClockwise, false, "[mask-image:url('resources/arrows/clockwise.svg')]"),
+        createButton(
+            handleRotateCounterClockwise,
+            false,
+            "[mask-image:url('resources/arrows/clockwise.svg')]",
+            "scale-x-flip",
+        ),
+        createButton(handleShowMatchSelectWindow, true, "[mask-image:url('resources/folder.svg')]"),
     );
     panel.classList.add(
         "grid",

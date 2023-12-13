@@ -1,4 +1,4 @@
-import { loadNewMJson } from "@/controllers/mJsonController";
+// import { loadNewMJson } from "@/controllers/mJsonController";
 import { getSelectedMatchId, setSelectedMatchId } from "@/models/selectedMatchId/states";
 import { getElementByIdOrThrowError } from "@/util/domHelper";
 import { createSelectList, removeAllSelectListItems, setSelectListItems } from "./selectList";
@@ -20,7 +20,7 @@ const handleTreeViewItemSelected = (items: readonly MJsonIndexItem[]): void => {
     setSelectListItems(items, updateOkButtonIsEnabled);
 };
 
-export const createMatchSelectWindow = async (): Promise<HTMLDivElement> => {
+export const createMatchSelectWindow = async (loadNewMJson: (id: string) => Promise<void>): Promise<HTMLDivElement> => {
     const container = document.createElement("div");
     container.setAttribute("id", matchSelectWindowContainerId);
     container.classList.add(

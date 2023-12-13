@@ -8,6 +8,15 @@ import { getAllMatchIds } from "./models/mJsonIndex/states";
 import { loadNewMJson } from "./controllers/mJsonController";
 import { assertNonNull } from "./util/error";
 import { createBoardContainer } from "./components/boardContainer/boardContainer";
+import {
+    handleGoToNextGame,
+    handleGoToNextPosition,
+    handleGoToPreviousGame,
+    handleGoToPreviousPosition,
+    handleRotateClockwise,
+    handleRotateCounterClockwise,
+    handleShowMatchSelectWindow,
+} from "./controllers/positionEventController";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");
@@ -27,8 +36,16 @@ const contents = await Promise.all(responses.map(async (response) => await respo
 resourceContainer.innerHTML = contents.join("");
 
 const boardContainer = createBoardContainer();
-const controlPanel = createControlPanel();
-const matchSelectWindow = await createMatchSelectWindow();
+const controlPanel = createControlPanel({
+    handleGoToPreviousGame,
+    handleGoToPreviousPosition,
+    handleGoToNextPosition,
+    handleGoToNextGame,
+    handleRotateClockwise,
+    handleRotateCounterClockwise,
+    handleShowMatchSelectWindow,
+});
+const matchSelectWindow = await createMatchSelectWindow(loadNewMJson);
 root.firstChild?.remove();
 root.append(boardContainer, controlPanel, matchSelectWindow);
 root.classList.add("flex", "flex-wrap");
