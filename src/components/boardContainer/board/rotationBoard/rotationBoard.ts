@@ -14,6 +14,7 @@ import { createScoreDisplay } from "./scoreDisplay";
 import { createWindDisplay } from "./windDisplay";
 import { createRiichiStickDisplay } from "./riichiStickDisplay";
 import { createTile } from "./tile";
+import { getElementByIdOrThrowError } from "@/util/domHelper";
 
 const rotationBoardId = "rotation_board";
 
@@ -59,5 +60,7 @@ export const createRotationBoard = (): SVGGElement => {
     return container;
 };
 
-// TODO: 回転
-// controllers/boardRotationControllerを作るべき
+export const rotateRotationBoard = (boardRotationValue: number): void => {
+    const rotationBoard = getElementByIdOrThrowError(rotationBoardId);
+    rotationBoard.setAttribute("transform", `rotate(${-90 * boardRotationValue})`);
+};

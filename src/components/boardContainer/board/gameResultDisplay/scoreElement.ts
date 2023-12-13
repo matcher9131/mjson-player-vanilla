@@ -6,9 +6,12 @@ import {
     positiveNumberColorClassName,
     svgNS,
 } from "@/const";
+import { getBoardRotateionValue } from "@/models/boardRotationValue/states";
+import { getElementByIdOrThrowError } from "@/util/domHelper";
+
+const scoreElementId = (sideIndex: number): string => `game_result_score_element${sideIndex}`;
 
 const scoreFontSizeClassName = "text-[400px]";
-
 const scoreGridClasses = [
     ["row-start-2", "row-end-3", "col-start-2", "col-end-3"],
     ["row-start-1", "row-end-3", "col-start-3", "col-end-4"],
@@ -34,15 +37,17 @@ export const createScoreElement = (
         defaultTextColorClassName,
     );
 
+    const boardRotationValue = getBoardRotateionValue();
     for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
         const element = document.createElement("div");
+        element.setAttribute("id", scoreElementId(sideIndex));
         element.classList.add(
             "flex",
             "flex-col",
             "justify-center",
             "items-center",
             "leading-[120%]",
-            ...scoreGridClasses[sideIndex],
+            ...scoreGridClasses[(sideIndex + boardRotationValue) % 4],
         );
         const nameElement = document.createElement("div");
         nameElement.textContent = players[sideIndex].name;
@@ -65,4 +70,13 @@ export const createScoreElement = (
     container.appendChild(gridRoot);
 
     return container;
+};
+
+export const updateGameResultScoreElement = (): void => {
+    const boardRotationValue = getBoardRotateionValue();
+    for (let sideIndex = 0; sideIndex < 4; ++sideIndex) {
+        const element = getElementByIdOrThrowError(scoreElementId(sideIndex));
+        element.classList.remove(...scoreGridClasses.flat());
+        element.classList.add(...scoreGridClasses[(sideIndex + boardRotationValue) % 4]);
+    }
 };

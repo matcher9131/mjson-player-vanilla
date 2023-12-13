@@ -2,6 +2,7 @@ import { createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelp
 import { overlayTextOffsetX, overlayTextOffsetY } from "@/const";
 import { type PositionEventMeld } from "@/models/positionEvent/types";
 import { rotateVector2D } from "@/util/vector2D";
+import { getBoardRotateionValue } from "@/models/boardRotationValue/states";
 
 const overlayTextId = (sideIndex: number): string => `overlay_text${sideIndex}`;
 const animationClassName = "animate-[fadeOut_0.5s]";
@@ -24,7 +25,8 @@ export const createMeldDisplay = (sideIndex: number): SVGTextElement => {
 };
 
 export const showMeldDisplay = ({ sideIndex, text }: PositionEventMeld): void => {
-    const element = getElementByIdOrThrowError(overlayTextId(sideIndex));
+    const index = (sideIndex + getBoardRotateionValue()) % 4;
+    const element = getElementByIdOrThrowError(overlayTextId(index));
     element.textContent = text;
     element.classList.remove(animationClassName);
     window.requestAnimationFrame(() => {

@@ -13,10 +13,9 @@ import {
     handleGoToNextPosition,
     handleGoToPreviousGame,
     handleGoToPreviousPosition,
-    handleRotateClockwise,
-    handleRotateCounterClockwise,
     handleShowMatchSelectWindow,
 } from "./controllers/positionEventController";
+import { handleRotateClockwise, handleRotateCounterClockwise } from "./controllers/boardRotationController";
 
 const root = document.getElementById("root");
 if (root == null) throw new Error("ERROR: 'root' is not found.");

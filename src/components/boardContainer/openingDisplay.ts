@@ -1,4 +1,5 @@
 import { boardOneSize, svgNS, tileWidth } from "@/const";
+import { getBoardRotateionValue } from "@/models/boardRotationValue/states";
 import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { rotateVector2D } from "@/util/vector2D";
 
@@ -47,10 +48,14 @@ export const createOpeningDisplay = (): SVGGElement => {
     return element;
 };
 
-export const setPlayerNames = (playerNames: readonly string[]): void => {
+export const updateOpeningDisplayContent = (playerNames: readonly string[]): void => {
+    const rotationValue = getBoardRotateionValue();
     for (let sideIndex = 0; sideIndex < playerNames.length; ++sideIndex) {
-        const text = getElementByIdOrThrowError(playerNameTextId(sideIndex));
-        text.textContent = playerNames[sideIndex];
+        const index = (sideIndex + rotationValue) % 4;
+        const textElement = getElementByIdOrThrowError(playerNameTextId(index));
+        textElement.textContent = playerNames[sideIndex];
+        const iconElement = getElementByIdOrThrowError(windIconId(index));
+        iconElement.setAttribute("href", `#${windSrcId(sideIndex)}`);
     }
 };
 

@@ -121,16 +121,6 @@ export const handleGoToNextGame = (): void => {
     handlePositionEvents(getCurrentPositionEvents(), true);
 };
 
-export const handleRotateClockwise = (): void => {
-    // TODO: Implement
-    throw new Error("Not implemented");
-};
-
-export const handleRotateCounterClockwise = (): void => {
-    // TODO: Implement
-    throw new Error("Not implemented");
-};
-
 export const handleShowMatchSelectWindow = (): void => {
     setMatchSelectWindowVisibility(true);
 };

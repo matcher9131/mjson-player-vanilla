@@ -1,4 +1,5 @@
 import { boardOneSize, defaultTextColor, negativeNumberColor, positiveNumberColor, svgNS, tileWidth } from "@/const";
+import { getBoardRotateionValue } from "@/models/boardRotationValue/states";
 import { type PlayerGameResult } from "@/models/mJson/types/playerGameResult";
 import { createSVGRectElement, createSVGTextElement, getElementByIdOrThrowError } from "@/util/domHelper";
 import { rotateVector2D } from "@/util/vector2D";
@@ -56,13 +57,15 @@ export const createClosingDisplay = (): SVGGElement => {
     return element;
 };
 
-export const setPlayerMatchResults = (results: readonly PlayerGameResult[]): void => {
+export const updatePlayerMatchResults = (results: readonly PlayerGameResult[]): void => {
+    const boardRotationValue = getBoardRotateionValue();
     results.forEach(({ name, score, income }, sideIndex) => {
-        const nameText = getElementByIdOrThrowError(playerNameTextId(sideIndex));
+        const index = (sideIndex + boardRotationValue) % 4;
+        const nameText = getElementByIdOrThrowError(playerNameTextId(index));
         nameText.textContent = name;
-        const scoreText = getElementByIdOrThrowError(scoreTextId(sideIndex));
+        const scoreText = getElementByIdOrThrowError(scoreTextId(index));
         scoreText.textContent = `${score}`;
-        const incomeText = getElementByIdOrThrowError(incomeTextId(sideIndex));
+        const incomeText = getElementByIdOrThrowError(incomeTextId(index));
         incomeText.textContent = income > 0 ? `+${income}` : `${income}`;
         incomeText.setAttribute(
             "fill",

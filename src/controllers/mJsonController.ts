@@ -1,7 +1,7 @@
-import { setPlayerMatchResults } from "@/components/boardContainer/closingDisplay";
+import { updatePlayerMatchResults } from "@/components/boardContainer/closingDisplay";
 import { setPositionNavigatorButtonsEnabled } from "@/components/controlPanel";
-import { setPlayerNames } from "@/components/boardContainer/openingDisplay";
-import { updatePlayerNames } from "@/components/boardContainer/board/rotationBoard/playerNameDisplay";
+import { updateOpeningDisplayContent } from "@/components/boardContainer/openingDisplay";
+import { updatePlayerNameDisplay } from "@/components/boardContainer/board/rotationBoard/playerNameDisplay";
 import { resetRiichiStickAll } from "@/components/boardContainer/board/rotationBoard/riichiStickDisplay";
 import { resetScoreDisplayAll } from "@/components/boardContainer/board/rotationBoard/scoreDisplay";
 import { type MJson } from "@/models/mJson/types/mJson";
@@ -9,23 +9,26 @@ import { resetPositionIndex, setPositionEvents } from "@/models/positionEvent/st
 import { handleGameIndexChanged } from "./positionEventController";
 import { fetchMJson, setMJson } from "@/models/mJson/states";
 import { hideGameResultDisplay } from "@/components/boardContainer/board/gameResultDisplay/gameResultDisplay";
+import { resetBoardRotationValue } from "@/models/boardRotationValue/states";
 
 export const handleMJsonChanged = (newMJson: MJson | null): void => {
     // GameResultWindowを閉じる
     hideGameResultDisplay();
-    // 各変数をセット
+    // 各変数をセット・リセットする
+    // BoardRotationValue
+    resetBoardRotationValue();
     // PositionEvent
     setPositionEvents(newMJson);
     resetPositionIndex();
     // OpeningDisplay
-    setPlayerNames(newMJson?.players?.map(({ name }) => name) ?? []);
+    updateOpeningDisplayContent(newMJson?.players?.map(({ name }) => name) ?? []);
     // ClosingDisplay
-    setPlayerMatchResults(newMJson?.players ?? []);
+    updatePlayerMatchResults(newMJson?.players ?? []);
     // ScoreDisplay
     resetScoreDisplayAll();
     resetRiichiStickAll();
     // PlayerNameDisplay
-    updatePlayerNames(newMJson?.players?.map(({ name }) => name) ?? []);
+    updatePlayerNameDisplay(newMJson?.players?.map(({ name }) => name) ?? []);
     // ControlPanel
     setPositionNavigatorButtonsEnabled(newMJson != null);
     // あとはhandleGameIndexChangedに任せる

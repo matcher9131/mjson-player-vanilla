@@ -15,7 +15,7 @@ export const createPlayerNameDisplay = (sideIndex: number): SVGTextElement => {
     return element;
 };
 
-export const updatePlayerNames = (names: readonly string[]): void => {
+export const updatePlayerNameDisplay = (names: readonly string[]): void => {
     for (let sideIndex = 0; sideIndex < names.length; ++sideIndex) {
         const element = getElementByIdOrThrowError(playerNameDisplayId(sideIndex));
         element.textContent = names[sideIndex];
