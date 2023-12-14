@@ -4,10 +4,10 @@ import {
     increaseBoardRotationValue,
     resetBoardRotationValue,
 } from "@/models/boardRotationValue/states";
-import { beforeAll, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 
 describe("boardRotationValue", () => {
-    beforeAll(() => {
+    beforeEach(() => {
         resetBoardRotationValue();
     });
 
