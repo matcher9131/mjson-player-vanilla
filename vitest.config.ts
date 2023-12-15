@@ -7,5 +7,6 @@ export default defineConfig({
             "@": path.join(__dirname, "/src"),
         },
         environment: "jsdom",
+        includeSource: ["src/**/*.ts"],
     },
 });

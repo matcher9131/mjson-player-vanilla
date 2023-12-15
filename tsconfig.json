@@ -21,7 +21,10 @@
 
         "paths": {
             "@/*": ["./src/*"]
-        }
+        },
+
+        // For in-source testing
+        "types": ["vitest/importMeta"]
     },
     "include": ["src", "tests", "tools"]
 }

@@ -10,4 +10,7 @@ export default defineConfig({
     build: {
         target: "es2022",
     },
+    define: {
+        "import.meta.vitest": undefined,
+    },
 });
