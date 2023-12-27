@@ -98,10 +98,14 @@ export const createTreeView = async (
 
     const element = document.createElement("ul");
     element.setAttribute("id", treeViewElementId);
-    const mJsonIndex = await getMJsonIndex();
-    for (const node of mJsonIndex.children) {
-        const childElement = createTreeViewItemElement(node, onItemSelected);
-        element.appendChild(childElement);
+    try {
+        const mJsonIndex = await getMJsonIndex();
+        for (const node of mJsonIndex.children) {
+            const childElement = createTreeViewItemElement(node, onItemSelected);
+            element.appendChild(childElement);
+        }
+    } catch {
+        // MJsonIndexがnull（読み込み失敗）なら何もしない
     }
 
     container.appendChild(element);
