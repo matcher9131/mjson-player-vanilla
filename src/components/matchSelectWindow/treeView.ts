@@ -17,7 +17,7 @@ const createTreeViewItemElement = (
         "before:inline-block",
         "before:w-[0.8rem]",
         "before:h-[0.8rem]",
-        "before:[mask-image:url('resources/arrows/left.svg')]",
+        "before:[mask-image:url('@resources/arrows/left.svg')]",
         "before:[mask-repeat:no-repeat]",
         "before:[mask-position:center]",
         "before:bg-black",

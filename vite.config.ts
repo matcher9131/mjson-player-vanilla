@@ -5,6 +5,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": path.join(__dirname, "/src"),
+            "@resources": path.join(__dirname, "/public/resources"),
         },
     },
     build: {
